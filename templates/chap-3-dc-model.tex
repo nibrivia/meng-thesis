@@ -1,5 +1,46 @@
-\chapter{Datacenter network model}
+\chapter{Datacenter network model} \label{model}
 
-\section{Topologies}
+\section{Topologies} \label{model-topology}
 
-\section{Traffic}
+Most datacenters, and models thereof \cite{mellette_rotornet_2017}\cite{handley_re-architecting_2017}\cite{mellette_expanding_2019} (more?) are organized in hundreds or thousands of racks containing servers.
+There are anywhere from 5 to 50 servers in a rack, each connected to a switch typically at the top, giving it the common name "Top of Rack switch" or ToR.
+A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or more. %cite
+
+The racks themselves are connected together through different fabrics, and switch technologies.
+The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research (Xpander, rotornet, opera).
+
+The typical bandwidth vary from 10Gbps to 100Gbps on each of those links.
+Some networks assume different link speeds between the ToRs than from server to ToR, others are uniform.
+
+The latencies involved are often extremely small, on the order of 10s of nanoseconds.
+
+%TODO talk about reconfigurable (and rotor) switches
+
+\section{Traffic modelling} \label{model-traffic}
+
+There are a few well studied datacenter traffic models (datamining, websearch, Chen Stefan Manya paper, more), with a common takeaway being that datacenter traffic is hard to predict.
+
+Traffic distribution can be broken down into multiple dimensions: overall load, skeweness, and flow size distribution.
+
+Overall load corresponds to how much traffic is being offered onto the network relative to how much capacity the network has.
+It is important to note that this does not mean that the network is able to 100\% load, most networks are overwhelmed far before.
+The reason for this is simple: if on average, it takes 4 hops to get to the destination, traffic is essentially being sent 4 times, making any load above 25\% impossible to satisfy.
+
+The traffic may be fairly uniform, each sender and receiver being involved in traffic all around the datacenter, or very concentrated, with a few "hot" racks being very active with each other, the rest of the datacenter quiet.
+Describing these patterns can become quite complex, as there may be multiple "hot" regions mostly not interacting with each other.
+Throoughout this thesis, and in most of the literature, we tend to be concerned about uniform traffic, and heavily skewed traffic. % is this true??
+
+Finally, the flow size distribution corresponds to how big each flow is expected to be \cite{dctcp}.
+Some workloads, such as websearch, consists mostly of many small flows.
+Others, such as datamining, are comparatively much bigger.
+Machine working loads also typically create a large demand, for example in a ring, using all the networking resources available.
+
+\section{Failures} \label{failures} % unsure if necessary
+
+Due to the presence of such a large number of devices, failures become extremely common. %cite
+To illustrate this, if a datacenter has 100,000 machines and a component, say a motherboard has an average lifetime of 10 years, we should expect a failure every hour.
+Although ubiquitous in the day to day of a datacenter, it is not uncommon to not include them as part of the model, and do a separate analysis for performance under failure. % What am I trying to say here??
+
+\section{Level of simulation} \label{model-level}
+
+%Flow vs packet

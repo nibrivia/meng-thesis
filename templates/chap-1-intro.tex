@@ -1,1 +1,23 @@
-\chapter{Introduction}
+\chapter{Introduction} \label{intro}
+
+\section{Models and simulators}
+
+% blah, not sure I like this intro
+Models and simulations are ubiquitous in society today.
+Their most visible use currently is in trying to understand and predict the spread of COVID-19, but they are used in almost every research discipline as a cheap way of testing an idea in software.
+
+To help us understand the world, we build simplified models which we hope are a good representation of it.
+A model may then be implemented into a simulation.
+These concepts are worth distinguishing: a simulator may perfectly simulate a model, but yield erroneous results due to the model being too imprecise.
+This distinction lies at the heart of this thesis: the objective is to make a fast simulator, using datacenter networking models as an example.
+The contribution of this work is almost entirely in the simulator, not the model.
+
+Discrete-event simulations in particular typically consist of actors reacting to events.
+Each event may then generate, or not, new events, affecting some actors.
+A classical example could be a car-wash, events being consumers arriving, potentially queuing, getting sent to a cleaning station, and leaving once done.
+Depending on the arrival pattern, queues may build up in front of the station, a more complex model might even take into account customers giving up and leaving the queue. %cite old paper
+The actors would be the queue and the cleaning stations. Events correspond to cars arriving and departing from each of those points.
+A data network is similar, cars becoming packets or flows, stations becoming servers and switches.
+
+Discrete events simulators stand in contrast to continuous simulators, which typically implement models better described by differential equations.
+Typical models would be fluid dynamic, solar systems, protein folding, and the like. % TODO find refs

@@ -25,12 +25,13 @@
 %% Page Intentionally Left Blank'', use the ``leftblank'' option, as
 %% above. 
 
-\documentclass[12pt,twoside,upcase]{mitthesis}
+\documentclass[12pt,twoside,upcase,draft]{mitthesis}
 \usepackage{lgrind}
 %% These have been added at the request of the MIT Libraries, because
 %% some PDF conversions mess up the ligatures.  -LB, 1/22/2014
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
+\usepackage{hyperref}
 \pagestyle{plain}
 
 %% This bit allows you to either specify only the files which you wish to
@@ -40,17 +41,18 @@
 %\typein [\files]{Enter file names to process, (chap1,chap2 ...), or `all' to process all files:}
 \def\all{all}
 \ifx\files\all \typeout{Including all files.} \else %\typeout{Including only \files.} \includeonly{\files} \fi
+\newcommand{\code}[1]{\texttt{#1}}
 
 \begin{document}
 
-\include{cover}
+\include{templates/cover}
 % Some departments (e.g. 5) require an additional signature page.  See
 % signature.tex for more information and uncomment the following line if
 % applicable.
 % \include{signature}
-\pagestyle{plain}
-\include{contents}
-\include{chap-1-intro}
+\pagestyle{drafthead}
+\include{templates/contents}
+\include{templates/chap-1-intro}
 \include{templates/chap-2-background}
 \include{templates/chap-3-dc-model}
 \include{templates/chap-4-limits}
@@ -60,6 +62,6 @@
 \appendix
 %\include{appa}
 %\include{appb}
-\include{biblio}
+\include{templates/biblio}
 \end{document}
 

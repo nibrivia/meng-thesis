@@ -1,12 +1,79 @@
-\chapter{Simulator design}
+\chapter{Simulator design} \label{simulators}
 
-\section{RotorSim}
+\section{RotorSim} \label{rotorsim}
 
 % TODO this probably needs some restructuring
-\section{Rustasim}
-\subsection{Data structures}
-\subsubsection{Message passing}
+RotorSim \cite{brode-roger_nibriviarotorsim_2020} is a centralized simulator (see \ref{centralized-sim}) of a packet-level datacenter network model (see \ref{model}).
+It is implemented in Python and is single-threaded. %does python need to be cited?
 
-\subsubsection{Multi-queue merging}
+\subsection{Event queue} \label{rotorsim-eventq}
+\subsubsection{API} \label{rotorsim-eventq-api}
 
-\subsection{Scheduling}
+\begin{table}[ht]
+\begin{center}
+\label{arm:table}
+\begin{tabular}{|p{1.8in}|p{3.8in}|}\hline
+\code{create(limit)} & Instantiates an event queue with the given \code{limit} \\\hline
+\code{call\_at(time, event)} & Schedules \code{event} at the specified \code{time} \\\hline
+\code{call\_in(delay, event)} & Schedules \code{event} at the current time+\code{delay}  \\\hline
+\code{run\_next()} & Starts the event simulator, returns when \code{limit} is reached, there are no events to run, or \code{stop()} is called \\\hline
+\code{stop()} & Forces the event loop to return \\\hline
+\code{time} & Returns the current time \\\hline
+\end{tabular}
+\caption{RotorSim event queue API}
+\end{center}
+\end{table}
+
+The event queue allows for the addition of new events through two functions: \code{call\_at(time, event)} and \code{call\_in(delay, event)}.
+These will then appropriately add the event to the queue and return.
+The exact structure of \code{time} and \code{event} are discussed in \ref{rotorsim-eventq-event}.
+
+To event loop is started through a call to \code{run\_next()} and finishes either when there are no more events to schedule, or when it hits a limit defined at its creation.
+The loop may also ended by calling \code{stop()}, breaking the loop.
+Although rarely useful when running simulations to produce results, it is useful while debugging.
+After being stopped, the loop may be resumed through another call to \code{run\_next()}.
+
+% wow is this section badly written
+In order to make code more readable, and less error-prone, the module also exports a function decorator, \code{@delay(amount)} that will wrap a function in a call.
+A useful case for this is to enforce delays in reconfiguration or receiving packets.
+For example, if an switch $S$ has a \code{recv(packet)} function that processes incoming packets, it may be useful to wrap this with a \code{@delay(latency)}, enforcing that anyone calling the function waits an additional $latency$ amount.
+Calling \code{S.recv(packet)} then doesn't actually call the function itself, but schedules an event $latency$ later that will call said function.
+In practice, most calls are made this way, clearing the code of many \code{call\_in} statements.
+
+
+
+% TODO write up full example?
+
+
+\subsubsection{Event structure} \label{rotorsim-eventq-event}
+RotorSim's event queue is implemented using Python's \code{heapq} \cite{heapq}.
+
+Python tuples are ordered by comparing the first element of the tuple, going to the next in case of a tie.
+This naturally leads to events being a tuple of time and event description.
+
+Python allows for the treatment of functions as values, as well as for calling a function with an array, or a dictionary as arguments through the \code{*args} and \code{**kwargs} idioms.
+Once the
+
+In addition to \code{(time, function, args, kwargs)}, the event queue adds a user-controlled priority value to allow for the breaking of ties for events that happen simultaneously.
+Although this isn't strictly required, it does simplify simulator design around configuration changes.
+For example, if the routing table of a device changes and a packet sent, both at time 100, it is often intended that the configuration change take place before the packet is routed, avoiding odd situations where a packet is routed along a path that no longer exists.
+
+Finally, as suggested in \code{heapq}'s documentation, there is a final integer, a counter, inserted after the priority. Ostensibly this breaks ties between events having the same time and priority by the order in which they are inserted.
+This property is not used in the simulator, however it stops python from 
+
+Each event is a tuple consisting of, in order, the current time, a priority (lower means run earlier), a unique counter, 
+
+\subsection{Runtime}
+
+Different interpreters exist for the python programming language, the default being CPython.
+However, I found that using PyPy \cite{team_pypy_2019} yields an almost 2x performance improvement for the simulator compared to CPython.
+Even Pypy can run virtually all Python code, numpy \cite{van_der_walt_numpy_2011} is difficult to set up properly.
+For RotorSim, numpy was only used for some random number generation, making moving away from the package easy.
+
+\section{Rustasim} \label{rustasim}
+\subsection{Data structures} \label{rustasim-data-structure}
+\subsubsection{Message passing} \label{rustasim-message-passing}
+
+\subsubsection{Multi-queue merging} \label{rusatim-tree}
+
+\subsection{Scheduling} \label{rustasim-sched}

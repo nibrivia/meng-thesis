@@ -1,0 +1,714 @@
+
+@article{van_der_walt_numpy_2011,
+	title = {The {NumPy} {Array}: {A} {Structure} for {Efficient} {Numerical} {Computation}},
+	volume = {13},
+	issn = {1558-366X},
+	shorttitle = {The {NumPy} {Array}},
+	doi = {10.1109/MCSE.2011.37},
+	abstract = {In the Python world, NumPy arrays are the standard representation for numerical data and enable efficient implementation of numerical computations in a high-level language. As this effort shows, NumPy performance can be improved through three techniques: vectorizing calculations, avoiding copying data in memory, and minimizing operation counts.},
+	number = {2},
+	journal = {Computing in Science Engineering},
+	author = {van der Walt, Stefan and Colbert, S. Chris and Varoquaux, Gael},
+	month = mar,
+	year = {2011},
+	note = {Conference Name: Computing in Science Engineering},
+	keywords = {Arrays, Computational efficiency, Finite element methods, NumPy, Numerical analysis, Performance evaluation, Python, Python programming language, Resource management, Vector quantization, data structures, high level language, high level languages, mathematics computing, numerical analysis, numerical computation, numerical computations, numerical data, numpy array, programming libraries, scientific programming},
+	pages = {22--30}
+}
+
+@misc{team_pypy_2019,
+	title = {{PyPy}},
+	url = {https://www.pypy.org/},
+	abstract = {A fast, compliant alternative implementation of Python
+Get Started : Download and install
+What is PyPy : Features
+Documentation (external link)
+
+On average, PyPy is 4.4 times faster than CPython
+
+
+PyP},
+	language = {en},
+	urldate = {2020-07-06},
+	journal = {PyPy},
+	author = {Team, The PyPy},
+	month = dec,
+	year = {2019},
+	note = {Library Catalog: www.pypy.org}
+}
+
+@misc{noauthor_heapq_nodate,
+	title = {heapq — {Heap} queue algorithm — {Python} 3.7.8 documentation},
+	url = {https://docs.python.org/3.7/library/heapq.html},
+	urldate = {2020-07-06}
+}
+
+@article{misra_distributed_1986,
+	title = {Distributed discrete-event simulation},
+	volume = {18},
+	issn = {0360-0300},
+	url = {https://doi.org/10.1145/6462.6485},
+	doi = {10.1145/6462.6485},
+	abstract = {Traditional discrete-event simulations employ an inherently sequential algorithm. In practice, simulations of large systems are limited by this sequentiality, because only a modest number of events can be simulated. Distributed discrete-event simulation (carried out on a network of processors with asynchronous message-communicating capabilities) is proposed as an alternative; it may provide better performance by partitioning the simulation among the component processors. The basic distributed simulation scheme, which uses time encoding, is described. Its major shortcoming is a possibility of deadlock. Several techniques for deadlock avoidance and deadlock detection are suggested. The focus of this work is on the theory of distributed discrete-event simulation.},
+	number = {1},
+	urldate = {2020-07-04},
+	journal = {ACM Computing Surveys},
+	author = {Misra, Jayadev},
+	month = mar,
+	year = {1986},
+	pages = {39--65}
+}
+
+@inproceedings{dragojevic_no_2015,
+	address = {Monterey, California},
+	series = {{SOSP} '15},
+	title = {No compromises: distributed transactions with consistency, availability, and performance},
+	isbn = {978-1-4503-3834-9},
+	shorttitle = {No compromises},
+	url = {https://doi.org/10.1145/2815400.2815425},
+	doi = {10.1145/2815400.2815425},
+	abstract = {Transactions with strong consistency and high availability simplify building and reasoning about distributed systems. However, previous implementations performed poorly. This forced system designers to avoid transactions completely, to weaken consistency guarantees, or to provide single-machine transactions that require programmers to partition their data. In this paper, we show that there is no need to compromise in modern data centers. We show that a main memory distributed computing platform called FaRM can provide distributed transactions with strict serializability, high performance, durability, and high availability. FaRM achieves a peak throughput of 140 million TATP transactions per second on 90 machines with a 4.9 TB database, and it recovers from a failure in less than 50 ms. Key to achieving these results was the design of new transaction, replication, and recovery protocols from first principles to leverage commodity networks with RDMA and a new, inexpensive approach to providing non-volatile DRAM.},
+	urldate = {2020-07-04},
+	booktitle = {Proceedings of the 25th {Symposium} on {Operating} {Systems} {Principles}},
+	publisher = {Association for Computing Machinery},
+	author = {Dragojević, Aleksandar and Narayanan, Dushyanth and Nightingale, Edmund B. and Renzelmann, Matthew and Shamis, Alex and Badam, Anirudh and Castro, Miguel},
+	month = oct,
+	year = {2015},
+	pages = {54--70}
+}
+
+@misc{brode-roger_nibriviarotorsim_2020,
+	title = {nibrivia/rotorsim},
+	url = {https://github.com/nibrivia/rotorsim},
+	abstract = {RotorNet simulator. Contribute to nibrivia/rotorsim development by creating an account on GitHub.},
+	urldate = {2020-07-04},
+	author = {Brode-Roger, Olivia},
+	month = apr,
+	year = {2020},
+	note = {original-date: 2019-10-23T17:13:59Z}
+}
+
+@misc{noauthor_pdf_nodate,
+	title = {({PDF}) {Conservative} {Distributed} {Discrete} {Event} {Simulation} on {Amazon} {EC2}},
+	url = {https://www.researchgate.net/publication/235953552_Conservative_Distributed_Discrete_Event_Simulation_on_Amazon_EC2},
+	abstract = {ResearchGate is a network dedicated to science and research. Connect, collaborate and discover scientific publications, jobs and conferences. All for free.},
+	language = {en},
+	urldate = {2020-06-11},
+	journal = {ResearchGate},
+	note = {Library Catalog: www.researchgate.net}
+}
+
+@inproceedings{chen_virtual_2019,
+	address = {Chicago, IL, USA},
+	series = {{SIGSIM}-{PADS} '19},
+	title = {Virtual {Time} {Machine} for {Reproducible} {Network} {Emulation}},
+	isbn = {978-1-4503-6723-3},
+	url = {https://doi.org/10.1145/3316480.3322897},
+	doi = {10.1145/3316480.3322897},
+	abstract = {Reproducing network emulation experiments on diverse physical platforms with varying computation and communication resources is non-trivial. Many state-of-the-art network emulation testbeds do not guarantee timing fidelity. Consequently, results obtained from these testbeds can be misleading, especially when insufficient physical resources are provided to run the experiments. Reproducibility is far from being the norm. In this paper, we present a novel approach that can guarantee reproducible results for network emulation. Our system, called the Virtual Time Machine (VTM), takes advantage of both time dilation and carefully controlled scheduling of the virtual machines. Time dilation allows sufficiently scaled resources to run the experiments in virtual time, and controlled VM scheduling prescribes the precise timing of message passing for distributed applications---independent of the resource provisioning of the underlying physical testbed. Preliminary experiments show that VTM can guarantee reproducible results with varying time dilation, resource subscription, and VM scheduling scenarios.},
+	urldate = {2020-06-11},
+	booktitle = {Proceedings of the 2019 {ACM} {SIGSIM} {Conference} on {Principles} of {Advanced} {Discrete} {Simulation}},
+	publisher = {Association for Computing Machinery},
+	author = {Chen, Jin and Liu, Jiang and Huang, Tao and Liu, Jason},
+	month = may,
+	year = {2019},
+	keywords = {network emulation, network experiments, reproducibility, time dilation, virtual machines},
+	pages = {61--70}
+}
+
+@inproceedings{mikida_adaptive_2019,
+	address = {Chicago, IL, USA},
+	series = {{SIGSIM}-{PADS} '19},
+	title = {An {Adaptive} {Non}-{Blocking} {GVT} {Algorithm}},
+	isbn = {978-1-4503-6723-3},
+	url = {https://doi.org/10.1145/3316480.3322896},
+	doi = {10.1145/3316480.3322896},
+	abstract = {In optimistic Parallel Discrete Event Simulations (PDES), the Global Virtual Time (GVT) computation is an important aspect of performance. It must be performed frequently enough to ensure simulation progress and free memory, while still incurring minimal overhead. Many algorithms have been studied for computing the GVT efficiently under a variety of simulation conditions for a variety of models. In this paper we propose a new GVT algorithm which aims to do two things. First, it incurs a very low overhead on the simulation by not requiring the simulation to block execution. Secondly, and most importantly, it has the ability to adapt to simulation conditions while it's running. This allows it to perform well for a variety of models, and helps remove some burden from developers by not requiring intensive tuning.},
+	urldate = {2020-06-11},
+	booktitle = {Proceedings of the 2019 {ACM} {SIGSIM} {Conference} on {Principles} of {Advanced} {Discrete} {Simulation}},
+	publisher = {Association for Computing Machinery},
+	author = {Mikida, Eric and Kale, Laxmikant},
+	month = may,
+	year = {2019},
+	keywords = {adaptive, charm++, distributed, global virtual time, gvt, non-blocking, parallel, parallel discrete event simulation, pdes},
+	pages = {25--36}
+}
+
+@inproceedings{perumalla_parallel_2006,
+	title = {Parallel and {Distributed} {Simulation}: {Traditional} {Techniques} and {Recent} {Advances}},
+	shorttitle = {Parallel and {Distributed} {Simulation}},
+	doi = {10.1109/WSC.2006.323041},
+	abstract = {This tutorial on parallel and distributed simulation systems reviews some of the traditional synchronization techniques and presents some recent advances},
+	booktitle = {Proceedings of the 2006 {Winter} {Simulation} {Conference}},
+	author = {Perumalla, Kalyan S.},
+	month = dec,
+	year = {2006},
+	note = {ISSN: 1558-4305},
+	keywords = {Analytical models, Computational modeling, Computer simulation, Concurrent computing, Delay, Discrete event simulation, Hardware, Laboratories, Runtime, Synchronization, distributed processing, distributed simulation, parallel simulation, simulation, traditional synchronization techniques},
+	pages = {84--95}
+}
+
+@inproceedings{pelkey_distributed_2011,
+	address = {Barcelona, Spain},
+	series = {{SIMUTools} '11},
+	title = {Distributed simulation with {MPI} in ns-3},
+	isbn = {978-1-936968-00-8},
+	abstract = {While small topology simulations are important for validation and educational purposes, large-scale network simulations are a fundamental part of active networking research. Therefore, it is important for a network simulator to provide scalable and efficient solutions to execute these types of scenarios. Using standard sequential simulation techniques, large-scale topologies with substantial network traffic will require lengthy simulation execution times and a considerable amount of computer memory. Often, these execution times are too long for a networking researcher to run multiple simulations and collect significant data. Parallel and distributed simulation is one method that allows researchers to efficiently simulate these large topologies by distributing a single simulation program over multiple interconnected processors. To enable this scalable simulation methodology in ns-3, we formally present our distributed simulator, introduced in ns-3.8. This simulator uses the Message Passing Interface (MPI) standard and a conservative lookahead mechanism. Using the distributed simulator, we conducted a performance study using a large-scale point-to-point campus network scenario with a variable number of nodes distributed across several interconnected processors within a computer cluster. We show near-optimal improvements in simulation execution time are possible using the distributed simulator in ns-3.},
+	urldate = {2020-06-02},
+	booktitle = {Proceedings of the 4th {International} {ICST} {Conference} on {Simulation} {Tools} and {Techniques}},
+	publisher = {ICST (Institute for Computer Sciences, Social-Informatics and Telecommunications Engineering)},
+	author = {Pelkey, Joshua and Riley, George},
+	month = mar,
+	year = {2011},
+	keywords = {parallel and distributed discrete event network simulation, scalability},
+	pages = {410--414}
+}
+
+@article{tang_ladder_2005,
+	title = {Ladder queue: {An} {O}(1) priority queue structure for large-scale discrete event simulation},
+	volume = {15},
+	issn = {1049-3301},
+	shorttitle = {Ladder queue},
+	url = {https://doi.org/10.1145/1103323.1103324},
+	doi = {10.1145/1103323.1103324},
+	abstract = {This article describes a new priority queue implementation for managing the pending event set in discrete event simulation. Extensive empirical results demonstrate that it consistently outperforms other current popular candidates. This new implementation, called Ladder Queue, is also theoretically justified to have O(1) amortized access time complexity, as long as the mean jump parameter of the priority increment distribution is finite and greater than zero, regardless of its variance. Many practical priority increment distributions satisfy this condition including unbounded variance distributions like the Pareto distribution. This renders the LadderQ the ideal discrete event queue structure for stable O(1) performance even under practical queue distributions with infinite variance. Numerical simulations ranging from 100 to 10 million events affirm the O(1) property of LadderQ and that it is a superior structure for large-scale discrete event simulation.},
+	number = {3},
+	urldate = {2020-05-26},
+	journal = {ACM Transactions on Modeling and Computer Simulation},
+	author = {Tang, Wai Teng and Goh, Rick Siow Mong and Thng, Ian Li-Jin},
+	month = jul,
+	year = {2005},
+	keywords = {Pending event set implementations, calendar queue, priority queue},
+	pages = {175--204}
+}
+
+@inproceedings{urino_wavelength-routing_2020,
+	address = {Fukuoka, Japan},
+	series = {{HPCAsia2020}},
+	title = {Wavelength-routing interconnect "{Optical} {Hub}" for parallel computing systems},
+	isbn = {978-1-4503-7236-7},
+	url = {https://doi.org/10.1145/3368474.3368495},
+	doi = {10.1145/3368474.3368495},
+	abstract = {To solve the inter-node bandwidth bottleneck in parallel computing systems, we propose a wavelength-routing inter-node interconnect "Optical Hub". The physical topology of Optical Hub is star network, which leads to advantages in term of its throughput, size, energy consumption and life-time cost. The logical topology is full-mesh network, which leads to advantages in term of its latency and reliability. We introduced multi-path routings, which expand the effective bandwidth with the full-mesh topology such as Optical Hub, by replacing conventional MPI functions with our wrapper functions. We simulated execution time of parallel benchmarks on the parallel computing system with Optical Hub using parallel computing simulator SimGrid. As a result, we have confirmed that the parallel computing system with Optical Hub can achieve higher performance and lower energy consumption than conventional ones. We also examined the scalability of Optical Hub and showed that recursive hierarchical configurations of Optical Hub can save cable count drastically in case of large number of nodes against Dragonfly networks.},
+	urldate = {2020-05-26},
+	booktitle = {Proceedings of the {International} {Conference} on {High} {Performance} {Computing} in {Asia}-{Pacific} {Region}},
+	publisher = {Association for Computing Machinery},
+	author = {Urino, Yutaka and Mizutani, Kenji and Usuki, Tatsuya and Nakamura, Shigeru},
+	month = jan,
+	year = {2020},
+	keywords = {MPI, collective communications, full-mesh networks, inter-node interconnects, parallel benchmarks, parallel computing, simulations, wavelength routing},
+	pages = {81--91}
+}
+
+@inproceedings{mikida_adaptive_2018,
+	address = {Rome, Italy},
+	series = {{SIGSIM}-{PADS} '18},
+	title = {Adaptive {Methods} for {Irregular} {Parallel} {Discrete} {Event} {Simulation} {Workloads}},
+	isbn = {978-1-4503-5092-1},
+	url = {https://doi.org/10.1145/3200921.3200936},
+	doi = {10.1145/3200921.3200936},
+	abstract = {Parallel Discrete Event Simulations (PDES) running at large scales involve the coordination of billions of very fine grain events distributed across a large number of processes. At such large scales optimistic synchronization protocols, such as TimeWarp, allow for a high degree of parallelism between processes, but with the additional complexity of managing event rollback and cancellation. This can become especially problematic in models that exhibit imbalance resulting in low event efficiency, which increases the total amount of work required to run a simulation to completion. Managing this complexity becomes key to achieving a high degree of performance across a wide range of models. In this paper, we address this issue by analyzing the relationship between synchronization cost and event efficiency. We first look at how these two characteristics are coupled via the computation of Global Virtual Time (GVT). We then introduce dynamic load balancing, and show how, when combined with low overhead GVT computation, we can achieve higher efficiency with less synchronization cost. In doing so, we achieve up to 2x better performance on a variety of benchmarks and models of practical importance.},
+	urldate = {2020-05-26},
+	booktitle = {Proceedings of the 2018 {ACM} {SIGSIM} {Conference} on {Principles} of {Advanced} {Discrete} {Simulation}},
+	publisher = {Association for Computing Machinery},
+	author = {Mikida, Eric and Kale, Laxmikant},
+	month = may,
+	year = {2018},
+	keywords = {GVT algorithms, GVT computation, PDES, adaptive, charades, charm++, continuous GVT, discrete event simulation, distributed algorithms, distributed simulation, load balancing, non-blocking GVT, parallel runtime system, ross},
+	pages = {189--200}
+}
+
+@inproceedings{furfaro_adaptive_2018,
+	address = {Rome, Italy},
+	series = {{SIGSIM}-{PADS} '18},
+	title = {Adaptive {Ladder} {Queue}: {Achieving} {O}(1) {Amortized} {Access} {Time} in {Practice}},
+	isbn = {978-1-4503-5092-1},
+	shorttitle = {Adaptive {Ladder} {Queue}},
+	url = {https://doi.org/10.1145/3200921.3200925},
+	doi = {10.1145/3200921.3200925},
+	abstract = {The data structure that handles the pending event set of a discrete event simulator is a critical component in that its performances have a direct impact on those of the overall simulation engine. Many data structures have been proposed in the literature. Among them, the Ladder Queue (LadderQ) claims \$O(1)\$ amortized access time. However, empirical results show that the practical achievement of such performances is highly dependent on the distribution of event timestamps and that in many cases are similar or even worse than those of heap-based priority queues. This paper proposes an adaptive extension of the LadderQ which overcomes most of its weaknesses and allows to achieve \$O(1)\$ amortized access time in practice.},
+	urldate = {2020-05-26},
+	booktitle = {Proceedings of the 2018 {ACM} {SIGSIM} {Conference} on {Principles} of {Advanced} {Discrete} {Simulation}},
+	publisher = {Association for Computing Machinery},
+	author = {Furfaro, Angelo and Sacco, Ludovica},
+	month = may,
+	year = {2018},
+	keywords = {calendar queue, discrete event simulatio, ladder queue, pending event set, priority queue},
+	pages = {101--104}
+}
+
+@misc{noauthor_pdf_nodate-1,
+	title = {({PDF}) "{Parameterized} {Benchmarking} of {Parallel} {Discrete} {Event} {Simulation} {Systems}: {Communication}, {Computation}, and {Memory}"},
+	shorttitle = {({PDF}) "{Parameterized} {Benchmarking} of {Parallel} {Discrete} {Event} {Simulation} {Systems}},
+	url = {https://www.researchgate.net/publication/285235196_Parameterized_Benchmarking_of_Parallel_Discrete_Event_Simulation_Systems_Communication_Computation_and_Memory},
+	abstract = {ResearchGate is a network dedicated to science and research. Connect, collaborate and discover scientific publications, jobs and conferences. All for free.},
+	language = {en},
+	urldate = {2020-05-19},
+	journal = {ResearchGate},
+	note = {Library Catalog: www.researchgate.net}
+}
+
+@inproceedings{fujimoto_parallel_2017,
+	address = {Las Vegas, NV},
+	title = {Parallel discrete event simulation: {The} making of a field},
+	isbn = {978-1-5386-3428-8},
+	shorttitle = {Parallel discrete event simulation},
+	url = {http://ieeexplore.ieee.org/document/8247793/},
+	doi = {10.1109/WSC.2017.8247793},
+	abstract = {Originating in the 1970’s, the parallel discrete event simulation (PDES) field grew from a group of researchers focused on determining how to execute a discrete event simulation program on a parallel computer while still obtaining the same results as a sequential execution. Over the decades that followed the field expanded, grew, and flourishes to this day. This paper describes the origins and development of the field in the words of many who were deeply involved. Unlike other published work focusing on technical issues, the emphasis here is on historical aspects that are not recorded elsewhere, providing a unique characterization of how the field was created and developed.},
+	language = {en},
+	urldate = {2020-05-19},
+	booktitle = {2017 {Winter} {Simulation} {Conference} ({WSC})},
+	publisher = {IEEE},
+	author = {Fujimoto, Richard M. and Bagrodia, Rajive and Bryant, Randal E. and Chandy, K. Mani and Jefferson, David and Misra, Jayadev and Nicol, David and Unger, Brian},
+	month = dec,
+	year = {2017},
+	pages = {262--291}
+}
+
+@inproceedings{bauer_reconfigurable_1998,
+	title = {A reconfigurable logic machine for fast event-driven simulation},
+	doi = {10.1145/277044.277214},
+	abstract = {As the density of VLSI circuits increases, software techniques cannot effectively simulate designs through the millions of simulation cycles needed for verification. Emulation can supply the necessary capacity and performance, but emulation is limited to designs that are structural or can be synthesized. The paper discusses a new system architecture that dramatically accelerates event-driven behavioral simulation and describes how it is merged with emulation.},
+	booktitle = {Proceedings 1998 {Design} and {Automation} {Conference}. 35th {DAC}. ({Cat}. {No}.{98CH36175})},
+	author = {Bauer, J. and Bershteyn, M. and Kaplan, I. and Vyedin, P.},
+	month = jun,
+	year = {1998},
+	keywords = {Circuit simulation, Circuit synthesis, Computational modeling, Discrete event simulation, Emulation, Field programmable gate arrays, Hardware design languages, Permission, Reconfigurable logic, VLSI, VLSI circuits, Very large scale integration, circuit analysis computing, design simulation, emulation, event-driven behavioral simulation, fast event-driven simulation, formal verification, logic CAD, reconfigurable architectures, reconfigurable logic machine, simulation cycles, software techniques, system architecture, verification},
+	pages = {668--671}
+}
+
+@article{nikolaev_wns3_nodate,
+	title = {{WNS3} 2015, {Castelldefels}, {Spain}},
+	language = {en},
+	author = {Nikolaev, S and Banks, L E and Barnes, P D and Jefferson, D R and Smith, S G},
+	pages = {30}
+}
+
+@article{chandy_distributed_1979,
+	title = {Distributed {Simulation}: {A} {Case} {Study} in {Design} and {Verification} of {Distributed} {Programs}},
+	volume = {SE-5},
+	issn = {1939-3520},
+	shorttitle = {Distributed {Simulation}},
+	doi = {10.1109/TSE.1979.230182},
+	abstract = {The problem of system simulation is typically solved in a sequential manner due to the wide and intensive sharing of variables by all parts of the system. We propose a distributed solution where processes communicate only through messages with their neighbors; there are no shared variables and there is no central process for message routing or process scheduling. Deadlock is avoided in this system despite the absence of global control. Each process in the solution requires only a limited amount of memory. The correctness of a distributed system is proven by proving the correctness of each of its component processes and then using inductive arguments. The proposed solution has been empirically found to be efficient in preliminary studies. The paper presents formal, detailed proofs of correctness.},
+	number = {5},
+	journal = {IEEE Transactions on Software Engineering},
+	author = {Chandy, K.M. and Misra, J.},
+	month = sep,
+	year = {1979},
+	note = {Conference Name: IEEE Transactions on Software Engineering},
+	keywords = {Centralized control, Computer aided software engineering, Concurrent processes, Control systems, Costs, Distributed control, Logic, Process control, Protocols, Routing, System recovery, distributed systems, performance, program proving, simulation},
+	pages = {440--452}
+}
+
+@inproceedings{ivey_phold_2015,
+	address = {Barcelona, Spain},
+	series = {{WNS3} '15},
+	title = {{PHOLD} performance of conservative synchronization methods for distributed simulation in ns-3},
+	isbn = {978-1-4503-3375-7},
+	url = {https://doi.org/10.1145/2756509.2756511},
+	doi = {10.1145/2756509.2756511},
+	abstract = {The scalability and runtime performance of large-scale discrete event network simulations has been improved previously by spreading processing effort across multiple processors, increasing the provided computational power while decreasing the wallclock execution time of each simulation trial. The popular network simulator ns-3 provides two distributed frameworks that differ in their synchronization implementations. This paper provides those thresholds under which certain selection criteria would deem one synchronization option better than the other in terms of runtime performance. It specifically focuses on the performance of each synchronization method by stripping the model of simulated network topologies and overhead and purely utilizing the synchronization implementations and event scheduler of ns-3. Simulations have been performed across a variety of lookahead values, neighbor selections, and remote traffic percentages, and neighbor connectivity thresholds have been determined that suggest where it is more appropriate to use one option over the other.},
+	urldate = {2020-05-18},
+	booktitle = {Proceedings of the 2015 {Workshop} on ns-3},
+	publisher = {Association for Computing Machinery},
+	author = {Ivey, Jared S. and Swenson, Brian P. and Riley, George F.},
+	month = may,
+	year = {2015},
+	keywords = {Chandy Misra Bryant, granted time window, ns-3, parallel discrete-event simulation, parallel processing, simulation},
+	pages = {47--53}
+}
+
+@inproceedings{fujimoto_computational_2017,
+	title = {Computational challenges in modeling simulation of complex systems},
+	doi = {10.1109/WSC.2017.8247805},
+	abstract = {Modeling and simulation faces many new computational challenges in the design of complex engineered systems. The systems that need to be modeled are increasingly interconnected and interdependent, achieving unprecedented levels of complexity. The computational platforms upon which simulations execute have undergone dramatic changes in recent years. Position statements by leading researchers are presented concerning important computational challenges and opportunities facing the M\&S community.},
+	booktitle = {2017 {Winter} {Simulation} {Conference} ({WSC})},
+	author = {Fujimoto, Richard M. and Carothers, Christopher and Ferscha, Alois and Jefferson, David and Loper, Margaret and Marathe, Madhav and Taylor, Simon J. E.},
+	month = dec,
+	year = {2017},
+	note = {ISSN: 1558-4305},
+	keywords = {Buffer storage, Complex systems, Computational modeling, Conferences, Engines, Handheld computers, complex engineered systems, complex systems modeling, complex systems simulation, computational platforms, important computational challenges, large-scale systems, simulation},
+	pages = {431--445}
+}
+
+@inproceedings{renard_performance_2012,
+	address = {Desenzano del Garda, Italy},
+	series = {{SIMUTOOLS} '12},
+	title = {A performance and scalability evaluation of the ns-3 distributed scheduler},
+	isbn = {978-1-4503-1510-4},
+	abstract = {Network simulation of MANETs has substantial benefits for planning, engineering and research for military networks. Achieving high fidelity in network models, complex radio systems, and RF propagation effects results in significant computational loads for even moderately sized networks. Network simulators capable of performance and scalability for MANETs are highly valuable. In this paper, we share results of performance and scalability tests of the ns-3 network simulator in representative scenarios using ns-3 on the supercomputing platforms at the US Army Research Laboratory.},
+	urldate = {2020-05-18},
+	booktitle = {Proceedings of the 5th {International} {ICST} {Conference} on {Simulation} {Tools} and {Techniques}},
+	publisher = {ICST (Institute for Computer Sciences, Social-Informatics and Telecommunications Engineering)},
+	author = {Renard, Ken and Peri, Charles and Clarke, Jerry},
+	month = mar,
+	year = {2012},
+	keywords = {MPI, distributed, high performance computing, network simulation, ns-3, performance},
+	pages = {378--382}
+}
+
+@inproceedings{wang_enhanced_2016,
+	address = {Singapore},
+	series = {Communications in {Computer} and {Information} {Science}},
+	title = {Enhanced {Null} {Message} {Algorithm} for {PDES} with {Diverse} {Event} {Density}},
+	isbn = {9789811026638},
+	doi = {10.1007/978-981-10-2663-8_9},
+	abstract = {Parallel discrete event simulation technology has become an important means for the study of complex systems, and with the human research system getting more and larger, the scale of complex system simulation is more and more big. Time synchronization algorithm is the core of parallel discrete event simulation, which determines the effect of parallel acceleration. Traditional conservative time synchronization algorithm, such as CMB null message algorithm, is to use the null message to avoid deadlock, and then propel the logical process step by step; but when the difference between the time step of model is large, the CMB algorithm will send a lot of useless null messages, resulting in the low efficiency of parallel. To solve the problem of large difference between lookahead of the LP, based on null message algorithm, we present a null message optimization algorithm based on time step and event in parallel discrete event simulation, which greatly accelerates the speed of the parallel simulation and improves the efficiency of the parallel simulation.},
+	language = {en},
+	booktitle = {Theory, {Methodology}, {Tools} and {Applications} for {Modeling} and {Simulation} of {Complex} {Systems}},
+	publisher = {Springer},
+	author = {Wang, Bin and Zhai, Yanlong and Zhang, Han and Qing, Duzheng},
+	editor = {Zhang, Lin and Song, Xiao and Wu, Yunjie},
+	year = {2016},
+	keywords = {Conservative time synchronization algorithm , Null message algorithm , Parallel simulation },
+	pages = {86--95}
+}
+
+@inproceedings{wolfe_modeling_2016,
+	address = {Banff, Alberta, Canada},
+	series = {{SIGSIM}-{PADS} '16},
+	title = {Modeling a {Million}-{Node} {Slim} {Fly} {Network} {Using} {Parallel} {Discrete}-{Event} {Simulation}},
+	isbn = {9781450337427},
+	url = {https://doi.org/10.1145/2901378.2901389},
+	doi = {10.1145/2901378.2901389},
+	abstract = {As supercomputers close in on exascale performance, the increased number of processors and processing power translates to an increased demand on the underlying network interconnect. The Slim Fly network topology, a new lowdiameter and low-latency interconnection network, is gaining interest as one possible solution for next-generation supercomputing interconnect systems. In this paper, we present a high-fidelity Slim Fly it-level model leveraging the Rensselaer Optimistic Simulation System (ROSS) and Co-Design of Exascale Storage (CODES) frameworks. We validate our Slim Fly model with the Kathareios et al. Slim Fly model results provided at moderately sized network scales. We further scale the model size up to n unprecedented 1 million compute nodes; and through visualization of network simulation metrics such as link bandwidth, packet latency, and port occupancy, we get an insight into the network behavior at the million-node scale. We also show linear strong scaling of the Slim Fly model on an Intel cluster achieving a peak event rate of 36 million events per second using 128 MPI tasks to process 7 billion events. Detailed analysis of the underlying discrete-event simulation performance shows how the million-node Slim Fly model simulation executes in 198 seconds on the Intel cluster.},
+	urldate = {2020-05-17},
+	booktitle = {Proceedings of the 2016 {ACM} {SIGSIM} {Conference} on {Principles} of {Advanced} {Discrete} {Simulation}},
+	publisher = {Association for Computing Machinery},
+	author = {Wolfe, Noah and Carothers, Christopher D. and Mubarak, Misbah and Ross, Robert and Carns, Philip},
+	month = may,
+	year = {2016},
+	keywords = {interconnection networks, network topologies, parallel discrete event simulation, slim fly},
+	pages = {189--199}
+}
+
+@article{le_nours_hybrid_2018,
+	title = {A {Hybrid} {Simulation} {Approach} for {Fast} and {Accurate} {Timing} {Analysis} of {Multi}-{Processor} {Platforms} {Considering} {Communication} {Resources} {Conflicts}},
+	volume = {90},
+	issn = {1939-8115},
+	url = {https://doi.org/10.1007/s11265-017-1315-x},
+	doi = {10.1007/s11265-017-1315-x},
+	abstract = {In the early design phase of embedded systems, discrete-event simulation is extensively used to analyse time properties of hardware-software architectures. Improvement of simulation efficiency has become imperative for tackling the ever increasing complexity of multi-processor execution platforms. The fundamental limitation of current discrete-event simulators lies in the time-consuming context switching required in simulation of concurrent processes. In this paper, we present a new simulation approach that reduces the number of events managed by a simulator while preserving timing accuracy of hardware-software architecture models. The proposed simulation approach abstracts the simulated processes by an equivalent executable model which computes the synchronization instants with no involvement of the simulation kernel. To consider concurrent accesses to platform shared resources, a correction technique that adjusts the computed synchronization instants is proposed as well. The proposed simulation approach was experimentally validated with an industrial modeling and simulation framework and we estimated the potential benefits through various case studies. Compared to traditional lock-step simulation approaches, the proposed approach enables significant simulation speed-up with no loss of timing accuracy. A simulation speed-up by a factor of 14.5 was achieved with no loss of timing accuracy through experimentation with a system model made of 20 functions, two processors and shared communication resources. Application of the proposed approach to simulation of a communication receiver model led to a simulation speed-up by a factor of 4 with no loss of timing accuracy. The proposed simulation approach has potential to support automatic generation of efficient system models.},
+	language = {en},
+	number = {12},
+	urldate = {2020-05-17},
+	journal = {Journal of Signal Processing Systems},
+	author = {Le Nours, Sébastien and Postula, Adam},
+	month = dec,
+	year = {2018},
+	pages = {1667--1685}
+}
+
+@article{lipp_meltdown_2018,
+	title = {Meltdown},
+	url = {http://arxiv.org/abs/1801.01207},
+	abstract = {The security of computer systems fundamentally relies on memory isolation, e.g., kernel address ranges are marked as non-accessible and are protected from user access. In this paper, we present Meltdown. Meltdown exploits side effects of out-of-order execution on modern processors to read arbitrary kernel-memory locations including personal data and passwords. Out-of-order execution is an indispensable performance feature and present in a wide range of modern processors. The attack works on different Intel microarchitectures since at least 2010 and potentially other processors are affected. The root cause of Meltdown is the hardware. The attack is independent of the operating system, and it does not rely on any software vulnerabilities. Meltdown breaks all security assumptions given by address space isolation as well as paravirtualized environments and, thus, every security mechanism building upon this foundation. On affected systems, Meltdown enables an adversary to read memory of other processes or virtual machines in the cloud without any permissions or privileges, affecting millions of customers and virtually every user of a personal computer. We show that the KAISER defense mechanism for KASLR has the important (but inadvertent) side effect of impeding Meltdown. We stress that KAISER must be deployed immediately to prevent large-scale exploitation of this severe information leakage.},
+	urldate = {2020-05-07},
+	journal = {arXiv:1801.01207 [cs]},
+	author = {Lipp, Moritz and Schwarz, Michael and Gruss, Daniel and Prescher, Thomas and Haas, Werner and Mangard, Stefan and Kocher, Paul and Genkin, Daniel and Yarom, Yuval and Hamburg, Mike},
+	month = jan,
+	year = {2018},
+	note = {arXiv: 1801.01207},
+	keywords = {Computer Science - Cryptography and Security}
+}
+
+@article{kelly_network_1991,
+	title = {Network routing},
+	volume = {337},
+	url = {https://royalsocietypublishing.org/doi/abs/10.1098/rsta.1991.0129},
+	doi = {10.1098/rsta.1991.0129},
+	abstract = {How should flows through a network be organized, so that the network responds sensibly to failures and overloads? The question is currently of considerable technological importance in connection with the development of computer and telecommunication networks, while in various other forms it has a long history in the fields of physics and economics. In all of these areas there is interest in how simple, local rules, often involving random actions, can produce coherent and purposeful behaviour at the macroscopic level. This paper describes some examples from these various fields, and indicates how analogies with fundamental concepts such as energy and price can provide powerful insights into the design of routing schemes for communication networks.},
+	number = {1647},
+	urldate = {2020-05-05},
+	journal = {Philosophical Transactions of the Royal Society of London. Series A: Physical and Engineering Sciences},
+	author = {Kelly, F. P. and Cox, David Roxbee and Titterington, D. M.},
+	month = dec,
+	year = {1991},
+	pages = {343--367}
+}
+
+@inproceedings{chen_altruism_2008,
+	address = {Chicago, Il, USA},
+	series = {{EC} '08},
+	title = {Altruism, selfishness, and spite in traffic routing},
+	isbn = {978-1-60558-169-9},
+	url = {https://doi.org/10.1145/1386790.1386816},
+	doi = {10.1145/1386790.1386816},
+	abstract = {In this paper, we study the price of anarchy of traffic routing, under the assumption that users are partially altruistic or spiteful. We model such behavior by positing that the "cost" perceived by a user is a linear combination of the actual latency of the route chosen (selfish component), and the increase in latency the user causes for others (altruistic component). We show that if all users have a coefficient of at least β {\textgreater} 0 for the altruistic component, then the price of anarchy is bounded by 1/β, for all network topologies, arbitrary commodities, and arbitrary semi-convex latency functions. We extend this result to give more precise bounds on the price of anarchy for specific classes of latency functions, even for β {\textless} 0 modeling spiteful behavior. In particular, we show that if all latency functions are linear, the price of anarchy is bounded by 4/(3+2β--β2). We next study non-uniform altruism distributions, where different users may have different coefficients β. We prove that all such games, even with infinitely many types of players, have a Nash Equilibrium. We show that if the average of the coefficients for the altruistic components of all users is β, then the price of anarchy is bounded by 1/β, for single commodity parallel link networks, and arbitrary convex latency functions. In particular, this result generalizes, albeit non-constructively, the Stackelberg routing results of Roughgarden and of Swamy. More generally, we bound the price of anarchy based on the class of allowable latency functions, and as a corollary obtain tighter bounds for Stackelberg routing than a recent result of Swamy.},
+	urldate = {2020-05-05},
+	booktitle = {Proceedings of the 9th {ACM} conference on {Electronic} commerce},
+	publisher = {Association for Computing Machinery},
+	author = {Chen, Po-An and Kempe, David},
+	month = jul,
+	year = {2008},
+	keywords = {altruism, anarchy, routing, selfishness, spite},
+	pages = {140--149}
+}
+
+@article{hoefer_competitive_2011,
+	title = {Competitive routing over time},
+	volume = {412},
+	issn = {0304-3975},
+	url = {http://www.sciencedirect.com/science/article/pii/S0304397511004956},
+	doi = {10.1016/j.tcs.2011.05.055},
+	abstract = {Congestion games are a fundamental and widely studied model for selfish allocation problems like routing and load balancing. An intrinsic property of these games is that players allocate resources simultaneously and instantly. This is particularly unrealistic for many network routing scenarios, which are one of the prominent application scenarios of congestion games. In many networks, load travels along routes over time and allocation of edges happens sequentially. In this paper, we consider two frameworks that enhance network congestion games with a notion of time. We introduce temporal network congestion games that are based on coordination mechanisms — local policies that allow to sequentialize traffic on the edges. In addition, we consider congestion games with time-dependent costs, in which travel times are fixed but quality of service of transmission varies with load over time. We study existence and complexity properties of pure Nash equilibria and best-response strategies in both frameworks for the special case of linear latency functions. In some cases our results can be used to characterize convergence properties of various improvement dynamics, by which the population of players can reach equilibrium in a distributed fashion.},
+	language = {en},
+	number = {39},
+	urldate = {2020-05-05},
+	journal = {Theoretical Computer Science},
+	author = {Hoefer, Martin and Mirrokni, Vahab S. and Röglin, Heiko and Teng, Shang-Hua},
+	month = sep,
+	year = {2011},
+	keywords = {Convergence, Coordination Mechanism, Equilibrium Computation, Nash equilibrium, Network Congestion Games, Routing},
+	pages = {5420--5432}
+}
+
+@inproceedings{wu_incentive-compatible_2008,
+	address = {San Francisco, California, USA},
+	series = {{MobiCom} '08},
+	title = {Incentive-compatible opportunistic routing for wireless networks},
+	isbn = {978-1-60558-096-8},
+	url = {https://doi.org/10.1145/1409944.1409979},
+	doi = {10.1145/1409944.1409979},
+	abstract = {User-contributed wireless mesh networks are a disruptive technology that may fundamentally change the economics of edge network access and bring the benefits of a computer network infrastructure to local communities at low cost, anywhere in the world. To achieve high throughput despite highly unpredictable and lossy wireless channels, it is essential that such networks take advantage of transmission opportunities wherever they emerge. However, as opportunistic routing departs from the traditional but less effective deterministic, shortest-path based routing, user nodes in such networks may have less incentive to follow protocols and contribute. In this paper, we present the first routing protocols in which it is incentive-compatible for each user node to honestly participate in the routing despite opportunistic transmissions. We not only rigorously prove the properties of our protocols but also thoroughly evaluate a complete implementation of our protocols. Experiments show that there is a 5.8\%-58.0\% gain in throughput when compared with an opportunistic routing protocol that does not provide incentives and users can act selfishly.},
+	urldate = {2020-05-05},
+	booktitle = {Proceedings of the 14th {ACM} international conference on {Mobile} computing and networking},
+	publisher = {Association for Computing Machinery},
+	author = {Wu, Fan and Chen, Tingting and Zhong, Sheng and Li, Li Erran and Yang, Yang Richard},
+	month = sep,
+	year = {2008},
+	keywords = {incentive, wireless},
+	pages = {303--314}
+}
+
+@article{bosshart_p4_2014,
+	title = {P4: programming protocol-independent packet processors},
+	volume = {44},
+	issn = {0146-4833},
+	shorttitle = {P4},
+	url = {https://doi.org/10.1145/2656877.2656890},
+	doi = {10.1145/2656877.2656890},
+	abstract = {P4 is a high-level language for programming protocol-independent packet processors. P4 works in conjunction with SDN control protocols like OpenFlow. In its current form, OpenFlow explicitly specifies protocol headers on which it operates. This set has grown from 12 to 41 fields in a few years, increasing the complexity of the specification while still not providing the flexibility to add new headers. In this paper we propose P4 as a strawman proposal for how OpenFlow should evolve in the future. We have three goals: (1) Reconfigurability in the field: Programmers should be able to change the way switches process packets once they are deployed. (2) Protocol independence: Switches should not be tied to any specific network protocols. (3) Target independence: Programmers should be able to describe packet-processing functionality independently of the specifics of the underlying hardware. As an example, we describe how to use P4 to configure a switch to add a new hierarchical label.},
+	number = {3},
+	urldate = {2020-04-23},
+	journal = {ACM SIGCOMM Computer Communication Review},
+	author = {Bosshart, Pat and Daly, Dan and Gibb, Glen and Izzard, Martin and McKeown, Nick and Rexford, Jennifer and Schlesinger, Cole and Talayco, Dan and Vahdat, Amin and Varghese, George and Walker, David},
+	month = jul,
+	year = {2014},
+	keywords = {p4, protocol-independent, reconfigurability, sdn},
+	pages = {87--95}
+}
+
+@article{noauthor_zfs_nodate,
+	title = {zfs}
+}
+@inproceedings{widianto_implementation_2016,
+	title = {On the implementation of {ZFS} ({Zettabyte} {File} {System}) storage system},
+	doi = {10.1109/ICITACEE.2016.7892481},
+	abstract = {Digital data storage is very critical in computer systems. Storage devices used to store data may at any time suffer from damage caused by its lifetime, resource failure or factory defects. Such damage may lead to loss of important data. The risk of data loss in the event of device damage can be minimized by building a storage system that supports redundancy. The design of storage based on ZFS (Zettabyte File System) aims at building a storage system that supports redundancy and data integrity without requiring additional RAID controllers. When the system fails on one of its hard drive, the stored data remains secure and data integrity is kept assured. In addition to providing redundancy, the ZFS-based storage system also supports data compression for savings on storage space. The results show that the ZFS with LZ4 compression has the highest read and write speed. For real benchmark, there is no significant difference in reading speed for a variety of different variables, whereas a significant increase in speed occurs when writing compressible files on the ZFS system with compression configuration.},
+	author = {Widianto, Eko Didik and Prasetijo, Agung and Ghufroni, Ahmad},
+	month = jan,
+	year = {2016},
+	pages = {408--413}
+}
+
+@inproceedings{terrace_object_2009,
+	address = {San Diego, California},
+	series = {{USENIX}'09},
+	title = {Object storage on {CRAQ}: high-throughput chain replication for read-mostly workloads},
+	shorttitle = {Object storage on {CRAQ}},
+	abstract = {Massive storage systems typically replicate and partition data over many potentially-faulty components to provide both reliability and scalability. Yet many commerciallydeployed systems, especially those designed for interactive use by customers, sacrifice stronger consistency properties in the desire for greater availability and higher throughput. This paper describes the design, implementation, and evaluation of CRAQ, a distributed object-storage system that challenges this inflexible tradeoff. Our basic approach, an improvement on Chain Replication, maintains strong consistency while greatly improving read throughput. By distributing load across all object replicas, CRAQ scales linearly with chain size without increasing consistency coordination. At the same time, it exposes noncommitted operations for weaker consistency guarantees when this suffices for some applications, which is especially useful under periods of high system churn. This paper explores additional design and implementation considerations for geo-replicated CRAQ storage across multiple datacenters to provide locality-optimized operations. We also discuss multi-object atomic updates and multicast optimizations for large-object updates.},
+	urldate = {2020-04-01},
+	booktitle = {Proceedings of the 2009 conference on {USENIX} {Annual} technical conference},
+	publisher = {USENIX Association},
+	author = {Terrace, Jeff and Freedman, Michael J.},
+	month = jun,
+	year = {2009},
+	keywords = {6.824},
+	pages = {11}
+}
+
+@inproceedings{thekkath_frangipani_1997,
+	address = {Saint Malo, France},
+	series = {{SOSP} '97},
+	title = {Frangipani: a scalable distributed file system},
+	isbn = {9780897919166},
+	shorttitle = {Frangipani},
+	url = {https://doi.org/10.1145/268998.266694},
+	doi = {10.1145/268998.266694},
+	urldate = {2020-04-01},
+	booktitle = {Proceedings of the sixteenth {ACM} symposium on {Operating} systems principles},
+	publisher = {Association for Computing Machinery},
+	author = {Thekkath, Chandramohan A. and Mann, Timothy and Lee, Edward K.},
+	month = oct,
+	year = {1997},
+	keywords = {6.824},
+	pages = {224--237}
+}
+
+@inproceedings{verbitski_amazon_2017,
+	address = {Chicago, Illinois, USA},
+	series = {{SIGMOD} '17},
+	title = {Amazon {Aurora}: {Design} {Considerations} for {High} {Throughput} {Cloud}-{Native} {Relational} {Databases}},
+	isbn = {9781450341974},
+	shorttitle = {Amazon {Aurora}},
+	url = {https://doi.org/10.1145/3035918.3056101},
+	doi = {10.1145/3035918.3056101},
+	abstract = {Amazon Aurora is a relational database service for OLTP workloads offered as part of Amazon Web Services (AWS). In this paper, we describe the architecture of Aurora and the design considerations leading to that architecture. We believe the central constraint in high throughput data processing has moved from compute and storage to the network. Aurora brings a novel architecture to the relational database to address this constraint, most notably by pushing redo processing to a multi-tenant scale-out storage service, purpose-built for Aurora. We describe how doing so not only reduces network traffic, but also allows for fast crash recovery, failovers to replicas without loss of data, and fault-tolerant, self-healing storage. We then describe how Aurora achieves consensus on durable state across numerous storage nodes using an efficient asynchronous scheme, avoiding expensive and chatty recovery protocols. Finally, having operated Aurora as a production service for over 18 months, we share the lessons we have learnt from our customers on what modern cloud applications expect from databases.},
+	urldate = {2020-04-01},
+	booktitle = {Proceedings of the 2017 {ACM} {International} {Conference} on {Management} of {Data}},
+	publisher = {Association for Computing Machinery},
+	author = {Verbitski, Alexandre and Gupta, Anurag and Saha, Debanjan and Brahmadesam, Murali and Gupta, Kamal and Mittal, Raman and Krishnamurthy, Sailesh and Maurice, Sandor and Kharatishvili, Tengiz and Bao, Xiaofeng},
+	month = may,
+	year = {2017},
+	keywords = {6.824, databases, distributed systems, log processing, oltp, performance, quorum models, recovery, replication},
+	pages = {1041--1052}
+}
+
+@inproceedings{hunt_zookeeper_2010,
+	address = {Boston, MA},
+	series = {{USENIXATC}'10},
+	title = {{ZooKeeper}: wait-free coordination for internet-scale systems},
+	shorttitle = {{ZooKeeper}},
+	abstract = {In this paper, we describe ZooKeeper, a service for coordinating processes of distributed applications. Since ZooKeeper is part of critical infrastructure, ZooKeeper aims to provide a simple and high performance kernel for building more complex coordination primitives at the client. It incorporates elements from group messaging, shared registers, and distributed lock services in a replicated, centralized service. The interface exposed by Zoo-Keeper has the wait-free aspects of shared registers with an event-driven mechanism similar to cache invalidations of distributed file systems to provide a simple, yet powerful coordination service. The ZooKeeper interface enables a high-performance service implementation. In addition to the wait-free property, ZooKeeper provides a per client guarantee of FIFO execution of requests and linearizability for all requests that change the ZooKeeper state. These design decisions enable the implementation of a high performance processing pipeline with read requests being satisfied by local servers. We show for the target workloads, 2:1 to 100:1 read to write ratio, that ZooKeeper can handle tens to hundreds of thousands of transactions per second. This performance allows ZooKeeper to be used extensively by client applications.},
+	urldate = {2020-04-01},
+	booktitle = {Proceedings of the 2010 {USENIX} conference on {USENIX} annual technical conference},
+	publisher = {USENIX Association},
+	author = {Hunt, Patrick and Konar, Mahadev and Junqueira, Flavio P. and Reed, Benjamin},
+	month = jun,
+	year = {2010},
+	keywords = {6.824},
+	pages = {11}
+}
+
+@inproceedings{ongaro_search_2014,
+	title = {In {Search} of an {Understandable} {Consensus} {Algorithm}},
+	isbn = {978-1-931971-10-2},
+	url = {https://www.usenix.org/node/184041},
+	language = {en},
+	urldate = {2020-04-01},
+	author = {Ongaro, Diego and Ousterhout, John},
+	year = {2014},
+	keywords = {6.033 rec, 6.824},
+	pages = {305--319}
+}
+
+@inproceedings{ghemawat_google_2003,
+	address = {Bolton Landing, NY},
+	title = {The {Google} {File} {System}},
+	booktitle = {Proceedings of the 19th {ACM} {Symposium} on {Operating} {Systems} {Principles}},
+	author = {Ghemawat, Sanjay and Gobioff, Howard and Leung, Shun-Tak},
+	year = {2003},
+	keywords = {6.033 rec, 6.824},
+	pages = {20--43}
+}
+
+@inproceedings{dean_mapreduce_2004,
+	address = {San Francisco, CA},
+	title = {{MapReduce}: {Simplified} {Data} {Processing} on {Large} {Clusters}},
+	shorttitle = {{MapReduce}},
+	booktitle = {{OSDI}'04: {Sixth} {Symposium} on {Operating} {System} {Design} and {Implementation}},
+	author = {Dean, Jeffrey and Ghemawat, Sanjay},
+	year = {2004},
+	keywords = {6.033 rec, 6.824},
+	pages = {137--150}
+}
+
+@inproceedings{khani_terarack_2020,
+	title = {{TeraRack}: {A} {Tbps} {Rack} for {Machine} {Learning} {Training}},
+	shorttitle = {{TeraRack}},
+	abstract = {We explore a novel, silicon photonics-based approach to build a high bandwidth rack designated for machine learning training. Our goal is to scale state-of-the-art ML training platforms, such as NVIDIA’s DGX and Intel’s Gaudi, from a handful of GPUs in one platform to 256 GPUs in a rack while maintaining Tbps communication bandwidth. Our design, called TeraRack, leverages the emergence of silicon photonics technology to achieve Tbps bandwidth in/out of the GPU chip. TeraRack enables accelerating the training time of popular ML models using (i) a scheduling algorithm that finds the best wavelength allocation to maximize the throughput between communicating nodes; and (ii) a device placement algorithm that partitions ML models across nodes to ensure a sparse and local communication pattern that can be supported efficiently on the interconnect. We build a small prototype with FPGA boards and a 10 mm × 10 mm silicon photonics chip. Simulation results show that TeraRack’s performance on realistic ML training workloads is equivalent to a full-bisection 256×1.2Tbps electrical fabric at 6× lower cost, enabling faster model/data parallel training.},
+	author = {Khani, Mehrdad and Ghobadi, Manya and Alizadeh, Mohammad and Zhu, Ziyi and Glick, Madeleine and Bergman, Keren and Vahdat, Amin and Klenk, Benjamin and Ebrahimi, Eiman},
+	year = {2020}
+}
+
+@article{sivaraman_smoking_2016,
+	title = {Smoking {Out} the {Heavy}-{Hitter} {Flows} with {HashPipe}},
+	abstract = {Identifying the "heavy hitter" flows or flows with large traffic volumes in the dataplane is important for several applications e.g., flow-size aware routing, DoS detection and traffic engineering. However, measurement in the data plane is constrained by the need for line-rate processing (at 10-100Gb/s) and limited memory in switching hardware. We propose HashPipe, a heavy hitter detection algorithm using emerging programmable data planes. HashPipe implements a pipeline of hash tables which retain counters for heavy flows in various stages while evicting lighter flows over time. We prototype HashPipe in P4 and evaluate it with CAIDA packet traces from an ISP backbone link. We find that HashPipe identifies 95\% of the 300 heaviest flows with less than 80KB of memory on a trace that contains 500,000 flows.},
+	author = {Sivaraman, Vibhaalakshmi and Narayana, Srinivas and Rottenstreich, Ori and Muthukrishnan, Senthilmurugan and Rexford, Jennifer},
+	month = nov,
+	year = {2016}
+}
+
+@inproceedings{kassing_beyond_2017,
+	address = {Los Angeles, CA, USA},
+	series = {{SIGCOMM} '17},
+	title = {Beyond fat-trees without antennae, mirrors, and disco-balls},
+	isbn = {978-1-4503-4653-5},
+	url = {https://doi.org/10.1145/3098822.3098836},
+	doi = {10.1145/3098822.3098836},
+	abstract = {Recent studies have observed that large data center networks often have a few hotspots while most of the network is underutilized. Consequently, numerous data center network designs have explored the approach of identifying these communication hotspots in real-time and eliminating them by leveraging flexible optical or wireless connections to dynamically alter the network topology. These proposals are based on the premise that statically wired network topologies, which lack the opportunity for such online optimization, are fundamentally inefficient, and must be built at uniform full capacity to handle unpredictably skewed traffic. We show this assumption to be false. Our results establish that state-of-the-art static networks can also achieve the performance benefits claimed by dynamic, reconfigurable designs of the same cost: for the skewed traffic workloads used to make the case for dynamic networks, the evaluated static networks can achieve performance matching full-bandwidth fat-trees at two-thirds of the cost. Surprisingly, this can be accomplished even without relying on any form of online optimization, including the optimization of routing configuration in response to the traffic demands. Our results substantially lower the barriers for improving upon today's data centers by showing that a static, cabling-friendly topology built using commodity equipment yields superior performance when combined with well-understood routing methods.},
+	urldate = {2020-03-24},
+	booktitle = {Proceedings of the {Conference} of the {ACM} {Special} {Interest} {Group} on {Data} {Communication}},
+	publisher = {Association for Computing Machinery},
+	author = {Kassing, Simon and Valadarsky, Asaf and Shahaf, Gal and Schapira, Michael and Singla, Ankit},
+	month = aug,
+	year = {2017},
+	keywords = {Data center, Routing, Topology},
+	pages = {281--294}
+}
+
+@article{avin_measuring_2019,
+	title = {Measuring the {Complexity} of {Packet} {Traces}},
+	url = {http://arxiv.org/abs/1905.08339},
+	abstract = {This paper studies the structure of several real-world traces (including Facebook, High-Performance Computing, Machine Learning, and simulation generated traces) and presents a systematic approach to quantify and compare the structure of packet traces based on the entropy contained in the trace file. Insights into the structure of packet traces can lead to improved network algorithms that are optimized toward specific traffic patterns. We then present a methodology to quantify the temporal and non-temporal components of entropy contained in a packet trace, called the trace complexity, using randomization and compression. We show that trace complexity provides unique insights into the characteristics of various applications and argue that there is a need for traffic generation models that preserve the intrinsic structure of empirically measured application traces. We then propose a traffic generator model that is able to produce a synthetic trace that matches the complexity level of its corresponding real-world trace.},
+	urldate = {2020-03-24},
+	journal = {arXiv:1905.08339 [cs]},
+	author = {Avin, Chen and Ghobadi, Manya and Griner, Chen and Schmid, Stefan},
+	month = may,
+	year = {2019},
+	note = {arXiv: 1905.08339},
+	keywords = {C.2.3, C.4, Computer Science - Networking and Internet Architecture}
+}
+
+@article{mellette_expanding_2019,
+	title = {Expanding across time to deliver bandwidth efficiency and low latency},
+	url = {http://arxiv.org/abs/1903.12307},
+	abstract = {Datacenters need networks that support both low-latency and high-bandwidth packet delivery to meet the stringent requirements of modern applications. We present Opera, a dynamic network that delivers latency-sensitive traffic quickly by relying on multi-hop forwarding in the same way as expander-graph-based approaches, but provides near-optimal bandwidth for bulk flows through direct forwarding over time-varying source-to-destination circuits. The key to Opera's design is the rapid and deterministic reconfiguration of the network, piece-by-piece, such that at any moment in time the network implements an expander graph, yet, integrated across time, the network provides bandwidth-efficient single-hop paths between all racks. We show that Opera supports low-latency traffic with flow completion times comparable to cost-equivalent static topologies, while delivering up to 4x the bandwidth for all-to-all traffic and supporting 60\% higher load for published datacenter workloads.},
+	urldate = {2020-03-24},
+	journal = {arXiv:1903.12307 [cs]},
+	author = {Mellette, William M. and Das, Rajdeep and Guo, Yibo and McGuinness, Rob and Snoeren, Alex C. and Porter, George},
+	month = mar,
+	year = {2019},
+	note = {arXiv: 1903.12307},
+	keywords = {Computer Science - Networking and Internet Architecture, opera}
+}
+
+@inproceedings{mellette_rotornet_2017,
+	address = {Los Angeles, CA, USA},
+	series = {{SIGCOMM} '17},
+	title = {{RotorNet}: {A} {Scalable}, {Low}-complexity, {Optical} {Datacenter} {Network}},
+	isbn = {978-1-4503-4653-5},
+	shorttitle = {{RotorNet}},
+	url = {https://doi.org/10.1145/3098822.3098838},
+	doi = {10.1145/3098822.3098838},
+	abstract = {The ever-increasing bandwidth requirements of modern datacenters have led researchers to propose networks based upon optical circuit switches, but these proposals face significant deployment challenges. In particular, previous proposals dynamically configure circuit switches in response to changes in workload, requiring network-wide demand estimation, centralized circuit assignment, and tight time synchronization between various network elements--- resulting in a complex and unwieldy control plane. Moreover, limitations in the technologies underlying the individual circuit switches restrict both the rate at which they can be reconfigured and the scale of the network that can be constructed. We propose RotorNet, a circuit-based network design that addresses these two challenges. While RotorNet dynamically reconfigures its constituent circuit switches, it decouples switch configuration from traffic patterns, obviating the need for demand collection and admitting a fully decentralized control plane. At the physical layer, RotorNet relaxes the requirements on the underlying circuit switches---in particular by not requiring individual switches to implement a full crossbar---enabling them to scale to 1000s of ports. We show that RotorNet outperforms comparably priced Fat Tree topologies under a variety of workload conditions, including traces taken from two commercial datacenters. We also demonstrate a small-scale RotorNet operating in practice on an eight-node testbed.},
+	urldate = {2020-03-24},
+	booktitle = {Proceedings of the {Conference} of the {ACM} {Special} {Interest} {Group} on {Data} {Communication}},
+	publisher = {Association for Computing Machinery},
+	author = {Mellette, William M. and McGuinness, Rob and Roy, Arjun and Forencich, Alex and Papen, George and Snoeren, Alex C. and Porter, George},
+	month = aug,
+	year = {2017},
+	keywords = {Datacenter, optical switching},
+	pages = {267--280}
+}
+
+@inproceedings{handley_re-architecting_2017,
+	address = {Los Angeles, CA, USA},
+	series = {{SIGCOMM} '17},
+	title = {Re-architecting datacenter networks and stacks for low latency and high performance},
+	isbn = {978-1-4503-4653-5},
+	url = {https://doi.org/10.1145/3098822.3098825},
+	doi = {10.1145/3098822.3098825},
+	abstract = {Modern datacenter networks provide very high capacity via redundant Clos topologies and low switch latency, but transport protocols rarely deliver matching performance. We present NDP, a novel data-center transport architecture that achieves near-optimal completion times for short transfers and high flow throughput in a wide range of scenarios, including incast. NDP switch buffers are very shallow and when they fill the switches trim packets to headers and priority forward the headers. This gives receivers a full view of instantaneous demand from all senders, and is the basis for our novel, high-performance, multipath-aware transport protocol that can deal gracefully with massive incast events and prioritize traffic from different senders on RTT timescales. We implemented NDP in Linux hosts with DPDK, in a software switch, in a NetFPGA-based hardware switch, and in P4. We evaluate NDP's performance in our implementations and in large-scale simulations, simultaneously demonstrating support for very low-latency and high throughput.},
+	urldate = {2020-03-24},
+	booktitle = {Proceedings of the {Conference} of the {ACM} {Special} {Interest} {Group} on {Data} {Communication}},
+	publisher = {Association for Computing Machinery},
+	author = {Handley, Mark and Raiciu, Costin and Agache, Alexandru and Voinescu, Andrei and Moore, Andrew W. and Antichi, Gianni and Wójcik, Marcin},
+	month = aug,
+	year = {2017},
+	keywords = {Datacenters, Network Stacks, Transport Protocols},
+	pages = {29--42}
+}

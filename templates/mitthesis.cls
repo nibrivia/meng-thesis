@@ -288,7 +288,7 @@
 }
 \fi
 
-% I redefine these formats that were defined in report.sty
+% I redefine these formats that\newcommand{\code}[1]{\texttt{#1}} were defined in report.sty
 % Definition of 'headings' page style 
 %  Note the use of ##1 for parameter of \def\chaptermark inside the
 %  \def\ps@headings.
