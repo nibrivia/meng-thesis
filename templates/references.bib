@@ -1,4 +1,158 @@
 
+@book{kernighan_c_1988,
+	edition = {2nd},
+	title = {The  {C} {Programming} {Language}},
+	isbn = {978-0-13-110370-2},
+	abstract = {From the Publisher: This second editon describes C as defined by the ANSI standard. This book is meant to help the reader learn how to program in C. The book assumes some familiarity with basic programming concepts like variables, assignment statements, loops, and functions. A novice programmer should be able to read along and pick up the language. FEATURES: All examples have been tested, which is in machine-readable form. It discusses various aspects of C in more detail, although the emphasis is on examples of complete programs, rather than isolated fragments. It deals with basic data types, operators and expressions. Covers functions and program structure, external variables, scope rules, multiple source files, and also touches on the preprocessor. It also describes an interface between C programs and the UNIX operating system, concentrating on input/output, the file system, and storage allocation. It also provides a language reference manual. The official statement of the syntax and semantics of C is the ANSI standard.},
+	publisher = {Prentice Hall Professional Technical Reference},
+	author = {Kernighan, Brian W. and Ritchie, Dennis M.},
+	year = {1988}
+}
+
+@book{donovan_go_2015,
+	edition = {1st},
+	title = {The {Go} {Programming} {Language}},
+	isbn = {978-0-13-419044-0},
+	abstract = {The Go Programming Language is the authoritative resource for any programmer who wants to learn Go. It shows how to write clear and idiomatic Go to solve real-world problems. The book does not assume prior knowledge of Go nor experience with any specific language, so youll find it accessible whether youre most comfortable with JavaScript, Ruby, Python, Java, or C++. The first chapter is a tutorial on the basic concepts of Go, introduced through programs for file I/O and text processing, simple graphics, and web clients and servers. Early chapters cover the structural elements of Go programs: syntax, control flow, data types, and the organization of a program into packages, files, and functions. The examples illustrate many packages from the standard library and show how to create new ones of your own. Later chapters explain the package mechanism in more detail, and how to build, test, and maintain projects using the go tool. The chapters on methods and interfaces introduce Gos unconventional approach to object-oriented programming, in which methods can be declared on any type and interfaces are implicitly satisfied. They explain the key principles of encapsulation, composition, and substitutability using realistic examples. Two chapters on concurrency present in-depth approaches to this increasingly important topic. The first, which covers the basic mechanisms of goroutines and channels, illustrates the style known as communicating sequential processes for which Go is renowned. The second covers more traditional aspects of concurrency with shared variables. These chapters provide a solid foundation for programmers encountering concurrency for the first time. The final two chapters explore lower-level features of Go. One covers the art of metaprogramming using reflection. The other shows how to use the unsafe package to step outside the type system for special situations, and how to use the cgo tool to create Go bindings for C libraries. The book features hundreds of interesting and practical examples of well-written Go code that cover the whole language, its most important packages, and a wide range of applications. Each chapter has exercises to test your understanding and explore extensions and alternatives. Source code is freely available for download from http://gopl.io/ and may be conveniently fetched, built, and installed using the go get command.},
+	publisher = {Addison-Wesley Professional},
+	author = {Donovan, Alan A.A. and Kernighan, Brian W.},
+	year = {2015}
+}
+
+@misc{brode-roger_nibriviasimcomp_2020,
+	title = {nibrivia/simcomp},
+	url = {https://github.com/nibrivia/simcomp},
+	abstract = {Contribute to nibrivia/simcomp development by creating an account on GitHub.},
+	urldate = {2020-07-06},
+	author = {Brode-Roger, Olivia},
+	month = may,
+	year = {2020},
+	note = {original-date: 2020-04-27T20:33:11Z}
+}
+
+@misc{brode-roger_nibriviarustasim_2020,
+	title = {nibrivia/rustasim},
+	copyright = {MIT License         ,                 MIT License},
+	url = {https://github.com/nibrivia/rustasim},
+	abstract = {High-performance packet-level distributed datacenter network simulator},
+	urldate = {2020-07-06},
+	author = {Brode-Roger, Olivia},
+	month = jul,
+	year = {2020},
+	note = {original-date: 2020-05-06T22:40:53Z},
+	keywords = {network-simulator, rust, simulator}
+}
+
+@inproceedings{alizadeh_data_2010,
+	address = {New Delhi, India},
+	series = {{SIGCOMM} '10},
+	title = {Data center {TCP} ({DCTCP})},
+	isbn = {978-1-4503-0201-2},
+	url = {https://doi.org/10.1145/1851182.1851192},
+	doi = {10.1145/1851182.1851192},
+	abstract = {Cloud data centers host diverse applications, mixing workloads that require small predictable latency with others requiring large sustained throughput. In this environment, today's state-of-the-art TCP protocol falls short. We present measurements of a 6000 server production cluster and reveal impairments that lead to high application latencies, rooted in TCP's demands on the limited buffer space available in data center switches. For example, bandwidth hungry "background" flows build up queues at the switches, and thus impact the performance of latency sensitive "foreground" traffic. To address these problems, we propose DCTCP, a TCP-like protocol for data center networks. DCTCP leverages Explicit Congestion Notification (ECN) in the network to provide multi-bit feedback to the end hosts. We evaluate DCTCP at 1 and 10Gbps speeds using commodity, shallow buffered switches. We find DCTCP delivers the same or better throughput than TCP, while using 90\% less buffer space. Unlike TCP, DCTCP also provides high burst tolerance and low latency for short flows. In handling workloads derived from operational measurements, we found DCTCP enables the applications to handle 10X the current background traffic, without impacting foreground traffic. Further, a 10X increase in foreground traffic does not cause any timeouts, thus largely eliminating incast problems.},
+	urldate = {2020-07-06},
+	booktitle = {Proceedings of the {ACM} {SIGCOMM} 2010 conference},
+	publisher = {Association for Computing Machinery},
+	author = {Alizadeh, Mohammad and Greenberg, Albert and Maltz, David A. and Padhye, Jitendra and Patel, Parveen and Prabhakar, Balaji and Sengupta, Sudipta and Sridharan, Murari},
+	month = aug,
+	year = {2010},
+	keywords = {ECN, TCP, data center network},
+	pages = {63--74}
+}
+
+@misc{noauthor_add_nodate,
+	title = {Add a bounded {SPSC} queue by stjepang · {Pull} {Request} \#338 · crossbeam-rs/crossbeam},
+	url = {https://github.com/crossbeam-rs/crossbeam/pull/338},
+	abstract = {Inspired by the Rust 2019: Rust Audio thread, I decided to add a high-performance wait-free bounded SPSC queue. This is the most common queue type in audio programming and it\&\#39;s very important i...},
+	language = {en},
+	urldate = {2020-07-06},
+	journal = {GitHub},
+	note = {Library Catalog: github.com}
+}
+
+@book{van_rossum_python_2009,
+	address = {Scotts Valley, CA},
+	title = {Python 3 {Reference} {Manual}},
+	isbn = {978-1-4414-1269-0},
+	abstract = {PYTHON 3 Reference Manual (Python Documentation MANUAL Part 2).Python is an easy to learn object-oriented programming language, which combines power with clear syntax. It has modules, classes, exceptions, very high level data types, and dynamic typing. Python is free software. It can be used with GNU (GNU/Linux), Unix, Microsoft Windows and many other systems.This is a printed softcover copy of the official Python documentation from the latest Python 3.0 distribution. For each copy sold \$1 will be donated to the Python Software Foundation by the publisher.This book is part of a brand new six-part series of Python documentation books. Searching for "Python Documentation Manual" will show all six available books.ABOUT THE AUTHOR: Guido van Rossum, is the inventor of Python. Fred L. Drake, Jr. is the official editor of the Python documentation.},
+	publisher = {CreateSpace},
+	author = {Van Rossum, Guido and Drake, Fred L.},
+	year = {2009}
+}
+
+@misc{noauthor_crossbeam-rscrossbeam_2020,
+	title = {crossbeam-rs/crossbeam},
+	copyright = {View license         ,                 View license},
+	url = {https://github.com/crossbeam-rs/crossbeam},
+	abstract = {Tools for concurrent programming in Rust. Contribute to crossbeam-rs/crossbeam development by creating an account on GitHub.},
+	urldate = {2020-07-06},
+	publisher = {Crossbeam},
+	month = jul,
+	year = {2020},
+	note = {original-date: 2015-05-13T18:10:54Z},
+	keywords = {concurrency, data-structures, lock-free, parallelism, rust, synchronization, threads}
+}
+
+@misc{noauthor_crossbeamdeque_nodate,
+	title = {crossbeam::deque - {Rust}},
+	url = {https://docs.rs/crossbeam/0.7.3/crossbeam/deque/index.html},
+	urldate = {2020-07-06}
+}
+
+@book{klabnik_rust_2018,
+	address = {USA},
+	title = {The {Rust} {Programming} {Language}},
+	isbn = {978-1-59327-828-1},
+	abstract = {The Rust Programming Language is the official book on Rust, an open-source, community-developed systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety. This is the undisputed go-to guide to Rust, written by two members of the Rust core team, with feedback and contributions from 42 members of the community. The book assumes that youve written code in another programming language but makes no assumptions about which one, meaning the material is accessible and useful to developers from a wide variety of programming backgrounds. Known by the Rust community as The Book, The Rust Programming Language includes concept chapters, where youll learn about a particular aspect of Rust, and project chapters, where youll apply what youve learned so far to build small programs. The Book opens with a quick hands-on project to introduce the basics then explores key concepts in depth, such as ownership, the type system, error handling, and fearless concurrency. Next come detailed explanations of Rust-oriented perspectives on topics like pattern matching, iterators, and smart pointers, with concrete examples and exercises--taking you from theory to practice. The Rust Programming Language will also show you how to:- Grasp important concepts unique to Rust, like ownership, borrowing, and lifetimes- Use Cargo, Rusts built-in package manager, to build and maintain your code, including downloading and building dependencies- Effectively use Rusts zero-cost abstractions and employ your own Youll learn to develop reliable code thats speed and memory efficient, while avoiding the infamous and arcane programming pitfalls common at the systems level. When you need to dive down into lower-level control, this guide will show you how without taking on the customary risk of crashes or security holes and without requiring you to learn the fine points of a fickle toolchain. Youll also learn how to create command line programs, build single- and multithreaded web servers, and much more. The Rust Programming Language fully embraces Rusts potential to empower its users. This friendly and approachable guide will help you build not only your knowledge of Rust but also your ability to program with confidence in a wider variety of domains.},
+	publisher = {No Starch Press},
+	author = {Klabnik, Steve and Nichols, Carol},
+	year = {2018}
+}
+
+@book{knuth_art_1998,
+	address = {USA},
+	title = {The art of computer programming,  volume 3: (2nd ed.) sorting and searching},
+	isbn = {978-0-201-89685-5},
+	shorttitle = {The art of computer programming,  volume 3},
+	publisher = {Addison Wesley Longman Publishing Co., Inc.},
+	author = {Knuth, Donald E.},
+	year = {1998}
+}
+
+@book{klabnik_rust_2018-1,
+	address = {USA},
+	title = {The {Rust} {Programming} {Language}},
+	isbn = {978-1-59327-828-1},
+	abstract = {The Rust Programming Language is the official book on Rust, an open-source, community-developed systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety. This is the undisputed go-to guide to Rust, written by two members of the Rust core team, with feedback and contributions from 42 members of the community. The book assumes that youve written code in another programming language but makes no assumptions about which one, meaning the material is accessible and useful to developers from a wide variety of programming backgrounds. Known by the Rust community as The Book, The Rust Programming Language includes concept chapters, where youll learn about a particular aspect of Rust, and project chapters, where youll apply what youve learned so far to build small programs. The Book opens with a quick hands-on project to introduce the basics then explores key concepts in depth, such as ownership, the type system, error handling, and fearless concurrency. Next come detailed explanations of Rust-oriented perspectives on topics like pattern matching, iterators, and smart pointers, with concrete examples and exercises--taking you from theory to practice. The Rust Programming Language will also show you how to:- Grasp important concepts unique to Rust, like ownership, borrowing, and lifetimes- Use Cargo, Rusts built-in package manager, to build and maintain your code, including downloading and building dependencies- Effectively use Rusts zero-cost abstractions and employ your own Youll learn to develop reliable code thats speed and memory efficient, while avoiding the infamous and arcane programming pitfalls common at the systems level. When you need to dive down into lower-level control, this guide will show you how without taking on the customary risk of crashes or security holes and without requiring you to learn the fine points of a fickle toolchain. Youll also learn how to create command line programs, build single- and multithreaded web servers, and much more. The Rust Programming Language fully embraces Rusts potential to empower its users. This friendly and approachable guide will help you build not only your knowledge of Rust but also your ability to program with confidence in a wider variety of domains.},
+	publisher = {No Starch Press},
+	author = {Klabnik, Steve and Nichols, Carol},
+	year = {2018}
+}
+
+@article{matsakis_rust_2014,
+	title = {The rust language},
+	volume = {34},
+	issn = {1094-3641},
+	url = {https://doi.org/10.1145/2692956.2663188},
+	doi = {10.1145/2692956.2663188},
+	abstract = {Rust is a new programming language for developing reliable and efficient systems. It is designed to support concurrency and parallelism in building applications and libraries that take full advantage of modern hardware. Rust's static type system is safe1 and expressive and provides strong guarantees about isolation, concurrency, and memory safety. Rust also offers a clear performance model, making it easier to predict and reason about program efficiency. One important way it accomplishes this is by allowing fine-grained control over memory representations, with direct support for stack allocation and contiguous record storage. The language balances such controls with the absolute requirement for safety: Rust's type system and runtime guarantee the absence of data races, buffer overflows, stack overflows, and accesses to uninitialized or deallocated memory.},
+	number = {3},
+	urldate = {2020-07-06},
+	journal = {ACM SIGAda Ada Letters},
+	author = {Matsakis, Nicholas D. and Klock, Felix S.},
+	month = oct,
+	year = {2014},
+	keywords = {affine type systems, memory management, rust, systems programming},
+	pages = {103--104}
+}
+
+@misc{noauthor_heapq_nodate,
+	title = {heapq — {Heap} queue algorithm — {Python} 3.7.8 documentation},
+	url = {https://docs.python.org/3.7/library/heapq.html},
+	urldate = {2020-07-06}
+}
+
 @article{van_der_walt_numpy_2011,
 	title = {The {NumPy} {Array}: {A} {Structure} for {Efficient} {Numerical} {Computation}},
 	volume = {13},
@@ -37,7 +191,7 @@ PyP},
 	note = {Library Catalog: www.pypy.org}
 }
 
-@misc{noauthor_heapq_nodate,
+@misc{noauthor_heapq_nodate-1,
 	title = {heapq — {Heap} queue algorithm — {Python} 3.7.8 documentation},
 	url = {https://docs.python.org/3.7/library/heapq.html},
 	urldate = {2020-07-06}
@@ -464,7 +618,6 @@ PyP},
 	keywords = {Convergence, Coordination Mechanism, Equilibrium Computation, Nash equilibrium, Network Congestion Games, Routing},
 	pages = {5420--5432}
 }
-
 @inproceedings{wu_incentive-compatible_2008,
 	address = {San Francisco, California, USA},
 	series = {{MobiCom} '08},
@@ -504,6 +657,7 @@ PyP},
 @article{noauthor_zfs_nodate,
 	title = {zfs}
 }
+
 @inproceedings{widianto_implementation_2016,
 	title = {On the implementation of {ZFS} ({Zettabyte} {File} {System}) storage system},
 	doi = {10.1109/ICITACEE.2016.7892481},

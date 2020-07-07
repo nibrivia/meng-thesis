@@ -25,12 +25,13 @@
 %% Page Intentionally Left Blank'', use the ``leftblank'' option, as
 %% above. 
 
-\documentclass[12pt,twoside,upcase,draft]{mitthesis}
+\documentclass[12pt,twoside,upcase]{mitthesis}
 \usepackage{lgrind}
 %% These have been added at the request of the MIT Libraries, because
 %% some PDF conversions mess up the ligatures.  -LB, 1/22/2014
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
+\usepackage{graphicx}
 \usepackage{hyperref}
 \pagestyle{plain}
 
@@ -42,6 +43,8 @@
 \def\all{all}
 \ifx\files\all \typeout{Including all files.} \else %\typeout{Including only \files.} \includeonly{\files} \fi
 \newcommand{\code}[1]{\texttt{#1}}
+
+\graphicspath{ {./figures/} }
 
 \begin{document}
 
