@@ -235,7 +235,7 @@ SPSC
 This is the core of the engine: merging multiple queues together, and returning the next event if it has heard from all neighbours, as described in \ref{null-messages}.
 If a neighbour has not been heard from, the scheduler should return a \code{Stalled} event.
 
-\subsubsection{An initial approach: the heap}
+\subsubsection{An initial approach: heaps}
 An initial approach might be to maintain a heap of all received event along with a counter for the number of events in the heap from each sender.
 The running time for this structure is sub-optimal, since it grows with to the amount of events in the queue, which is, due to the nature of waiting on everyone, always going to be nearly equal to, or greater than the number of neighbours.
 The algorithmic complexity of processing or returning an event is then $O(\log e)$, with $e$ being the number of events in the queue.
@@ -260,7 +260,9 @@ The winner of each exchange, the event to be scheduled the soonest, moves on to 
 This process eventually forms a tree analogous to the structure of many tournaments.
 Although it may be natural to record the winner of each exchange, recording the looser makes for a significantly more elegant algorithm as described by Knuth \cite{knuth_art_1998}.
 
-\paragraph{}
+% Describe the loser tree process
+
+\paragraph{Dealing with ties}
 
 \subsection{Scheduling} \label{rustasim-sched}
 
