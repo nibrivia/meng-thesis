@@ -20,7 +20,7 @@ Although there exists slightly faster "monotonic heaps", such as the Ladder Queu
 Standard heaps however are common enough that most every language has a well-optimized implementation, often making them easier to use.
 
 Fundamentally, these simulations are centralized: the scheduler drives the model forward.
-Some parallelization is possible if many events are scheduled at the same virtual time *and* the actors are able to deal with that.
+Some parallelization is possible if many events are scheduled at the same virtual time and the actors are able to deal with that.
 Even if the simulation has many events executing in parallel, we run into issues when they try to schedule new events: the scheduler needs to manage multiple new events being enqueued concurrently.
 In my experience, the overhead of managing these concurrent operations results in worse performance overall.
 
@@ -40,9 +40,43 @@ This simulator will always make progress as long as there is another event to pr
 \section{Parallel discrete event simulators} \label{pdes}
 
 The main difficulty in making event simulators parallel lies in guaranteeing causality and progress.
-It is often easy to guarantee one without the other.
+It is often easy to guarantee one without the other: without preserving causality, we can process events out of order, and without a need for progress, we are free to advance until it becomes too difficult, and stop then.
+Clearly, neither of these solutions are satisfying.
 
-In order to better understand the opportunity, or lack thereof, for parallelization, it is necessary to better understand that causality requirements imposed by the model.
+I will describe first the opportunities for concurrency in distributed simulations, then focus on the issues that are raised by needing to make progress.
+
+\subsection{Causality preservation} \label{causality}
+
+%TODO make diagram
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{causality-single}
+        \caption{
+            This series of events has no opportunity for concurrency: every event directly depends on the previous one.
+        }
+        \label{causality-graph-seq:fig}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{causality-concurrent}
+        \caption{
+            However, when the congestion window is larger, some events are independent from each other, for example \code{recv 1} and \code{send 2}.
+        }
+        \label{causality-graph-seq:fig}
+    \end{subfigure}
+    \caption{
+        These two causality graphs are very similar, however, one permits concurrency and the other does not.
+        Each graph corresponds to a sketch of a TCP exchange with a congestion window of 1 or 2.
+        The arrows represent a direct dependency between two events, the black arrows between successive sends correspond to how long it takes to transmit a single packet.
+        Every send implicitly depends on previous sends.
+    }
+    \label{causality-graph:fig}
+\end{figure}
+
+To better understand the opportunity, or lack thereof, for parallelization, it is necessary to better understand what causality requirements are imposed by the model.
+A useful tool for this job is a causality graph.
 A causality graph consists of a node for each event in the simulation, and a directed edge between from a dependency to the future event.
 Any topological sort of the resulting graph is a valid execution order of the events.
 Since the direction of the graph is always to the future, sorting the events by time is trivially correct.
@@ -53,21 +87,27 @@ Conversely, if there is no direct connection between two events, they may be exe
 This does not prevent events from sharing a common ancestor or descendant.
 
 These events that are neither ancestor nor descendants are essentially independent of the current event, they can happen before, or after, or simultaneously, it will not affect the correctness of the simulation.
-This is very similar to events outside the light-cone in physics: the happening, or not, of events outside the light cone have no causal relationship with the current point.
+This is very similar to events outside the light-cone in physics: events outside the light cone cannot have a causal relationship with the current point.
+The correctness guarantee can therefore be reduced to knowing whether the next event to process has had all of its ancestors have been processed, i.e. it is safe.
 
-The correctness challenge is therefore reduced to knowing whether the next event to process is safe, i.e. all of its ancestors have been processed.
-
-\subsection{Causality preservation} \label{causality}
+From an actor-centric point of view, this guarantee comes down to knowing if the next event available to process is in fact the next event.
+% TODO
 
 An old algorithm, described as early as 1986\cite{misra_distributed_1986}, TODO...
 
-\subsection{Conservative scheduling and null-message passing} \label{null-messages}
+\subsection{Null-message passing} \label{null-messages}
 
-In order to TODO
+Unfortunately, waiting on each of our neighbours to send us an event is prone to deadlocking.
+For example, in a network simulation where there are no packets to send, actors will not be sending any events to each other.
+Every actor will therefore be waiting for its neighbours, 
 
 \subsection{Other approaches}
-\paragraph{Optimistic scheduling} \label{optimistic-scheduling}
 
+Although the process described above is what I will be implementing in this thesis, other options exists for parallel discrete-event simulators.
+Two are worth highlighting, both sacrifice accuracy in some way in order to obtain better performance.
+The difference between the two approaches comes down to wether that accuracy error gets resolved or no.
+
+\paragraph{Optimistic scheduling} \label{optimistic-scheduling}
 It is also possible to allow actors to process events as fast as they can, possibly resulting in causality violations.
 In order to maintain correctness, the simulation needs to have a cancellation mechanism, some use anti-events \cite{} or checkpointing \cite{}. %todo cite
 This hopeful approach is the source of its name.
@@ -79,8 +119,18 @@ Trying and rolling back is a common technique in computer engineering.
 Databases use optimistic concurrency control instead of locks to rollback transactions in case of a conflict \cite{dragojevic_no_2015}.
 CPUs are continuously predicting the next instruction to allow for higher speeds, but also need a cancelling mechanism if the prediction turns out incorrect.
 
+Although correct, I have not explored this strategy out of a belief that it requires too much additional book-keeping to be useful.
+This assumption has proven to be correct, on similar models, my simulator performs better than state of the art optimistic simulators.
+
+However, optimistic simulators are able to make progress in models that the null-message passing algorithm cannot.
+A null-message passing strategy relies on there being latency between actors, allowing them to make progress with respect to each other.
+However, if the model asks for actors that may send each other events with no intervening delay, conservative simulators can get stuck: progress cannot be made if neither actor knows whether to expect an event from the other.
+% mention rarely used small latency?
+There are often ways to restructure the model in order to eliminate this situation, but this type of scenario is where optimistic strategies shine.
+
 \paragraph{Loss of accuracy}
 Another strategy could be to let execute events in the wrong order, possible yielding incorrect results.
-Results from this strategy are harder to justify: incorrect results may come from an unlucky run or simulator.
-In this thesis, correctness is an important design goal: it makes it easier to claim the results of research are good, and not just a quirk of the simulator.
-There may be cases where loss of accuracy is acceptable, or can be bounded sufficiently to make it useful.
+Indeed, in an accurate simulator, incorrect results can result from an incorrect model or an incorrect simulator.
+However, when giving up accuracy, the model may be correct, and properly implemented, but the results may still be off due to an unlucky run or a simulator bias.
+Fundamentally, this makes trusting the results of the simulator harder.
+In this thesis, correctness is an important design goal since it eliminates a source of errors, and I thus do not explore this strategy.

@@ -31,6 +31,8 @@
 %% some PDF conversions mess up the ligatures.  -LB, 1/22/2014
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \pagestyle{plain}
@@ -48,23 +50,23 @@
 
 \begin{document}
 
-\include{templates/cover}
+\include{cover}
 % Some departments (e.g. 5) require an additional signature page.  See
 % signature.tex for more information and uncomment the following line if
 % applicable.
 % \include{signature}
 \pagestyle{drafthead}
-\include{templates/contents}
-\include{templates/chap-1-intro}
-\include{templates/chap-2-background}
-\include{templates/chap-3-dc-model}
-\include{templates/chap-4-simulator}
-\include{templates/chap-5-limits}
-\include{templates/chap-6-results}
-\include{templates/chap-7-ccl}
+\include{contents}
+\include{chap-1-intro}
+\include{chap-2-background}
+\include{chap-3-dc-model}
+\include{chap-4-simulator}
+\include{chap-5-limits}
+\include{chap-6-results}
+\include{chap-7-ccl}
 \appendix
 %\include{appa}
 %\include{appb}
-\include{templates/biblio}
+\include{biblio}
 \end{document}
 
