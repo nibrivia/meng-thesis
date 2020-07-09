@@ -90,16 +90,56 @@ These events that are neither ancestor nor descendants are essentially independe
 This is very similar to events outside the light-cone in physics: events outside the light cone cannot have a causal relationship with the current point.
 The correctness guarantee can therefore be reduced to knowing whether the next event to process has had all of its ancestors have been processed, i.e. it is safe.
 
-From an actor-centric point of view, this guarantee comes down to knowing if the next event available to process is in fact the next event.
-% TODO
+A natural way to exploit concurrency in models is to run all the actors simultaneously.
+From this actor-centric point of view, the concurrency guarantee is equivalent to processing events in order.
+This means that an actor should only process an event if it is guaranteed that no other event will be received that would come before it.
+This guarantee can be achieved if we require all actors to send each other events in order, a requirement many models already satisfy.
+In the rare case where this requirement isn't satisfied, it is usually possible to reformulate the model to comply with it.
+We will see an example of such a reformulation when in section \ref{} when we talk about timeouts. % TODO write section, model chapter?
+% Typically cases where events may be sent out of order comes from different events, can create multiple channels
 
-An old algorithm, described as early as 1986\cite{misra_distributed_1986}, TODO...
+An old algorithm, described as early as 1986\cite{misra_distributed_1986}, is able to take these multiple in-order streams and safely return the next event.
+Although taking the next event amongst all those received clearly is necessary to returning the next event, that alone is not sufficient.
+For example, if the current next event would be scheduled at time 10, but we still haven't heard from a neighbour, we may later receive an event to be scheduled at time 9 from that neighbour, violating causality.
+In order to avoid this situation, it is only safe to return an event when we have heard from \emph{every} neighbour.
 
-\subsection{Null-message passing} \label{null-messages}
+There exists a small relaxation of this strict requirement for events to be scheduled at the same time.
+If we have already scheduled an event at time 10, we already know that no events will be scheduled before 10.
+Therefore it is also safe to return all events that also happen exaclty at time 10, even if we haven't heard from all our neighbours.
+A common term for this time is \emph{safe time}, all events at or before the safe time are safe to schedule.
+This handling of ties will turn out to be an important optimization when we talk about scheduling in section \ref{rustasim-sched}. % TODO make sure it is talked about
 
-Unfortunately, waiting on each of our neighbours to send us an event is prone to deadlocking.
+\subsection{Making progress with null-message passing} \label{null-messages}
+
+Unfortunately, the algorithm above does not guarantee progress.
 For example, in a network simulation where there are no packets to send, actors will not be sending any events to each other.
-Every actor will therefore be waiting for its neighbours, 
+This will lead to every actor waiting on each other, leaving the simulation deadlocked.
+These deadlocking patterns can be much more complex than two neighbours waiting on each other, and may involve a long ring of actors waiting on each other.
+This problem is called distributed deadlock.
+
+In order to overcome distributed deadlock, a new type of event is introduced: the null event.
+A null event is an event that represents the absence of event.
+It is necessary because an actor cannot, on its own, distinguish between a lack of events due to another actor taking a long time and a lack of progress due to another actor not having any events to send.
+Null events make it so that those cases can be distinguished: the presence of a null event signals that we can keep making progress, assured that we will not be receiving any more events from this actor before the null event.
+A lack of events altogether implies that the actor has not been able to make progress yet.
+
+A first, and technically correct, approach is to send null events to all of our neighbours after we process every event, including null events.
+This does guarantee progress, however, since every null event causes every actor to send many new null events, this leads to an exponential growth of null events.
+In order to mitigate this, actors can be made to only send null events to actors who have not yet heard from them at the current time.
+Details of both these algorithms can also be seen in \cite{misra_distributed_1986}.
+
+However, this approach of continuously sending null events can dramatically increase the number of events being sent.
+Even though null events are fast to process, in some simulations, they can outnumber the number of non-null event 10 to 1 or more.
+The algorithm I have gone for is a demand-based: null-events are only sent when we are unable to make progress otherwise.
+If correctly implemented, this can result in some runs never requiring a single null event be sent.
+
+When the simulator detects that there are no more safe events it declares a \emph{stall} and forces the actor to send a null message to all neighbours who need one.
+A neighbour needs a null event if the last event we sent it was sent before the current safe time.
+This might seem like an odd stipulation: by the nature of safe time, isn't it true that we will not have sent any neighour an event past the safe time?
+However, that is often not true: actors might now far ahead of time what they will be sending each other, in such a case, it is not necessary to send null events, the events we sent are enough to let them progress on their own.
+
+Further optimization exist for null messages, for example \cite{} proposes null-message squashing and various loop optimizations.
+The loop optimizations are essentially identical to the stall technique described above. % TODO double check
 
 \subsection{Other approaches}
 
