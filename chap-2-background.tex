@@ -95,7 +95,7 @@ From this actor-centric point of view, the concurrency guarantee is equivalent t
 This means that an actor should only process an event if it is guaranteed that no other event will be received that would come before it.
 This guarantee can be achieved if we require all actors to send each other events in order, a requirement many models already satisfy.
 In the rare case where this requirement isn't satisfied, it is usually possible to reformulate the model to comply with it.
-We will see an example of such a reformulation when in section \ref{} when we talk about timeouts. % TODO write section, model chapter?
+We will see an example of such a reformulation when in section \ref{} when we talk about timeouts. %TODO write section, model chapter?
 % Typically cases where events may be sent out of order comes from different events, can create multiple channels
 
 An old algorithm, described as early as 1986\cite{misra_distributed_1986}, is able to take these multiple in-order streams and safely return the next event.
@@ -109,7 +109,7 @@ Therefore it is also safe to return all events that also happen exaclty at time 
 A common term for this time is \emph{safe time}, all events at or before the safe time are safe to schedule.
 This handling of ties will turn out to be an important optimization when we talk about scheduling in section \ref{rustasim-sched}. % TODO make sure it is talked about
 
-\subsection{Making progress with null-message passing} \label{null-messages}
+\subsection{Guaranteed progress with null-message passing} \label{null-messages}
 
 Unfortunately, the algorithm above does not guarantee progress.
 For example, in a network simulation where there are no packets to send, actors will not be sending any events to each other.

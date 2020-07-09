@@ -1,13 +1,89 @@
-% TODO I think this chapter maks more sense after the simulator section, and before the results
+\chapter{Simulator limits} \label{limits}
 
-\chapter{Fundamental limits of simulators} \label{limits}
+In this chapter we explore theoretical limits of simulators both in terms of speed, and what is possible
 
-In this chapter we explore theoretical limits of simulators.
+Throughout the chapter, the baseline model will consist of 4,773 actors comprised 128 racks connected to 37 backbone switches and 37 servers each through bidirectional 10Gbps links.
+The full bandwidth of the network is therefore $2\times128\times(37+37)\times10Gbps = 190Tbps$, over 10 simulated seconds this corresponds to up to almost 2,000Tb of data.
+The packet size will be assumed to be 1,500~bytes, the TCP standard. \\
+Note that network speeds are typically measured in bits per second, not bytes.
+For more details on the structure of datacenters see section \ref{model-dc}.
 
-\section{Memory} \label{limits-mem}
+\section{Memory feasability} \label{limits-feasible}
+
+The main limiting factor in the feasability of simulations is how much memory it needs at any given moment.
+Speed is typically not a concern since it is always possible, if frustrating, to wait longer, and disk space is cheap.
+
+There are three main sources of memory usage in this simulation: events, packets, and flows.
+Although there are nearly 5,000 actors, they each (without their events, packets, and flows) take up fairly little memory.
+Even if they each took up a full 10 kilobytes, this would correspond to 50MB of RAM, barely noticeable on today's computers.
+
+A fully saturated network on the model above will result in 16 billion packets being sent for every simulation second.
+Each packet contains information about its source, destination, size, the flow it belongs to, and so on...
+%mark
 
 
-\section{Processing power} \label{limits-cpu}
+
+\section{Speed} \label{limits-speed}
+
+\paragraph{Metrics}
+In order to more easily compare the speed of different simulators, it is useful to talk about the amount of simulated data moved per real second.
+Since this metric has units of data over time, I will refer to it as the simulator's bandwidth.
+As a useful reference, a simulation bandwidth of 100Gbps results in a running time of 5.5h for a typical 10s run.
+
+A more standard metrics is the number of events per second that the simulator executes.
+It is less useful here since it doesn't directly translate to how long the simulator runs, it can also be highly dependent on the type of events being processed.
 
 
-\section{I/O} \label{limits-io}
+\subsection{Processing power} \label{limits-cpu}
+
+In the worst case scenario, the network is fully saturated, meaning that the 190Tbps of the network are filled with packets.
+This corresponds to 16 billion packets per simulated second (16Gp/s), meaning at least that many events.
+
+If a packet takes around 100 CPU cycles to process on average, which is an optimistic guess: a single L2 cache access takes around 10 cycles, on a 2GHz CPU that corresponds to 50ns of processing per packet, or 20 million simulated packets per real CPU-second. % TODO cite cache speed
+Although this may seem slow compared to the 16Gp/s of the network under simulation, this corresponds to a simulation bandwidth of 240Gbps.
+
+Optimistically, across multiple CPUs, we can hope to multiply this effect.
+My laptop's 8 cores may therefore dream of running a simulation at nearly 2Tbps.
+
+Realistically, 100 cycles per packet is optimistic, and in the case of a parallel simulaiton, the synchronization between cores becomes expensive: a typical shared lock operation alone typically taking 20-30ns. %TODO cite
+These numbers do allow us to understand an upper bound of what is possible.
+
+
+
+\subsection{I/O} \label{limits-io}
+
+The slowest component of a computer is always the IO interface, and the entire point of running simulations is to have a record of what happened during the running of it.
+It is therefore necessary to log particular events during the running of the simulation.
+
+Since I am interested in finding upper bounds, I will be particularly generous in the encoding schemes proposed.
+In practice, I expect these data to take up more space than I propose, but these calculations serve to limit our dreams and not necessarily indicate what is realistic.
+
+\paragraph{Packet-level logging}
+The highest level of detail can be measured by logging every single packet movement.
+The bare minimum needed would be to log some form of packet identifier and a source and destination.
+Given 5,000~hosts, the source and destination can each have 16~bits of a 32~bit integer.
+However, uniquely identifying the packet is tricky, but a 64~bit integer should theoretically be enough.
+This results in 12~bytes of data per packet movement, and a logging bandwidth of almost 200GB per simulated second.
+
+The fastest SSDs advertise writing rates around 500MBps, which if fully utilized yields a maximum simulation rate around 500Gbps.
+However, the amount of data generated under this scheme is large: it is typical to run dozens of simulations for a single plot, and under this logging scheme and nearly magical encoding, each run would produce nearly 2TB of data.
+
+However, this calculation illustrates that IO is not as much of a limit as might be expected: 500Gbps is twice as high as the single-CPU limit of section \ref{limits-cpu}.
+Fortunately for us, IO is even less of an issue if we log less data.
+
+\paragraph{Flow-level logging}
+We can significantly reduce our IO needs if instead of logging each packet, we log only the flows, along with its source, destination, size, and duration.
+The source and destination can again both share a 32~bit integer.
+However, the size of the flow in simulation can vary from a few KB to GBs, a range that can barely fit in 32~bit values.
+Time in the simulator is measured down to the nanosecond, but such precision is not required, allowing it to also fit in a 32~bit value.
+This brings the overall size of logging a single flow to three 32~bit values, or 12~bytes.
+
+The last value that is required to compute this limit is the average flow size.
+However, this is highly dependent on the traffic distribution (see \ref{model-traffic}).
+The datamining workload has an average flow size around 62Mb, a small distribution we use internally has an average of 1.5Mb, while another one has an average of 1,100Mb.
+
+With the smallest average flow size of 1Mb, we will be producing over 2GB per simulated second of log data, which, consumed at 500MBps supports simulation speeds up to 40Tbps.
+Datamining can be simulated up to 2,500Tbps, and the largest distribution up to 45Pbps.
+In other words, IO is not the limiting factor.
+
+

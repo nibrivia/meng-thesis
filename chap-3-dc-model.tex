@@ -1,22 +1,23 @@
 \chapter{Datacenter network model} \label{model}
 
-\section{Topologies} \label{model-topology}
+\section{Datacenter background} \label{model-dc}
+\subsection{Network configuration} \label{model-network}
 
-Most datacenters, and models thereof \cite{mellette_rotornet_2017}\cite{handley_re-architecting_2017}\cite{mellette_expanding_2019} (more?) are organized in hundreds or thousands of racks containing servers.
+% A lot of this section is a mess
+Most datacenters \cite{mellette_rotornet_2017}\cite{handley_re-architecting_2017}\cite{mellette_expanding_2019} (more?) are organized in hundreds or thousands of racks containing servers.
 There are anywhere from 5 to 50 servers in a rack, each connected to a switch typically at the top, giving it the common name "Top of Rack switch" or ToR.
-A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or more. %cite
+A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or more. % TODO cite
 
 The racks themselves are connected together through different fabrics, and switch technologies.
-The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research (Xpander, rotornet, opera).
+The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research (Xpander, rotornet, opera). % TODO cite
 
 The typical bandwidth vary from 10Gbps to 100Gbps on each of those links.
 Some networks assume different link speeds between the ToRs than from server to ToR, others are uniform.
 
 The latencies involved are often extremely small, on the order of 10s of nanoseconds.
 
-%TODO talk about reconfigurable (and rotor) switches
 
-\section{Traffic modelling} \label{model-traffic}
+\subsection{Traffic modelling} \label{model-traffic}
 
 There are a few well studied datacenter traffic models (datamining, websearch, Chen Stefan Manya paper, more), with a common takeaway being that datacenter traffic is hard to predict.
 
@@ -35,12 +36,44 @@ Some workloads, such as websearch, consists mostly of many small flows.
 Others, such as datamining, are comparatively much bigger.
 Machine working loads also typically create a large demand, for example in a ring, using all the networking resources available.
 
-\section{Failures} \label{failures} % unsure if necessary
+\subsection{Failures} \label{failures} % unsure if necessary
 
 Due to the presence of such a large number of devices, failures become extremely common. %cite
-To illustrate this, if a datacenter has 100,000 machines and a component, say a motherboard has an average lifetime of 10 years, we should expect a failure every hour.
-Although ubiquitous in the day to day of a datacenter, it is not uncommon to not include them as part of the model, and do a separate analysis for performance under failure. % What am I trying to say here??
+To illustrate this, if a datacenter has 100,000 machines and with an mean time between failure of 10 years, a failure is expected every hour.
+Although ubiquitous in the operation of a datacenter, it is uncommon to include them as part of the simulation.
+It is rare for a simulated component to fail partway through a simulation.
+Instead, behavior under failure is usually simulated on its own.
 
-\section{Level of simulation} \label{model-level}
 
-Flow vs packet
+
+\section{Simulation Model} \label{model-sim}
+
+TODO Model likely to change dramatically to be more complete.
+
+The actual model used in Rustasim \ref{rustasim}, consists of two actor types: routers and servers.
+The exact topology is governed by the number of routers $n$.
+Every rack is connected to the $n-1$ other racks and to $n-1$ servers through 8Gbps link (1 byte per nanosecond) with 100ns latency.
+
+There are two types of model events: \code{packet} and \code{flow} events.\\
+A \code{Packet} carry with them a packet and signals the arrival of that packet to the actor who then forwards it along appropriately.
+If the packet carried by the event arrives at its destination, it is acked.
+If the packet is an ack arriving back at the sender, the flow reacts appropriately.\\
+\code{Flow} events are received directly by servers and indicate the start of a new flow at that server.
+
+TODO timeout and more
+
+
+\subsection{Queue sizes} \label{model-queues}
+TODO not yet implemented in code
+
+
+\subsection{TCP} \label{model-tcp}
+
+In this model, a limited version of TCP is implemented with a fixed congestion window of size 4.
+TODO This will probably change before this thesis is over.
+
+\section{Flow level simulations?} \label{model-flow-level}
+
+This thesis builds a packet level simulation, however there also exists flow level simulations which sacrifice detail and accuracy in favor of significantly faster runtimes.
+In particular, flow level simulations often fail to capture details of congestion control and of some queuing dynamics.
+% expand or drop?
