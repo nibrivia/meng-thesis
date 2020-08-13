@@ -11,10 +11,10 @@ A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or
 The racks themselves are connected together through different fabrics, and switch technologies.
 The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research (Xpander, rotornet, opera). % TODO cite
 
-The typical bandwidth vary from 10Gbps to 100Gbps on each of those links.
+The typical bandwidth vary but are in the 10Gbps to 100Gbps scale for these links.
 Some networks assume different link speeds between the ToRs than from server to ToR, others are uniform.
 
-The latencies involved are often extremely small, on the order of 10s of nanoseconds.
+The latencies involved are often extremely small, on the order of tens of nanoseconds.
 
 
 \subsection{Traffic modelling} \label{model-traffic}
@@ -22,6 +22,7 @@ The latencies involved are often extremely small, on the order of 10s of nanosec
 There are a few well studied datacenter traffic models (datamining, websearch, Chen Stefan Manya paper, more), with a common takeaway being that datacenter traffic is hard to predict.
 
 Traffic distribution can be broken down into multiple dimensions: overall load, skeweness, and flow size distribution.
+
 
 Overall load corresponds to how much traffic is being offered onto the network relative to how much capacity the network has.
 It is important to note that this does not mean that the network is able to 100\% load, most networks are overwhelmed far before.
@@ -36,43 +37,27 @@ Some workloads, such as websearch, consists mostly of many small flows.
 Others, such as datamining, are comparatively much bigger.
 Machine working loads also typically create a large demand, for example in a ring, using all the networking resources available.
 
-\subsection{Failures} \label{failures} % unsure if necessary
-
-Due to the presence of such a large number of devices, failures become extremely common. %cite
-To illustrate this, if a datacenter has 100,000 machines and with an mean time between failure of 10 years, a failure is expected every hour.
-Although ubiquitous in the operation of a datacenter, it is uncommon to include them as part of the simulation.
-It is rare for a simulated component to fail partway through a simulation.
-Instead, behavior under failure is usually simulated on its own.
-
-
 \section{Simulation Model} \label{model-sim}
 
-TODO Model likely to change dramatically to be more complete.
+The datacenter model used by Rustasim was chosen to emulate closely that of Opera, to allow for comparison and verification of the results.
 
-The actual model used in Rustasim \ref{rustasim}, consists of two actor types: routers and servers.
-The exact topology is governed by the number of routers $n$.
-Every rack is connected to the $n-1$ other racks and to $n-1$ servers through 8Gbps link (1 byte per nanosecond) with 100ns latency.
+The model used in Rustasim \ref{rustasim}, consists of two actor types: routers and servers, and three model-level event types: \code{packet}, \code{flow} and \code{timeout} events.
+The servers are organized in racks, themselves interconnected through a user-chosen topology.
 
-There are two types of model events: \code{packet} and \code{flow} events.\\
-A \code{Packet} carry with them a packet and signals the arrival of that packet to the actor who then forwards it along appropriately.
+A \code{packet} event carries with it the corresponding packet and signals the arrival of that packet to the actor who then forwards it along appropriately.
 If the packet carried by the event arrives at its destination, it is acked.
 If the packet is an ack arriving back at the sender, the flow reacts appropriately.\\
 \code{Flow} events are received directly by servers and indicate the start of a new flow at that server.
+\code{Timeouts} are received by the senders themselves and may cause a packet to be retransmitted if it hasn't been acknowledged.
 
-TODO timeout and more
-
-
-\subsection{Queue sizes} \label{model-queues}
-TODO not yet implemented in code
+Following with Opera's design, the queue sizes are TODO, the link speeds are all 10Gbps.
+The latencies in the Opera simulator are set to 0 from server to ToR, and 500ns from ToR to ToR.
+Unfortunately, conservative scheduling algorithms are unable to make progress with 0 latency, so I've set all latencies to be 500ns.
+This has a measurable impact on the completion time of very small flows, where latency is the main contributor, but otherwise does not impact the results.
+This is discussed more in section TODO.
 
 
 \subsection{TCP} \label{model-tcp}
 
-In this model, a limited version of TCP is implemented with a fixed congestion window of size 4.
-TODO This will probably change before this thesis is over.
-
-\section{Flow level simulations?} \label{model-flow-level}
-
-This thesis builds a packet level simulation, however there also exists flow level simulations which sacrifice detail and accuracy in favor of significantly faster runtimes.
-In particular, flow level simulations often fail to capture details of congestion control and of some queuing dynamics.
-% expand or drop?
+In this model, a limited version of TCP is implemented with a fixed congestion window of size 30, similar to choices Opera makes.
+Although it is possible to implement a more realistic version of TCP, this simple version is close to the Opera simulator that the results check out.

@@ -186,12 +186,12 @@ Finally, \code{Close} events tell the actor to return from its event loop.
 Although this might seem trivial, it does require a little care, it is easy to leave the simulation hanging at this point.
 It is necessary to also inform neighbours that we have no more events to communicate to them.
 This can be done by sending \code{Null} events that pass closing times, or by sending \code{Close} events to the neighbours.
-This imp
 
 % TODO re-write, more details, reorgnize, cite?
 \paragraph{Compiler enforcement}
-The modularity between the actor and the engine is strictly enforced by the Rust compiler.
-The events the engine deals with are parametrized through a generic type \code{T} representing the model events.
+The modularity between the actor and the engine is strictly enforced by the Rust compiler, by separating them into different crates, forbidding the simulator designer from modifying the internals of Rustasim.
+In order to allow for arbitrary models to be built on top of Rustasim, the events the engine deals with are parametrized through a generic type \code{T}.
+When implementing a particular type of event
 Because the engine code is generic over \code{T}, it cannot make any assumptions about what the type looks like, lest the Rust compiler errors.
 However, when compiled, the compiler will fill in the type appropriately and is able to optimize as though the type were written explicitly written in.\\
 This separation between the model and the engine also allows for many different models to be implemented using the same engine, allowing for significant reuse between projects.
@@ -200,7 +200,7 @@ This separation also allows the writing of tests for the engine using a trivial 
 
 \subsection{Indexing} \label{rustasim-indexing}
 
-Although most code consider the performance cost of a hash to be negligible, at the scale of TKTK, it becomes noticeable.
+Although most programs consider the performance cost of a hash to be negligible, at the scale of nanoseconds, it becomes noticeable.
 There is therefore a large incentive to not use hash tables and rely on the significantly faster direct indexing offered by arrays.
 However, most data structures maintained by both the actor require indexing by the neighbour's \code{id}.
 This \code{id} is unique across all actors and is useful for routing and for keeping track of who an event's sender is.
@@ -217,18 +217,17 @@ By having the engine maintain the incoming queues in an array the same order as 
 Indeed, hen the engine removes an event from a queue, it necessarily knows the index of that queue in its array of incoming queues.
 It can then overwrite the incoming event's source field with the appropriate index, no lookup required.
 
-% TODO there is no section where you talk about servers, should go in the model chapter too
-The only exception to the lack of hashtables is the list of flows at a server.
-Flows are uniquely identified by a global id and servers maintain a mapping from \code{flow\_id} to the appropriate flow receiver.
-However, this can probably be optimized out and profiling has not revealed it as a bottleneck.
+% TODO flows
 
 The combination of these optimizations mean that there is almost no need to execute a hash table lookup in the normal processing of events.
 The full translation tables, although never used in a proper simulation run, can be extremely helpful in debugging.
 
-%\subsection{Data structures} \label{rustasim-data-structure}
 \subsection{Message passing} \label{rustasim-message-passing}
-SPSC
 
+The communication between actors is done through a single-producer, single-consumer channel.
+Rust offers a default channel implementation for multiple-producers and a single-consumer, which although technically correct isn't performant enough.
+Multiple Rust crates offer more performant options, and after testing many different options, including Ringbuffer (TODO cite), crossbeam's (TODO cite) channels, the most performant option was the unreleased single-producer single-consumer queue from crossbeam.
+In order to be easily published, Rustasim currently extracts the SPSC channel code from the unreleased branch of crossbeam.
 
 \subsection{Multi-queue merging} \label{rusatim-tree}
 
@@ -245,14 +244,23 @@ The heap is then bounded by the number of senders, and the book-keeping is reduc
 This structure then has an algorithmic complexity of $O\left(\log n\right)$
 This works relatively well and supports somewhat fast running times. %TODO numbers plz!
 
-% TODO expand on structure more: state goes between waiting and continuously popping
+When waiting on a neighbour, i.e. there are no events from at least one actor in the heap or in the incoming queue, the merger returns a \code{Stalled} event.
+Otherwise, the merger returns the smallest current event off the heap, and attempts to extract an event from the incoming queue.
+If there are no events in that neighbour's queue, the neighbour is marked as missing and the merger may stall when asked about the next event.
 
-Processing happens in two stages... is that fundamentally true?
+It is not necessarily true that marking a neighbour as missing results in a stall: it is possible that by the time the next event is requested from the merger, another event has been sent.
+It is also possible that there is another event, from a different neighbour, that has the same time.
+These tied events are all safe to return, and returning tied events can limit the number of stalls and increase performance.
+This means that there may be more than one neighbour marked as missing without there being a stall.
 
 \subsubsection{Loser trees}
 
 Although there does not exist to my knowledge a structure with a better algorithmic performance, there exists structures with significantly better constant factors.
-Notably, this problem is essentially identical to the problem of merging tapes: the reader, either tape head or channel consumer, cannot look ahead in the data, and we are allowed to assume the data already sorted.
+Notably, general purpose heaps can grow and shrink in size, and are non-monotonic: they do not require the input to be continuously growing to properly work.
+By taking advantage of these two restrictions, we can reduce the complexity of the heap and dramatically increase the performance of the merger.
+In some experiments, improvements can be greater than a factor of 2 over the heap.
+
+Notably, this problem is essentially identical to the problem of merging tapes: there is a fixed number of tapes, and the reader cannot look ahead in the data, and we are required to assume the data on a single tape is already sorted.
 Tournament trees in particular solve this problem elegantly.
 
 A tournament tree takes in a certain number of elements to compare, here the next element of each of the queues and pairs them off.
@@ -261,41 +269,52 @@ This process eventually forms a tree analogous to the structure of many tourname
 Although it may be natural to record the winner of each exchange, recording the looser makes for a significantly more elegant algorithm as described by Knuth \cite{knuth_art_1998}.
 
 % Describe the loser tree process
-
 \paragraph{Dealing with ties}
+In order to allow tied events to be returned before a stall, when an incoming queue doesn't have any events to insert into the tree a \code{Stalled} event is inserted in its place.
+The inserted event will then make its way to the top of the tree as though it were any other event, being returned when it is its time.
+However, this alone doesn't mean all tied events will be returned, in order to guarantee that, \code{Stalled} events lose to events that are at the same time.
+
+It is also important not to spuriously return a \code{Stalled} events: doing so will cause the actor to do expensive actions, and will upset the scheduling process described in \ref{rustasim-sched}.
+When a \code{Stalled} event wins, the merger checks the neighbour's queue again and if it is no longer empty, will not return the \code{Stalled} event and will continue the process with the new event.
+
 
 \subsection{Scheduling} \label{rustasim-sched}
 
-In the rare cases where there are less actors than available cores and there isn't contention on the system (no other CPU heavy job), it is possible to give each actor its own thread.
-In the case where an actor stalls and is waiting on another, it can `busy-wait', burning CPU cycles until there is a new event on the channel.
-More subtle synchronization primitives could be used, but they have some overhead, whereas checking in a tight loop has none.
+In the cases where there are less actors than available cores and there isn't contention on the system (no other CPU heavy job), it is possible to give each actor its own thread and still have excellent performance.
+In this scenario when an actor stalls and is waiting on another, it can `busy-wait', burning CPU cycles until there is a new event on the channel.
+More subtle synchronization primitives could be used, but all have some overhead, whereas checking in a tight loop has none.
 
 However, The huge disadvantage of busy-waiting is that it gives the operating system no help as to which thread should be scheduled next, often scheduling threads that have nothing to do but burn cycles.
-This issue alone is enough to make the simulator over 1,000x slower. %vrify + experiment?
-Explicitly yielding the thread on a stall improves the situation, but not much, since the OS still has no clear idea of who is best to schedule next. %numbers plz
+This issue alone is enough to make the simulator over 1,000x slower.
+Explicitly yielding the thread on a stall sometimes improves the situation, but not much, since the OS still has no clear idea of who is best to schedule next.
 In fact, cursory experiments suggest that it often repeatedly picks the same threads to schedule, letting it advance ahead of the rest, stall, and get rescheduled soon after, making little progress before stalling again, and so on.
 Unfortunately switching between threads is an expensive operation for the operating system, and can easily take up a huge fraction of the simulation time.
-In some runs, this process took up almost two thirds of the simulation time, i.e. removing the scheduling issue could speed up the simulation by a factor of 3. %experiment, plz
+In some runs, thread-switching took up almost two thirds of the simulation time, i\.e\. removing the scheduling issue could speed up the simulation by a factor of 3.
 In addition to the overhead of thread switching, repeatedly stalling an operation sends out more \code{Null} events than necessary: they were not sent because of a deadlock, but because of a scheduling issue, creating overhead.
-On its own, sending more events may not seem like a big issue, but these \code{Null} events can become the main thing the stragglers receive, sometimes the fraction of \code{Null} events exceeding TK\%. %experiment
+On its own, sending more events than needed may not seem like a big issue, they are cheap to process, but these \code{Null} events can become the main event type the stragglers receive, sometimes exceeding half of all received events.
+\\
 
-However, a better setup would be to advance an actor until it stalls and sends \code{Null} events, stop it, schedule every other actor, and then come back.
-This pattern guarantees that our actor is now last, or at least near it, before scheduling it again.
-Straggling behind everyone means that it can run for longer: enough to catch up, and then enough until it stalls.
+However, a better setup would be to have as many active actors as available cores, and to always schedule the most-straggling actor.
+Indeed, being last means that the actor can run for longer uninterrupted, reducing the overhead of scheduling actors.
 
-This is essentially a form of round-robin.
-TK
+An easy way to schedule actors is such a pattern is to advance an actor until it stalls, then schedule every other actor, guaranteeing that the current actor is `last' before scheduling it again.
 
-\subsubsection{Work stealing}
+This can be done by having a single shared queue shared behind a lock, workers popping the front of the queue and pushing stalled actors at the back.
+However, this queue then becomes a contention point between the actors.
+This can be mitigated by having a few queues each with its own lock, and having workers randomly picking a queue and popping an event from it after pushing the stalled actor onto it.
 
-Work stealing good, fast
-problem is can't distribute without central
-problem with central is tooooo slowwww
+It is possible to push and pop from two distinct random queues, but this has the disadvantage of acquiring two locks for every scheduled actor and of allowing queues to drift to different sizes.
+Pushing and popping from the same queue does not change the size of the picked queue since it both adds and removes an element from the queue before releasing it, and only acquires one lock.
 
-instead steal from neighbour in ring
-still too slow
+Initializing and terminating the scheduler requires a little care: since the number of elements in the queues won't change size during the course of the program, they should all start with roughly the same number of actors each.
+Failure to evenly distribute the queues may result in some actors being rescheduled too quickly or too slowly depending on if they end up in a shorter or longer queue, hurting performance.
 
-how about a ring of messages
-traffic jams
-ring+steal
-happiness :)
+Terminating the process is tricky: a single queue being empty indicates that some actors have finished, but does not indicate that all have.
+In order to know when to terminate, a shared global counter is created which is incremented every time an actor finished.
+When the shared counter reaches the number of actors, all actors are done and the workers can safely finish.
+\\
+
+In order to support this kind of scheduling, when actors are scheduled, they are required to only make progress as far as they can.
+Once a \code{Stalled} event is received, they must return to let other actors be scheduled.
+To allow the workers to distinguish a finished actor from a stalled actor, the actor returns either an \code{ActorState} which is either a \code{Continue(T)} containing the furthest time the actor got to, or a \code{Done(R)} containing the final result of the actor.
+Although unused in this scheme, the furthest time reached by an actor can be used by more complex schedulers to further optimize the simulator's scheduling.

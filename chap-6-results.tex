@@ -1,1 +1,38 @@
 \chapter{Experiments and results} \label{results}
+
+\section{PHOLD performance} \label{phold}
+
+A standard measure for the performance of parallel distributed simulators is the PHOLD benchmark %TODO cite
+It is a parallel version of the HOLD benchmark. %TODO cite
+
+The HOLD benchmark consists of a certaim amount of original events, which, when processed, would schedule another one some random amount of time in the simulation future.
+Typically the distribution of time before a next event is processed is an exponential distribution although that may vary.
+
+A PHOLD benchmark follows the same idea, with the only difference being of which actor receives the event.
+Instead the actor may be the same as the processing actor, or a different one (or `remote' in PHOLD terminology).
+The fraction of remote events is an input parameter for the PHOLD model.
+
+In addition to the number of remote events, there is also a parameter controlling the minimal amount of time before another event is scheduled.
+This value, called the \code{lookahead} represents a form of latency between actors and is necessary for conservative simulations to make progress.
+
+
+\begin{table}
+\begin{center}
+\label{phold-params:table}
+\begin{tabular}{|p{1.8in}|p{3.8in}|}
+    \hline
+    \code{n\_actor} & Number of actors \\\hline
+    \code{n\_events} & Number of initial events per actor \\\hline
+    \code{n\_cpus} & Number of processing elements \\\hline
+    \code{remote} & Fraction of remote events \\\hline
+    \code{lookahead} & Minimum time before the next event is scheduled\\\hline
+\end{tabular}
+\caption{PHOLD parameters}
+\end{center}
+\end{table}
+%XXX
+
+\section{Network simulation performance} \label{phold}
+
+Although general performance metrics are useful to compare against other general purpose simulators, Rustasim outperforms datacenter network simulators directly.
+The other 

@@ -17,10 +17,14 @@ There are three main sources of memory usage in this simulation: events, packets
 Although there are nearly 5,000 actors, they each (without their events, packets, and flows) take up fairly little memory.
 Even if they each took up a full 10 kilobytes, this would correspond to 50MB of RAM, barely noticeable on today's computers.
 
+\paragraph{Packets}
 A fully saturated network on the model above will result in 16 billion packets being sent for every simulation second.
 Each packet contains information about its source, destination, size, the flow it belongs to, and so on...
 %mark
 
+\paragraph{Events}
+
+\paragraph{Flows}
 
 
 \section{Speed} \label{limits-speed}

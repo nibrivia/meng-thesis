@@ -1,23 +1,40 @@
 \chapter{Introduction} \label{intro}
 
-\section{Models and simulators}
-% blah, not sure I like this intro
-Models and simulations are ubiquitous in society today.
-Their most visible use currently is in trying to understand and predict the spread of COVID-19, but they are used in almost every research discipline as a cheap way of testing an idea in software.
 
-To help us understand the world, we build simplified models which we hope are a good representation of it.
-A model may then be implemented into a simulation.
-These concepts are worth distinguishing: a simulator may perfectly simulate a model, but yield erroneous results due to the model being too imprecise.
-This distinction lies at the heart of this thesis: the objective is to make a fast simulator, using datacenter networking models as an example.
-The contribution of this work is almost entirely in the simulator, not the model.
+\section{Models and simulators} \label{models-and-sims}
+
+Models and simulations are ubiquitous in society today.
+Their most visible use currently is in trying to understand and predict the spread of COVID-19, or the outcomes of elections, but they are also used in almost every research discipline as a way of evaluating new ideas without having to fully realize the project.
+
+The first step in building a simulation is to build a model which should be a good representation of reality.
+The model is necessarily a simplified view of the world: it is impossible, and usually uninteresting, to simulate every single sub-atomic particle.
+Models therefore may be inaccurate because they are too simple, or because they make some incorrect assumptions about reality.
+
+Once a model is decided, it may then be implemented into a simulation.
+Just like the same program can be implemented in many programming languages, the same model may be implemented in many different ways, hopefully yielding the same results, but with difference performance characteristics.
+Typically, the choice of how a model is implemented is guided by the implementor's familiarity with different tools.
+
+It is also worth noting that in practice, after a simulator is built, the outcomes may be inaccurate and require modifying the model.
+This process of iteration is expected.
+
+The contribution of this work is in the simulator, not in the model.
+In order to validate the correctness of the simulator, I will be comparing it to the published simulator from the Opera paper TODO cite.
+
+\section{Discrete-event models and simulators} \label{discrete-event-sims}
+
+There are many kinds of models, this thesis focuses on discrete-event models and simulators.
+These are useful in modeling computer systems, supply chains, and any model where there is a notion of a event happening.
+Notably, many physics models are continuous, such as simulating the flow of a river over time, the solar system, or protein folding.
 
 Discrete-event simulations in particular typically consist of actors reacting to events.
 Each event may then generate, or not, new events, affecting some actors.
 A classical example could be a car-wash, events being consumers arriving, potentially queuing, getting sent to a cleaning station, and leaving once done.
 Depending on the arrival pattern, queues may build up in front of the station, a more complex model might even take into account customers giving up and leaving the queue. %cite old paper
-The actors would be the queue and the cleaning stations. Events correspond to cars arriving and departing from each of those points.
-For more details on 
+The actors would be the queue and the cleaning stations.
+Events correspond to cars arriving and departing from each of those points.
 A data network is similar, cars becoming packets or flows, stations becoming servers and switches.
 
-Discrete events simulators stand in contrast to continuous simulators, which typically implement models better described by differential equations.
-Typical models would be fluid dynamic, solar systems, protein folding, and the like. % TODO find refs
+These discrete models may then be implemented in many different ways, and can be broadly divided in sequential or parallel simulators.
+In a sequential simulator, only one event is processed at a time, making progress in time as the events are processed, the main advantage of these being their relative ease of implementation.
+In contrast, parallel simulators are able to process multiple events simultaneously, possibly increasing simulation speed, but are significantly harder to implement: without special care, it is easy to accidentally process events in the wrong order which will almost certainly result in inaccurate results.
+This thesis implements a general-purpose parallel discrete simulator, Rustasim TODO ref: the codebase can be used by simulation developers to implement their own simulators, while Rustasim manages the parallel nature of the simulator.
