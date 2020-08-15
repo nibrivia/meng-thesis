@@ -1,5 +1,7 @@
 \chapter{Datacenter network model} \label{model}
 
+In this chapter I describe common models of networks and data-centers as well as describe the model I implemented.
+
 \section{Datacenter background} \label{model-dc}
 
 \subsection{Network configuration} \label{model-network}
@@ -12,7 +14,7 @@ A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or
 The racks themselves are connected together through different fabrics, and switch technologies.
 The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research \opera\rotornet (TODO Xpander). % TODO cite
 
-CLOS networks, or fat-trees, are a common topology in data-centers today. %cite Leiserson, Jupiter, Facebook
+CLOS networks, or fat-trees, are a common topology in data-centers today \cite{singh_jupiter_2015}. %cite Leiserson, Jupiter, Facebook
 They consist of a hierarchy of switches, with their bandwidth equally split up and down the hierarchy.
 For cost-reduction purposes, it is common to have the first layer, from the servers to the ToR switch to be oversubscribed: the servers are able to send more traffic than the rack can handle.
 
@@ -20,7 +22,7 @@ For cost-reduction purposes, it is common to have the first layer, from the serv
     \centering
     \includegraphics[width=\textwidth]{fat-tree}
     \label{fig:fat-tree}
-    \caption{An example of a fat-tree topology from TODO} %TODO cite A scalable, commodity...
+    \caption{An example of a fat-tree topology from \cite{al-fares_scalable_2008}}
 \end{figure}
 
 The typical bandwidth vary but are in the 10Gbps to 100Gbps scale for these links.
@@ -42,7 +44,7 @@ The reason for this is simple: if on average, it takes 4 hops to get to the dest
 
 The traffic may be fairly uniform, each sender and receiver being involved in traffic all around the datacenter, or very concentrated, with a few "hot" racks being very active with each other, the rest of the datacenter quiet.
 Describing these patterns can become quite complex, as there may be multiple "hot" regions mostly not interacting with each other.
-Throoughout this thesis, and in most of the literature, we tend to be concerned about uniform traffic, and heavily skewed traffic. % is this true??
+Throughput this thesis, and in most of the literature, we tend to be concerned about uniform traffic, and heavily skewed traffic. % is this true??
 
 Finally, the flow size distribution corresponds to how big each flow is expected to be \cite{alizadeh_data_2010}.
 Some workloads, such as websearch, consists mostly of many small flows.
@@ -66,7 +68,7 @@ Following with Opera's design, the queue sizes are TODO, the link speeds are all
 The latencies in the Opera simulator are set to 0 from server to ToR, and 500ns from ToR to ToR.
 Unfortunately, conservative scheduling algorithms are unable to make progress with 0 latency, so I've set all latencies to be 500ns.
 This has a measurable impact on the completion time of very small flows, where latency is the main contributor, but otherwise does not impact the results.
-This is discussed more in section TODO.
+This is discussed more in section \ref{replication}.
 
 
 \subsection{TCP} \label{model-tcp}

@@ -72,7 +72,6 @@ This value, called the \code{lookahead} represents a form of latency between act
 
 \begin{table}[h]
 \begin{center}
-\label{phold-params:table}
 \begin{tabular}{|p{1.8in}|p{3.8in}|}
     \hline
     \code{n\_actor} & Number of actors \\\hline
@@ -81,12 +80,13 @@ This value, called the \code{lookahead} represents a form of latency between act
     \code{remote} & Fraction of remote events \\\hline
     \code{lookahead} & Minimum time before the next event is scheduled\\\hline
 \end{tabular}
+\label{phold-params:table}
 \caption{PHOLD parameters}
 \end{center}
 \end{table}
 %TODO
 
-\section{Network simulation performance} \label{phold}
+\section{Network simulation performance} \label{perf-phold}
 
 Although general performance metrics are useful to compare against other general purpose simulators, Rustasim outperforms datacenter network simulators directly.
 

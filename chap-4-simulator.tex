@@ -345,3 +345,5 @@ In order to support this kind of scheduling, when actors are scheduled, they are
 Once a \code{Stalled} event is received, they must return to let other actors be scheduled.
 To allow the workers to distinguish a finished actor from a stalled actor, the actor returns either an \code{ActorState} which is either a \code{Continue(T)} containing the furthest time the actor got to, or a \code{Done(R)} containing the final result of the actor.
 Although unused in this scheme, the furthest time reached by an actor can be used by more complex schedulers to further optimize the simulator's scheduling.
+
+\section{Timeouts} \label{sim-timeouts}

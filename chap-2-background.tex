@@ -1,6 +1,7 @@
 \chapter{Background and related work} \label{background}
 
 In this chapter I describe different types of simulators and the tradeoff between them.
+Excellent overviews of the entire field have been written over the years \cite{fujimoto_parallel_2001} \cite{fujimoto_computational_2017} and provide significantly further details on simulation techniques.
 
 \section{Centralized discrete event simulators} \label{centralized-sim}
 
@@ -10,9 +11,9 @@ The relatively simple nature of the scheduler makes it so that it can usually be
 For the sequential simulator, RotorSim\cite{brode-roger_nibriviarotorsim_2020} described in \S \ref{rotorsim}, the loop and event processing code takes up around 30 lines of python.
 
 % not happy with this paragraph structure
-Large simulation models can generate millions or billions of events through their lifetime, causing the queue to continuously hold thousands or more events at a time, see the results section \S\ref{results} for more details.
+Large simulation models can generate millions or billions of events through their lifetime, if not every second \cite{fujimoto_parallel_2015}, causing the queue to continuously hold thousands or more events at a time, see the results section \S\ref{results} for more details.
 In addition, since events are typically fast to process, the queue is also continuously being accessed and modified and can easily become a bottleneck.
-The large size and frequent access of the queue, force careful consideration of the data structures used to implement the queue/
+The large size and frequent access of the queue, force careful consideration of the data structures used to implement the queue.
 
 The queue has to support two operations: retrieving the smallest element currently in the queue, and inserting new events.
 This naturally leads to using a min-heap, allowing for $O\left(\log n\right)$ insertion and removal of the smallest element.
@@ -64,7 +65,7 @@ I will describe first the opportunities for concurrency in distributed simulatio
         \caption{
             However, when the congestion window is larger, some events are independent from each other, for example \code{recv 1} and \code{send 2}.
         }
-        \label{causality-graph-seq:fig}
+        \label{causality-graph-para:fig}
     \end{subfigure}
     \caption{
         These two causality graphs are very similar, however, one permits concurrency and the other does not.
@@ -76,7 +77,7 @@ I will describe first the opportunities for concurrency in distributed simulatio
 \end{figure}
 
 To better understand the opportunity, or lack thereof, for parallelization, it is necessary to better understand what causality requirements are imposed by the model.
-A useful tool for this job is a causality graph.
+A useful tool for this job is a causality graph \cite{misra_distributed_1986}.
 A causality graph consists of a node for each event in the simulation, and a directed edge between from a dependency to the future event.
 Any topological sort of the resulting graph is a valid execution order of the events.
 Since the direction of the graph is always to the future, sorting the events by time is trivially correct.
@@ -90,32 +91,31 @@ These events that are neither ancestor nor descendants are essentially independe
 This is very similar to events outside the light-cone in physics: events outside the light cone cannot have a causal relationship with the current point.
 The correctness guarantee can therefore be reduced to knowing whether the next event to process has had all of its ancestors have been processed, i.e. it is safe.
 
-A natural way to exploit concurrency in models is to run all the actors simultaneously.
+A natural way to exploit concurrency in models is to run all the actors simultaneously \cite{misra_distributed_1986}.
 From this actor-centric point of view, the concurrency guarantee is equivalent to processing events in order.
 This means that an actor should only process an event if it is guaranteed that no other event will be received that would come before it.
-This guarantee can be achieved if we require all actors to send each other events in order, a requirement many models already satisfy.
+This guarantee can be achieved if we require all actors to send each other events in order, a requirement many models already satisfy, and a common assumption \cite{fujimoto_parallel_2001}.
 In the rare case where this requirement isn't satisfied, it is usually possible to reformulate the model to comply with it.
-We will see an example of such a reformulation when in section \ref{} when we talk about timeouts. %TODO write section, model chapter?
-% Typically cases where events may be sent out of order comes from different events, can create multiple channels
+We will see an example of such a reformulation when in section \ref{sim-timeouts} when we talk about timeouts.
 
-An old algorithm, described as early as 1986\cite{misra_distributed_1986}, is able to take these multiple in-order streams and safely return the next event.
+An old algorithm, described as early as 1979\cite{fujimoto_parallel_2000}\cite{misra_distributed_1986}, is able to take these multiple in-order streams and safely return the next event.
 Although taking the next event amongst all those received clearly is necessary to returning the next event, that alone is not sufficient.
 For example, if the current next event would be scheduled at time 10, but we still haven't heard from a neighbour, we may later receive an event to be scheduled at time 9 from that neighbour, violating causality.
 In order to avoid this situation, it is only safe to return an event when we have heard from \emph{every} neighbour.
 
 There exists a small relaxation of this strict requirement for events to be scheduled at the same time.
 If we have already scheduled an event at time 10, we already know that no events will be scheduled before 10.
-Therefore it is also safe to return all events that also happen exaclty at time 10, even if we haven't heard from all our neighbours.
+Therefore it is also safe to return all events that also happen exactly at time 10, even if we haven't heard from all our neighbours.
 A common term for this time is \emph{safe time}, all events at or before the safe time are safe to schedule.
 This handling of ties will turn out to be an important optimization when we talk about scheduling in section \ref{rustasim-sched}. % TODO make sure it is talked about
 
 \subsection{Guaranteed progress with null-message passing} \label{null-messages}
 
-Unfortunately, the algorithm above does not guarantee progress.
+Unfortunately, the algorithm above does not guarantee progress\cite{misra_distributed_1986}.
 For example, in a network simulation where there are no packets to send, actors will not be sending any events to each other.
 This will lead to every actor waiting on each other, leaving the simulation deadlocked.
 These deadlocking patterns can be much more complex than two neighbours waiting on each other, and may involve a long ring of actors waiting on each other.
-This problem is called distributed deadlock.
+This problem is called distributed deadlock \cite{misra_distributed_1986}.
 
 In order to overcome distributed deadlock, a new type of event is introduced: the null event.
 A null event is an event that represents the absence of event.
@@ -138,22 +138,22 @@ A neighbour needs a null event if the last event we sent it was sent before the 
 This might seem like an odd stipulation: by the nature of safe time, isn't it true that we will not have sent any neighour an event past the safe time?
 However, that is often not true: actors might now far ahead of time what they will be sending each other, in such a case, it is not necessary to send null events, the events we sent are enough to let them progress on their own.
 
-Further optimization exist for null messages, for example \cite{} proposes null-message squashing and various loop optimizations.
-The loop optimizations are essentially identical to the stall technique described above. % TODO double check
+Further optimization exist for null messages, for example \cite{wang_enhanced_2016} proposes null-message squashing and various loop optimizations.
+The loop optimizations are very similar to the stall technique described above.
 
 \subsection{Other approaches}
 
 Although the process described above is what I will be implementing in this thesis, other options exists for parallel discrete-event simulators.
 Two are worth highlighting, both sacrifice accuracy in some way in order to obtain better performance.
-The difference between the two approaches comes down to wether that accuracy error gets resolved or no.
+The difference between the two approaches comes down to whether that accuracy error gets resolved or no.
 
 \paragraph{Optimistic scheduling} \label{optimistic-scheduling}
 It is also possible to allow actors to process events as fast as they can, possibly resulting in causality violations.
-In order to maintain correctness, the simulation needs to have a cancellation mechanism, some use anti-events \cite{} or checkpointing \cite{}. %todo cite
+In order to maintain correctness, the simulation needs to have a cancellation mechanism, some use anti-events, checkpointing, rollbacks, or other techniques \cite{fujimoto_parallel_2015}.
 This hopeful approach is the source of its name.
 
 The cost of optimistic scheduling comes from the overhead necessary to allow for rollbacks, and the execution of these rollbacks.
-\emph{TimeWarp} \cite{} is a popular example of an optimistic scheduling algorithm.
+\emph{TimeWarp} \cite{jefferson_virtual_1985} is a popular example of an optimistic scheduling algorithm.
 
 Trying and rolling back is a common technique in computer engineering.
 Databases use optimistic concurrency control instead of locks to rollback transactions in case of a conflict \cite{dragojevic_no_2015}.
