@@ -2,7 +2,6 @@
 
 \section{RotorSim} \label{rotorsim}
 
-% TODO this probably needs some restructuring
 RotorSim \cite{brode-roger_nibriviarotorsim_2020} is a centralized simulator (see \ref{centralized-sim}) of a packet-level datacenter network model (see \ref{model}).
 It is implemented in Python \cite{van_rossum_python_2009} and is single-threaded. %does python need to be cited?
 
@@ -41,7 +40,7 @@ Calling \code{S.recv(packet)} then doesn't actually call the function itself, bu
 In practice, most calls are made this way, clearing the code of many \code{call\_in} statements.
 
 
-% TODO write up full example?
+% write up full example?
 
 
 \subsubsection{Event structure} \label{rotorsim-eventq-event}
@@ -190,31 +189,6 @@ This separation between the model and the engine also allows for many different 
 This is particularly appealing because most optimizations are implemented in the engine itself, and allowing further optimizations to be propagated to many simulations.
 This separation also allows the writing of tests for the engine using a trivial model, making it easier to validate the engine and catch subtle errors.
 
-\subsection{Indexing} \label{rustasim-indexing}
-
-Although most programs consider the performance cost of a hash to be negligible, at the scale of nanoseconds, it becomes noticeable.
-There is therefore a large incentive to not use hash tables and rely on the significantly faster direct indexing offered by arrays.
-However, most data structures maintained by both the actor require indexing by the neighbour's \code{id}.
-This \code{id} is unique across all actors and is useful for routing and for keeping track of who an event's sender is.
-
-An alternative to structuring these data by \code{id} is to add every neighbour to an array and refer to them by their index.
-Unfortunately that mapping isn't going to be regular across all actors, and some structure still explicitly require an \code{id}, notably packet destinations.
-
-In order to minimize the amount of hashes to be made, each actor keeps track of a single hash table that maintains a translation from \code{ids} to an index \code{ix}, as well as an array containing an \code{ix} to \code{id} translation, mostly used for debugging purposes.
-In addition, if the \code{id}s of all the devices in the network are continuous starting from 0, the routing table can be indexed, not hashed, by \code{id}, and return the appropriate index.
-
-However, it is possible to avoid hash table lookups entirely with the cooperation of the engine.
-The engine doesn't care about the model \code{id} of its neighbours, it only needs to receive its events.
-By having the engine maintain the incoming queues in an array the same order as the actor has setup its \code{id}s, it is possible to translate the source \code{id} of the event to an index without needing a lookup.
-Indeed, when the engine removes an event from a queue, it necessarily knows the index of that queue in its array of incoming queues.
-It can then overwrite the incoming event's source field with the appropriate index, no lookup required.
-
-Flows follow a similar pattern and are given a \code{flow\_id} only by the source server, akin to how TCP ports are used in the real world.
-Each \code{flow\_id} can then simply be an index into an array, limiting the need for hash tables entirely.
-
-The combination of these optimizations mean that there is almost no need to execute a hash table lookup in the normal processing of events.
-The full translation tables, although never used in a proper simulation run, can be extremely helpful in debugging.
-
 \subsection{Message passing} \label{rustasim-message-passing}
 
 The communication between actors is done through a single-producer, single-consumer channel.
@@ -340,6 +314,50 @@ Once a \code{Stalled} event is received, they must return to let other actors be
 To allow the workers to distinguish a finished actor from a stalled actor, the actor returns either an \code{ActorState} which is either a \code{Continue(T)} containing the furthest time the actor got to, or a \code{Done(R)} containing the final result of the actor.
 Although unused in this scheme, the furthest time reached by an actor can be used by more complex schedulers to further optimize the simulator's scheduling.
 
-\section{Timeouts} \label{sim-timeouts}
+\subsection{Timeouts} \label{sim-timeouts}
 
-%TODO timeouts
+Timeouts are by the nature of their generation, a little complicated to schedule in the simulator.
+In order for an actor to send an event to itself, it must have itself as a neighbour.
+In practice, this means that there is a queue whose receiving engine is the actor's own engine.
+
+However, because timeouts can be generated for different values at different times, it is entirely possible for a timeout generated after a previous one to finish before the earlier one.
+This out-of-order property means that we cannot simply use the event-merger to re-order the timeouts properly.
+However, this can be solved by making use of the fact that timeouts have a large minimum value, a good fraction of a millisecond.
+
+Instead of being sent to the actor, timeouts generated by a server are kept in a local heap, and a "check for timeout" event is sent to the engine.
+Upon receiving the timeout, the server checks to see if any timeouts need to happen, and executes those.
+The server also then schedules the next "check for timeout" event at that point.
+
+Scheduling the "check for timeout" event is done by checking when the next timeout is scheduled to happen.
+If the next timeout is going to happen sooner than any other timeout, i.e. it is scheduled to happen less than the mimimum timeout away, the checking event is scheduled for when the next timeout expires.
+If the next timeout will expire longer than the minimum possible timeout in the future, the server schedules a check for a minimum timeout in the future: this will catch all fast timeouts which may generated before the current next timeout will expire.
+
+Although this might seem slightly convoluted, this design for timeouts is efficient and highlights the flexibility of Rustasim in implementing patterns that may not seem to be part of its paradigm.
+
+
+\subsection{Indexing} \label{rustasim-indexing}
+% Not sure where this section best goes...
+
+Although most programs consider the performance cost of a hash to be negligible, at the scale of nanoseconds, it becomes noticeable.
+There is therefore a large incentive to not use hash tables and rely on the significantly faster direct indexing offered by arrays.
+However, most data structures maintained by both the actor require indexing by the neighbour's \code{id}.
+This \code{id} is unique across all actors and is useful for routing and for keeping track of who an event's sender is.
+
+An alternative to structuring these data by \code{id} is to add every neighbour to an array and refer to them by their index.
+Unfortunately that mapping isn't going to be regular across all actors, and some structure still explicitly require an \code{id}, notably packet destinations.
+
+In order to minimize the amount of hashes to be made, each actor keeps track of a single hash table that maintains a translation from \code{ids} to an index \code{ix}, as well as an array containing an \code{ix} to \code{id} translation, mostly used for debugging purposes.
+In addition, if the \code{id}s of all the devices in the network are continuous starting from 0, the routing table can be indexed, not hashed, by \code{id}, and return the appropriate index.
+
+However, it is possible to avoid hash table lookups entirely with the cooperation of the engine.
+The engine doesn't care about the model \code{id} of its neighbours, it only needs to receive its events.
+By having the engine maintain the incoming queues in an array the same order as the actor has setup its \code{id}s, it is possible to translate the source \code{id} of the event to an index without needing a lookup.
+Indeed, when the engine removes an event from a queue, it necessarily knows the index of that queue in its array of incoming queues.
+It can then overwrite the incoming event's source field with the appropriate index, no lookup required.
+
+Flows follow a similar pattern and are given a \code{flow\_id} only by the source server, akin to how TCP ports are used in the real world.
+Each \code{flow\_id} can then simply be an index into an array, limiting the need for hash tables entirely.
+
+The combination of these optimizations mean that there is almost no need to execute a hash table lookup in the normal processing of events.
+The full translation tables, although never used in a proper simulation run, can be extremely helpful in debugging.
+

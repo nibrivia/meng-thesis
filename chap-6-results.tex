@@ -22,7 +22,7 @@ In addition to testing most individual components of the model and simulator, th
 
 \subsection{Replication of prior results} \label{replication}
 
-In order to replicate prior results, I implemented a data-center network similar to that of Opera \opera, described fully in Chapter \ref{model}. %TODO cite
+In order to replicate prior results, I implemented a data-center network similar to that of Opera \opera, described fully in Chapter \ref{model}.
 To further increase trust in my results, I compare Rustasim to the data published directly by the Opera team, and not against data produced by any simulation run on a computer I control.
 
 \begin{figure}[h]
@@ -54,39 +54,54 @@ On a flow-by-flow basis, the average error is of 2.1\%, a very good reproduction
 Once flows smaller than a single packet are excluded, the average error is of 1.2\%.
 
 
-\section{PHOLD performance} \label{phold}
+%\section{PHOLD performance} \label{phold}
+%
+%A standard measure for the performance of parallel distributed simulators is the PHOLD benchmark %TODO cite
+%It is a parallel version of the HOLD benchmark. %TODO cite
+%
+%The HOLD benchmark consists of a certaim amount of original events, which, when processed, would schedule another one some random amount of time in the simulation future.
+%Typically the distribution of time before a next event is processed is an exponential distribution although that may vary.
+%
+%A PHOLD benchmark follows the same idea, with the only difference being of which actor receives the event.
+%Instead the actor may be the same as the processing actor, or a different one (or `remote' in PHOLD terminology).
+%The fraction of remote events is an input parameter for the PHOLD model.
+%
+%In addition to the number of remote events, there is also a parameter controlling the minimal amount of time before another event is scheduled.
+%This value, called the \code{lookahead} represents a form of latency between actors and is necessary for conservative simulations to make progress.
+%
+%
+%\begin{table}[h]
+%\begin{center}
+%\begin{tabular}{|p{1.8in}|p{3.8in}|}
+%    \hline
+%    \code{n\_actor} & Number of actors \\\hline
+%    \code{n\_events} & Number of initial events per actor \\\hline
+%    \code{n\_cpus} & Number of processing elements \\\hline
+%    \code{remote} & Fraction of remote events \\\hline
+%    \code{lookahead} & Minimum time before the next event is scheduled\\\hline
+%\end{tabular}
+%\label{phold-params:table}
+%\caption{PHOLD parameters}
+%\end{center}
+%\end{table}
 
-A standard measure for the performance of parallel distributed simulators is the PHOLD benchmark %TODO cite
-It is a parallel version of the HOLD benchmark. %TODO cite
-
-The HOLD benchmark consists of a certaim amount of original events, which, when processed, would schedule another one some random amount of time in the simulation future.
-Typically the distribution of time before a next event is processed is an exponential distribution although that may vary.
-
-A PHOLD benchmark follows the same idea, with the only difference being of which actor receives the event.
-Instead the actor may be the same as the processing actor, or a different one (or `remote' in PHOLD terminology).
-The fraction of remote events is an input parameter for the PHOLD model.
-
-In addition to the number of remote events, there is also a parameter controlling the minimal amount of time before another event is scheduled.
-This value, called the \code{lookahead} represents a form of latency between actors and is necessary for conservative simulations to make progress.
-
-
-\begin{table}[h]
-\begin{center}
-\begin{tabular}{|p{1.8in}|p{3.8in}|}
-    \hline
-    \code{n\_actor} & Number of actors \\\hline
-    \code{n\_events} & Number of initial events per actor \\\hline
-    \code{n\_cpus} & Number of processing elements \\\hline
-    \code{remote} & Fraction of remote events \\\hline
-    \code{lookahead} & Minimum time before the next event is scheduled\\\hline
-\end{tabular}
-\label{phold-params:table}
-\caption{PHOLD parameters}
-\end{center}
-\end{table}
-%TODO
 
 \section{Network simulation performance} \label{perf-phold}
 
 Although general performance metrics are useful to compare against other general purpose simulators, Rustasim outperforms datacenter network simulators directly.
 
+The Opera simulator\opera was not built for speed, and will often take over a day to finish larger simulations. %TODO more precise data incoming
+Even anecdotely, I have not heard of a full Opera run taking less than multiple hours to run, even on dedicated compute servers.
+In contrast, during development, Rustasim has always finished these simulations on a laptop within an hour, often in 20 minutes or so.
+
+Beyond direct comparisons, Rustasim can be compared against the literature, with literature reviews providing useful overviews of the field \cite{fujimoto_computational_2017}.
+Network simulators in particular are measured on the number of packet transmissions per second, with the highest performers reaching 12 billion packet transmissions per second, on a 65,536 core machine.
+On a per-core basis, this corresponds to 187K packet/second/core, where Rustasim routinely reaches over 300K packets/second/core on an 8-core laptop. %TODO gather large-scale data?
+
+Beyond networking simulators, it is also possible to make direct comparisons of the event rate.
+The Opera model at 25\% load on my laptop, Rustasim is able to process 382K events/second/core (events include timeouts), significantly exceeding the 256K events/second/core per core performance of .%TODO cite.
+\\
+
+These comparisons highlight the potential of Rustasim, but they should also be understood carefully.
+Although the performance is impressive, the simulated models are all different and some may be fundamentally faster to simulate.
+The simulations are not run on the same hardware either, but it is difficult to know who this helps most: having less parallel elements requires less synchronization than a supercomputer might need, but supercomputers are also engineered for speed.

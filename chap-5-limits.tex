@@ -21,12 +21,33 @@ Even if they each took up a full 10 kilobytes, this would correspond to 50MB of 
 
 \paragraph{Packets}
 A fully saturated network on the model above will result in 16 billion packets being sent for every simulation second.
-Each packet contains information about its source, destination, size, the flow it belongs to, and so on...
-%mark
+Each packet contains information about its source, destination, size, the flow it belongs to, its sequence number.
+Altogether, it consists of about 5 fields of 64 bytes, or about 320 bytes of memory.
+Packets never exist without an associated event in Rustasim.
+
 
 \paragraph{Events}
+Although there are hundreds of billions of events created throughout the course of the simulation, few events are present at any time.
+The high network speeds mean that we aren't generating events far ahead of when they will be consumed by the actor.
+Generating an event 10ms in advance is equivalent to knowing a packet is going to arrive more than 8,000 packets in advance.
+Being generous and saying that events are created an average of 10ms ahead of time then lets us know that we have around 160 million events in memory at a time.
+
+Events are relatively small, containing a packet as well as the event's timestamp and its source.
+Although there are also other events, most of these are extremely short-lived and do not impact memory consumption much.
+If all the events for 10ms are held in memory at once, this corresponds to a memory consumption of 82GB.
+Althouh this number is large, it is the result of over-estimations: for example, it is rare to know of a packet much ahead of a single millisecond.
+However, 82GB is still realizable on many current platforms and does give assurance of the feasability of this simulation on current hardware.
+
 
 \paragraph{Flows}
+Over the entire simulation, the upper limit of nearly 2,000Tb of data will be divided into flows.
+The datamining distribution has an average flow size of 62MB, resulting in around 4 million flows being created throughout the simulation.
+Flow objects are more complex, requiring some book-keeping for which packets were acknowledged and need retransmitting.
+A generous estimate of the size of the flow object puts it at 2KB.
+Over the entire simulation, this corresponds to around 8GB of data used for flows, which is easily feasible on modern computers.
+
+If flows are removed after being done, and only generated when needed, this number can be reduced to only account for active flows, further reducing memory usage.
+Although this was necessary to do in the Python simulator due to memory concerns, the Rust simulator has a much more memory-efficient implementation of flows and does not require such book-keeping.
 
 
 \section{Speed} \label{limits-speed}
