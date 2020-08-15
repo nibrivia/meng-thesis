@@ -71,25 +71,19 @@ There were two main frustrations with RotorSim, its large memory usage and "slow
 \paragraph{Memory usage} \label{rotorsim-mem}
 Large simulations used up a lot of memory.
 Part of this is due to the large amounts of objects being actively used, see \ref{limits-mem}, but Python also offers little to no control of the underlying memory representations of objects.
-%TODO more
-%TODO numbers
 
 \paragraph{Low performance} \label{rotorsim-perf}
 In addition to large memory usage, it often took over 24h, sometimes even up to 72, to get results.
 This significantly slows down the research iterations.
 Although this was sometimes mitigated thanks to being able to run hundreds of simulations simultaneously, this was only interesting when we wanted to explore a large cross-section of different parameters.
-%TODO more
-%TODO numbers
 
 
-
-\subsection{Runtime} \label{rotorsim-runtime}
+\subsection{Python runtime} \label{rotorsim-runtime}
 
 Different interpreters exist for the python programming language, the default being CPython.
 However, I found that using PyPy \cite{team_pypy_2019} yields an almost 2x performance improvement for the simulator compared to CPython.
 Even Pypy can run virtually all Python code, numpy \cite{van_der_walt_numpy_2011} is difficult to set up properly.
 For RotorSim, numpy was only used for some random number generation, making moving away from the package easy.
-
 
 
 
@@ -104,7 +98,7 @@ Rustasim \cite{brode-roger_nibriviarustasim_2020} is a parallel discrete event s
 
 The main impetus for exploring a different programming language came from repeatedly hitting memory limits with RotorSim (even with 96GB of RAM!) and being frustrated at its slow speed.
 A goal was proposed to make a simulator run medium-sized simulations within a few hours, yielding an objective of managing to simulate 100Gb worth of traffic moving for every wall-clock second the simulator is run.
-For context, Rotorsim was able to move TKGbps. %TODO get number
+For context, Rotorsim is able to move 126Gbps on a laptop, more in \ref{}.
 
 
 \subsection{Language choice} \label{rustasim-language}
@@ -129,8 +123,8 @@ However the performance was, surprisingly, nearly identical to python's at aroun
 Attempts to make the simulation parallel, by processing the event and heap operations in parallel slowed down the simulator due to the need for synchronization between the different routines.
 
 \item Rust took much longer to develop, around 4-5 days, most of which was spent getting familiar with a new memory management model.
-Rust also does not take well to functions whose type is not defined at compile time.
-However, Rust has structured enumerations, allowing all the different event types to be defined at compile time. %TODO check name
+Rust also does not take well to functions whose type is not defined at compile time, making calling arbitrary functions difficult.
+However, Rust has structured enumerations, allowing all the different event types to be defined at compile time.
 The event loop could then, on a pre-defined event, call a specific function.
 Since the different enumeration variants can also carry distinct data, the arguments for the function can be carried with the variant, allowing flexibility in the types of functions called.
 After some quick optimizations, Rust moved 125Gb per second, faster than goal.
@@ -188,9 +182,8 @@ This can be done by sending \code{Null} events that pass closing times, or by se
 
 % TODO re-write, more details, reorgnize, cite?
 \paragraph{Compiler enforcement}
-The modularity between the actor and the engine is strictly enforced by the Rust compiler, by separating them into different crates, forbidding the simulator designer from modifying the internals of Rustasim.
+By separating the actor and the engine into different crates, the modularity is strictly enforced by the Rust compiler, forbidding the simulator designer from modifying the internals of Rustasim.
 In order to allow for arbitrary models to be built on top of Rustasim, the events the engine deals with are parametrized through a generic type \code{T}.
-When implementing a particular type of event
 Because the engine code is generic over \code{T}, it cannot make any assumptions about what the type looks like, lest the Rust compiler errors.
 However, when compiled, the compiler will fill in the type appropriately and is able to optimize as though the type were written explicitly written in.\\
 This separation between the model and the engine also allows for many different models to be implemented using the same engine, allowing for significant reuse between projects.
@@ -213,10 +206,11 @@ In addition, if the \code{id}s of all the devices in the network are continuous 
 However, it is possible to avoid hash table lookups entirely with the cooperation of the engine.
 The engine doesn't care about the model \code{id} of its neighbours, it only needs to receive its events.
 By having the engine maintain the incoming queues in an array the same order as the actor has setup its \code{id}s, it is possible to translate the source \code{id} of the event to an index without needing a lookup.
-Indeed, hen the engine removes an event from a queue, it necessarily knows the index of that queue in its array of incoming queues.
+Indeed, when the engine removes an event from a queue, it necessarily knows the index of that queue in its array of incoming queues.
 It can then overwrite the incoming event's source field with the appropriate index, no lookup required.
 
-% TODO flows
+Flows follow a similar pattern and are given a \code{flow\_id} only by the source server, akin to how TCP ports are used in the real world.
+Each \code{flow\_id} can then simply be an index into an array, limiting the need for hash tables entirely.
 
 The combination of these optimizations mean that there is almost no need to execute a hash table lookup in the normal processing of events.
 The full translation tables, although never used in a proper simulation run, can be extremely helpful in debugging.
@@ -228,7 +222,7 @@ Rust offers a default channel implementation for multiple-producers and a single
 Multiple Rust crates offer more performant options, and after testing many different options, including Ringbuffer (TODO cite), crossbeam's (TODO cite) channels, the most performant option was the unreleased single-producer single-consumer queue from crossbeam.
 In order to be easily published, Rustasim currently extracts the SPSC channel code from the unreleased branch of crossbeam.
 
-\subsection{Multi-queue merging} \label{rusatim-tree}
+\subsection{Multi-queue merging} \label{rustasim-tree}
 
 This is the core of the engine: merging multiple queues together, and returning the next event if it has heard from all neighbours, as described in \ref{null-messages}.
 If a neighbour has not been heard from, the scheduler should return a \code{Stalled} event.
@@ -241,7 +235,7 @@ The algorithmic complexity of processing or returning an event is then $O(\log e
 An improved approach would take only the top event from each of the senders and maintain a heap of those.
 The heap is then bounded by the number of senders, and the book-keeping is reduced to whether or not a sender has an element in the heap.
 This structure then has an algorithmic complexity of $O\left(\log n\right)$
-This works relatively well and supports somewhat fast running times. %TODO numbers plz!
+This works relatively well and does slightly improve running time.
 
 When waiting on a neighbour, i.e. there are no events from at least one actor in the heap or in the incoming queue, the merger returns a \code{Stalled} event.
 Otherwise, the merger returns the smallest current event off the heap, and attempts to extract an event from the incoming queue.
@@ -308,7 +302,7 @@ This issue alone is enough to make the simulator over 1,000x slower.
 Explicitly yielding the thread on a stall sometimes improves the situation, but not much, since the OS still has no clear idea of who is best to schedule next.
 In fact, cursory experiments suggest that it often repeatedly picks the same threads to schedule, letting it advance ahead of the rest, stall, and get rescheduled soon after, making little progress before stalling again, and so on.
 Unfortunately switching between threads is an expensive operation for the operating system, and can easily take up a huge fraction of the simulation time.
-In some runs, thread-switching took up almost two thirds of the simulation time, i\.e\. removing the scheduling issue could speed up the simulation by a factor of 3.
+In some runs, thread-switching took up almost two thirds of the simulation time, i.e. removing the scheduling issue could speed up the simulation by a factor of 3.
 In addition to the overhead of thread switching, repeatedly stalling an operation sends out more \code{Null} events than necessary: they were not sent because of a deadlock, but because of a scheduling issue, creating overhead.
 On its own, sending more events than needed may not seem like a big issue, they are cheap to process, but these \code{Null} events can become the main event type the stragglers receive, sometimes exceeding half of all received events.
 \\
@@ -347,3 +341,5 @@ To allow the workers to distinguish a finished actor from a stalled actor, the a
 Although unused in this scheme, the furthest time reached by an actor can be used by more complex schedulers to further optimize the simulator's scheduling.
 
 \section{Timeouts} \label{sim-timeouts}
+
+%TODO timeouts
