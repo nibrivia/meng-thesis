@@ -146,12 +146,11 @@ After having spent significant time developing the full simulator, that bet has 
 
 \subsection{System overview} \label{rustasim-overview}
 
-%TODO use newer version
 \begin{figure}[h]
 \centering
 \label{rustasim-overview:fig}
-\includegraphics[width=\textwidth]{rustasim-overview}
-\caption{Rustasim system diagram (TODO pretty diagram)}
+\includegraphics[width=\textwidth]{system-diagrams}
+\caption{Rustasim actor overview}
 \end{figure}
 
 A Rustasim simulation consists of many actors, each running concurrently, not necessarily simultaneously, to all others.
@@ -268,7 +267,21 @@ The winner of each exchange, the event to be scheduled the soonest, moves on to 
 This process eventually forms a tree analogous to the structure of many tournaments.
 Although it may be natural to record the winner of each exchange, recording the looser makes for a significantly more elegant algorithm as described by Knuth \cite{knuth_art_1998}.
 
-% Describe the loser tree process
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{loser_tree}
+    \caption{Loser tree example from TODO}
+    \label{loser-tree:fig}
+\end{figure}
+
+In the example of Figure \ref{loser-tree:fig}, the current winner is 8, coming from \code{S0}.
+In order to find the next smallest value, which a quick visual scan reveals should be 15 from \code{S2}, we re-run all the tournaments starting from \code{S0}.
+The new value of \code{S0} is now 19, which goes up against the currently saved value in the parent: 22.
+18 wins and moves on to go up against 15, which it loses.
+Upon losing, we swap the two players, writing 18 down in the place of 15, and continuing 15 up the tree.
+Reaching the root node of 18, current player 15 wins and is now the tournament winner.
+
+
 \paragraph{Dealing with ties}
 In order to allow tied events to be returned before a stall, when an incoming queue doesn't have any events to insert into the tree a \code{Stalled} event is inserted in its place.
 The inserted event will then make its way to the top of the tree as though it were any other event, being returned when it is its time.
@@ -279,6 +292,12 @@ When a \code{Stalled} event wins, the merger checks the neighbour's queue again 
 
 
 \subsection{Scheduling} \label{rustasim-sched}
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth,page=2]{system-diagrams}
+    \caption{Rustasim actor overview}
+    \label{rustasim-scheduling:fig}
+\end{figure}
 
 In the cases where there are less actors than available cores and there isn't contention on the system (no other CPU heavy job), it is possible to give each actor its own thread and still have excellent performance.
 In this scenario when an actor stalls and is waiting on another, it can `busy-wait', burning CPU cycles until there is a new event on the channel.
@@ -294,6 +313,7 @@ In addition to the overhead of thread switching, repeatedly stalling an operatio
 On its own, sending more events than needed may not seem like a big issue, they are cheap to process, but these \code{Null} events can become the main event type the stragglers receive, sometimes exceeding half of all received events.
 \\
 
+
 However, a better setup would be to have as many active actors as available cores, and to always schedule the most-straggling actor.
 Indeed, being last means that the actor can run for longer uninterrupted, reducing the overhead of scheduling actors.
 
@@ -302,6 +322,13 @@ An easy way to schedule actors is such a pattern is to advance an actor until it
 This can be done by having a single shared queue shared behind a lock, workers popping the front of the queue and pushing stalled actors at the back.
 However, this queue then becomes a contention point between the actors.
 This can be mitigated by having a few queues each with its own lock, and having workers randomly picking a queue and popping an event from it after pushing the stalled actor onto it.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{flame-lock-one-heap}
+    \caption{`Flamegraph' of a Rustasim run with a single shared scheduling queue: lock contention accounts for over 90\% of the runtime.} %TODO cite
+    \label{rustasim-lock-one-heap:fig}
+\end{figure}
 
 It is possible to push and pop from two distinct random queues, but this has the disadvantage of acquiring two locks for every scheduled actor and of allowing queues to drift to different sizes.
 Pushing and popping from the same queue does not change the size of the picked queue since it both adds and removes an element from the queue before releasing it, and only acquires one lock.

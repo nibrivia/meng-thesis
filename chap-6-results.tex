@@ -1,5 +1,59 @@
 \chapter{Experiments and results} \label{results}
 
+\section{Simulation accuracy} \label{accuracy}
+
+Because it is easy to write a fast, but wrong, simulator, it is necessary to prove that it is in fact, accurate.
+This is done in two steps: through testing, and through replication of prior results.
+
+Testing is most useful to the developper by catching errors as soon as a breaking change is made to the codebase and allows for a high degree of confidence while the work is still in progress.
+However, testing requires trusting that my tests are extensive and correct.
+
+Replication of prior results is significantly more difficult to achieve, requiring careful implementation, much longer runtimes and more complex analysis, but does not require trust in the implementation.
+
+\subsection{Testing} \label{testing}
+
+The Rustasim engine, and the datacenter model both contain a large number of automated tests, most testing small components of the design.
+These tests serve to build assurance during development that optimizations did not break the accuracy of the simulator.
+
+Notably, in my experience, routing is a common source of inaccuracies during the development of network models due to errors such as the mishandling of redundant paths.
+Such inaccuracies can be extremely difficult to uncover, especially if they result in a packets still making it to the destination, albeit slightly inefficiently.
+
+In addition to testing most individual components of the model and simulator, there are full integration tests that build a full network simulation with a sufficiently simple and well-defined traffic pattern that the outcome was verified manually.
+
+\subsection{Replication of prior results} \label{replication}
+
+In order to replicate prior results, I implemented a data-center network similar to that of Opera \opera, described fully in Chapter \ref{model}. %TODO cite
+To further increase trust in my results, I compare Rustasim to the data published directly by the Opera team, and not against data produced by any simulation run on a computer I control.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{fct-1perc}
+    \caption{
+        Flow completion times at 1\% load
+    }
+    \label{fct-1perc}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{fct-1perc}
+    \caption{
+        Flow completion times at 25\% load
+    }
+    \label{fct-25perc}
+\end{figure}
+
+Although the results match very closely, as evident in figures \ref{fct-1perc} and \ref{fct-25perc}, they do not fully match.
+This is due to the Opera model including a link with no latency, which is currently impossible to simulate in a conservative simulators like Rustasim.
+This is discussed more in section TK. %TODO ref
+This has an effect on the smaller flows, who see an additional 500ns for each server to ToR link.
+However, this effect tends to disappear in the flow completion time of larger flows, to whom latency has a much smaller effect.
+
+There remains some small inaccuracies due to the Opera simulator using a relatively complex congestion control scheme that was not implemented in Rustasim.
+On a flow-by-flow basis, the average error is of 2.1\%, a very good reproduction given the use of a completely different congestion control mechanism.
+Once flows smaller than a single packet are excluded, the average error is of 1.2\%.
+
+
 \section{PHOLD performance} \label{phold}
 
 A standard measure for the performance of parallel distributed simulators is the PHOLD benchmark %TODO cite
@@ -16,7 +70,7 @@ In addition to the number of remote events, there is also a parameter controllin
 This value, called the \code{lookahead} represents a form of latency between actors and is necessary for conservative simulations to make progress.
 
 
-\begin{table}
+\begin{table}[h]
 \begin{center}
 \label{phold-params:table}
 \begin{tabular}{|p{1.8in}|p{3.8in}|}
@@ -30,9 +84,9 @@ This value, called the \code{lookahead} represents a form of latency between act
 \caption{PHOLD parameters}
 \end{center}
 \end{table}
-%XXX
+%TODO
 
 \section{Network simulation performance} \label{phold}
 
 Although general performance metrics are useful to compare against other general purpose simulators, Rustasim outperforms datacenter network simulators directly.
-The other 
+

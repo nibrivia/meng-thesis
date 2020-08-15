@@ -1,15 +1,27 @@
 \chapter{Datacenter network model} \label{model}
 
 \section{Datacenter background} \label{model-dc}
+
 \subsection{Network configuration} \label{model-network}
 
 % A lot of this section is a mess
-Most datacenters \cite{mellette_rotornet_2017}\cite{handley_re-architecting_2017}\cite{mellette_expanding_2019} (more?) are organized in hundreds or thousands of racks containing servers.
+Most datacenters \rotornet\cite{handley_re-architecting_2017}\opera
 There are anywhere from 5 to 50 servers in a rack, each connected to a switch typically at the top, giving it the common name "Top of Rack switch" or ToR.
 A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or more. % TODO cite
 
 The racks themselves are connected together through different fabrics, and switch technologies.
-The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research (Xpander, rotornet, opera). % TODO cite
+The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research \opera\rotornet (TODO Xpander). % TODO cite
+
+CLOS networks, or fat-trees, are a common topology in data-centers today. %cite Leiserson, Jupiter, Facebook
+They consist of a hierarchy of switches, with their bandwidth equally split up and down the hierarchy.
+For cost-reduction purposes, it is common to have the first layer, from the servers to the ToR switch to be oversubscribed: the servers are able to send more traffic than the rack can handle.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{fat-tree}
+    \label{fig:fat-tree}
+    \caption{An example of a fat-tree topology from TODO} %TODO cite A scalable, commodity...
+\end{figure}
 
 The typical bandwidth vary but are in the 10Gbps to 100Gbps scale for these links.
 Some networks assume different link speeds between the ToRs than from server to ToR, others are uniform.

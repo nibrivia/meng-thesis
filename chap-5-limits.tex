@@ -1,8 +1,9 @@
 \chapter{Simulator limits} \label{limits}
 
-In this chapter we explore theoretical limits of simulators both in terms of speed, and what is possible
+In this chapter we explore theoretical limits of simulators both in terms of speed, and what is even feasible.
+\\
 
-Throughout the chapter, the baseline model will consist of 4,773 actors comprised 128 racks connected to 37 backbone switches and 37 servers each through bidirectional 10Gbps links.
+Throughout this chapter, the baseline model will consist of 4,773 actors comprised 128 racks connected to 37 backbone switches and 37 servers each through bidirectional 10Gbps links.
 The full bandwidth of the network is therefore $2\times128\times(37+37)\times10Gbps = 190Tbps$, over 10 simulated seconds this corresponds to up to almost 2,000Tb of data.
 The packet size will be assumed to be 1,500~bytes, the TCP standard. \\
 Note that network speeds are typically measured in bits per second, not bytes.
@@ -10,8 +11,9 @@ For more details on the structure of datacenters see section \ref{model-dc}.
 
 \section{Memory feasability} \label{limits-feasible}
 
-The main limiting factor in the feasability of simulations is how much memory it needs at any given moment.
-Speed is typically not a concern since it is always possible, if frustrating, to wait longer, and disk space is cheap.
+The main limiting factor in the feasability of simulations is memory consumption.
+Speed is typically not a concern since it is always possible, if frustrating, to wait longer.
+Storing the results of a large simulation could also be limiting but disk space is relatively cheap.
 
 There are three main sources of memory usage in this simulation: events, packets, and flows.
 Although there are nearly 5,000 actors, they each (without their events, packets, and flows) take up fairly little memory.
