@@ -1,4 +1,42 @@
 
+@inproceedings{barnes_warp_2013,
+	address = {New York, NY, USA},
+	series = {{SIGSIM} {PADS} '13},
+	title = {Warp speed: executing time warp on 1,966,080 cores},
+	isbn = {978-1-4503-1920-1},
+	shorttitle = {Warp speed},
+	url = {https://doi.org/10.1145/2486092.2486134},
+	doi = {10.1145/2486092.2486134},
+	abstract = {Time Warp is an optimistic synchronization protocol for parallel discrete event simulation that coordinates the available parallelism through its rollback and antimessage mechanisms. In this paper we present the results of a strong scaling study of the ROSS simulator running Time Warp with reverse computation and executing the well-known PHOLD benchmark on Lawrence Livermore National Laboratory's Sequoia Blue Gene/Q supercomputer. The benchmark has 251 million PHOLD logical processes and was executed in several configurations up to a peak of 7.86 million MPI tasks running on 1,966,080 cores. At the largest scale it processed 33 trillion events in 65 seconds, yielding a sustained speed of 504 billion events/second using 120 racks of Sequoia. This is by far the highest event rate reported by any parallel discrete event simulation to date, whether running PHOLD or any other benchmark. Additionally, we believe it is likely to be the largest number of MPI tasks ever used in any computation of any kind to date. ROSS exhibited a super-linear speedup throughout the strong scaling study, with more than a 97x speed improvement from scaling the number of cores by only 60x (from 32,768 to 1,966,080). We attribute this to significant cache-related performance acceleration as we moved to higher scales with fewer LPs per core. Prompted by historical performance results we propose a new, long term performance metric called Warp Speed that grows logarithmically with the PHOLD event rate. As we define it our maximum speed of 504 billion PHOLD events/sec corresponds to Warp 2.7. We suggest that the results described here are significant because they demonstrate that direct simulation of planetary-scale discrete event models are now, in principle at least, within reach.},
+	urldate = {2020-08-15},
+	booktitle = {Proceedings of the 1st {ACM} {SIGSIM} {Conference} on {Principles} of {Advanced} {Discrete} {Simulation}},
+	publisher = {Association for Computing Machinery},
+	author = {Barnes, Peter D. and Carothers, Christopher D. and Jefferson, David R. and LaPre, Justin M.},
+	month = may,
+	year = {2013},
+	keywords = {blue gene/q, parallel discrete-event simulation, time warp},
+	pages = {327--336}
+}
+
+@inproceedings{barnes_warp_2013-1,
+	address = {New York, NY, USA},
+	series = {{SIGSIM} {PADS} '13},
+	title = {Warp speed: executing time warp on 1,966,080 cores},
+	isbn = {978-1-4503-1920-1},
+	shorttitle = {Warp speed},
+	url = {https://doi.org/10.1145/2486092.2486134},
+	doi = {10.1145/2486092.2486134},
+	abstract = {Time Warp is an optimistic synchronization protocol for parallel discrete event simulation that coordinates the available parallelism through its rollback and antimessage mechanisms. In this paper we present the results of a strong scaling study of the ROSS simulator running Time Warp with reverse computation and executing the well-known PHOLD benchmark on Lawrence Livermore National Laboratory's Sequoia Blue Gene/Q supercomputer. The benchmark has 251 million PHOLD logical processes and was executed in several configurations up to a peak of 7.86 million MPI tasks running on 1,966,080 cores. At the largest scale it processed 33 trillion events in 65 seconds, yielding a sustained speed of 504 billion events/second using 120 racks of Sequoia. This is by far the highest event rate reported by any parallel discrete event simulation to date, whether running PHOLD or any other benchmark. Additionally, we believe it is likely to be the largest number of MPI tasks ever used in any computation of any kind to date. ROSS exhibited a super-linear speedup throughout the strong scaling study, with more than a 97x speed improvement from scaling the number of cores by only 60x (from 32,768 to 1,966,080). We attribute this to significant cache-related performance acceleration as we moved to higher scales with fewer LPs per core. Prompted by historical performance results we propose a new, long term performance metric called Warp Speed that grows logarithmically with the PHOLD event rate. As we define it our maximum speed of 504 billion PHOLD events/sec corresponds to Warp 2.7. We suggest that the results described here are significant because they demonstrate that direct simulation of planetary-scale discrete event models are now, in principle at least, within reach.},
+	urldate = {2020-08-15},
+	booktitle = {Proceedings of the 1st {ACM} {SIGSIM} {Conference} on {Principles} of {Advanced} {Discrete} {Simulation}},
+	publisher = {Association for Computing Machinery},
+	author = {Barnes, Peter D. and Carothers, Christopher D. and Jefferson, David R. and LaPre, Justin M.},
+	month = may,
+	year = {2013},
+	keywords = {blue gene/q, parallel discrete-event simulation, time warp},
+	pages = {327--336}
+}
+
 @book{fujimoto_parallel_2000,
 	title = {Parallel and distributed simulation systems},
 	volume = {300},
@@ -639,7 +677,6 @@ PyP},
 	author = {Nikolaev, S and Banks, L E and Barnes, P D and Jefferson, D R and Smith, S G},
 	pages = {30}
 }
-
 @article{chandy_distributed_1979,
 	title = {Distributed {Simulation}: {A} {Case} {Study} in {Design} and {Verification} of {Distributed} {Programs}},
 	volume = {SE-5},
@@ -674,6 +711,7 @@ PyP},
 	keywords = {Chandy Misra Bryant, granted time window, ns-3, parallel discrete-event simulation, parallel processing, simulation},
 	pages = {47--53}
 }
+
 @inproceedings{fujimoto_computational_2017,
 	title = {Computational challenges in modeling simulation of complex systems},
 	doi = {10.1109/WSC.2017.8247805},

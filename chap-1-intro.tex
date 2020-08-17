@@ -18,23 +18,25 @@ It is also worth noting that in practice, after a simulator is built, the outcom
 This process of iteration is expected.
 
 The contribution of this work is in the simulator, not in the model.
-In order to validate the correctness of the simulator, I will be comparing it to the published simulator from the Opera paper TODO cite.
+In order to validate the correctness of the simulator, I will be comparing it to the published simulator from the Opera paper TODO cite. \manya{please cite and address all the TODOs in the entire thesis.}
 
 \section{Discrete-event models and simulators} \label{discrete-event-sims}
 
-There are many kinds of models, this thesis focuses on discrete-event models and simulators.
-These are useful in modeling computer systems, supply chains, and any model where there is a notion of a event happening.
-Notably, many physics models are continuous, such as simulating the flow of a river over time, the solar system, or protein folding.
+There are many kinds of models, \manya{mention some examples and cite them.} this thesis focuses on discrete-event models and simulators.
+These are useful in modeling computer systems, supply chains, and any model where there is a notion of an event happening.
+Notably, many physics models are continuous, such as simulating the flow of a river over time, the solar system, or protein folding.\manya{good places for citation}
 
 Discrete-event simulations in particular typically consist of actors reacting to events.
-Each event may then generate, or not, new events, affecting some actors.
+Each event may then generate, or not, \manya{this is confusing, pleas reword} new events, affecting some actors.
 A classical example could be a car-wash, events being consumers arriving, potentially queuing, getting sent to a cleaning station, and leaving once done.
-Depending on the arrival pattern, queues may build up in front of the station, a more complex model might even take into account customers giving up and leaving the queue. %cite old paper
-The actors would be the queue and the cleaning stations.
-Events correspond to cars arriving and departing from each of those points.
+Depending on the arrival pattern, queues may build up in front of the station. \manya{cite a simulation book that uses this as an example} A more complex model might even take into account customers giving up and leaving the queue \cite{chandy_distributed_1979}.
+The actors would be the queue and the cleaning stations.\manya{elaborate on why both the queue and cleaning stations can be actors.}
+Events correspond to cars arriving and departing from each of those points.\manya{a few sentences above you defined events as "events being consumers arriving, potentially queuing, getting sent to a cleaning station, and leaving once done". please combine these two sentences to avoid confusion. }
 A data network is similar, cars becoming packets or flows, stations becoming servers and switches.
 
 These discrete models may then be implemented in many different ways, and can be broadly divided in sequential or parallel simulators.
-In a sequential simulator, only one event is processed at a time, making progress in time as the events are processed, the main advantage of these being their relative ease of implementation.
-In contrast, parallel simulators are able to process multiple events simultaneously, possibly increasing simulation speed, but are significantly harder to implement: without special care, it is easy to accidentally process events in the wrong order which will almost certainly result in inaccurate results.
-This thesis implements a general-purpose parallel discrete simulator, Rustasim TODO ref: the codebase can be used by simulation developers to implement their own simulators, while Rustasim manages the parallel nature of the simulator.
+In a sequential simulator \manya{cite}, only one event is processed at a time, making progress in time as the events are processed, the main advantage of these being their relative ease of implementation.
+In contrast, parallel simulators \manya{cite} are able to process multiple events simultaneously, possibly increasing simulation speed, but are significantly harder to implement: without special care, it is easy to accidentally process events in the wrong order which will almost certainly result in inaccurate results.
+This thesis implements a general-purpose parallel discrete simulator, Rustasim TODO ref: \manya{please resolve all the TODOs} the codebase can be used by simulation developers to implement their own simulators, while Rustasim manages the parallel nature of the simulator.
+
+\manya{high-level comment on the intro: the introduction of a thesis should talk about the content of the thesis, the ideas behind it, the challenges to solve, the techniques you used, the evaluation methodology, and results. the current version, unfortunately, does not meet the bar for intro of a thesis.The last few sentences are insufficient to capture what you did in this thesis. The focus of the current version is on "what is a simulation model". But the reader is left unsure about why you are talking about the model for 2 pages without tying it to the research contribution of this thesis. Please re-write the intro and put more emphasis on the contributions of the thesis. Ayush's and Jeremy's theses are good examples to read and follow their format.}

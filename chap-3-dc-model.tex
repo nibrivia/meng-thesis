@@ -9,12 +9,12 @@ In this chapter I describe common models of networks and data-centers as well as
 % A lot of this section is a mess
 Most datacenters \rotornet\cite{handley_re-architecting_2017}\opera
 There are anywhere from 5 to 50 servers in a rack, each connected to a switch typically at the top, giving it the common name "Top of Rack switch" or ToR.
-A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or more. % TODO cite
+A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or more. % TODO citation?
 
 The racks themselves are connected together through different fabrics, and switch technologies.
 The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research \opera\rotornet (TODO Xpander). % TODO cite
 
-CLOS networks, or fat-trees, are a common topology in data-centers today \cite{singh_jupiter_2015}. %cite Leiserson, Jupiter, Facebook
+CLOS networks, or fat-trees, are a common topology in data-centers today \cite{singh_jupiter_2015}\cite{noauthor_reinventing_2019}\cite{noauthor_introducing_2014}.
 They consist of a hierarchy of switches, with their bandwidth equally split up and down the hierarchy.
 For cost-reduction purposes, it is common to have the first layer, from the servers to the ToR switch to be oversubscribed: the servers are able to send more traffic than the rack can handle.
 
@@ -44,7 +44,7 @@ The reason for this is simple: if on average, it takes 4 hops to get to the dest
 
 The traffic may be fairly uniform, each sender and receiver being involved in traffic all around the datacenter, or very concentrated, with a few "hot" racks being very active with each other, the rest of the datacenter quiet.
 Describing these patterns can become quite complex, as there may be multiple "hot" regions mostly not interacting with each other.
-Throughput this thesis, and in most of the literature, we tend to be concerned about uniform traffic, and heavily skewed traffic. % is this true??
+Throughput this thesis, and in most of the literature, we tend to be concerned about uniform traffic.
 
 Finally, the flow size distribution corresponds to how big each flow is expected to be \cite{alizadeh_data_2010}.
 Some workloads, such as websearch, consists mostly of many small flows.
@@ -61,6 +61,7 @@ The servers are organized in racks, themselves interconnected through a user-cho
 A \code{packet} event carries with it the corresponding packet and signals the arrival of that packet to the actor who then forwards it along appropriately.
 If the packet carried by the event arrives at its destination, it is acked.
 If the packet is an ack arriving back at the sender, the flow reacts appropriately.\\
+
 \code{Flow} events are received directly by servers and indicate the start of a new flow at that server.
 \code{Timeouts} are received by the senders themselves and may cause a packet to be retransmitted if it hasn't been acknowledged.
 

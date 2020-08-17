@@ -9,9 +9,9 @@ The packet size will be assumed to be 1,500~bytes, the TCP standard. \\
 Note that network speeds are typically measured in bits per second, not bytes.
 For more details on the structure of datacenters see section \ref{model-dc}.
 
-\section{Memory feasability} \label{limits-mem}
+\section{Memory feasibility} \label{limits-mem}
 
-The main limiting factor in the feasability of simulations is memory consumption.
+The main limiting factor in the feasibility of simulations is memory consumption.
 Speed is typically not a concern since it is always possible, if frustrating, to wait longer.
 Storing the results of a large simulation could also be limiting but disk space is relatively cheap.
 
@@ -35,14 +35,14 @@ Being generous and saying that events are created an average of 10ms ahead of ti
 Events are relatively small, containing a packet as well as the event's timestamp and its source.
 Although there are also other events, most of these are extremely short-lived and do not impact memory consumption much.
 If all the events for 10ms are held in memory at once, this corresponds to a memory consumption of 82GB.
-Althouh this number is large, it is the result of over-estimations: for example, it is rare to know of a packet much ahead of a single millisecond.
-However, 82GB is still realizable on many current platforms and does give assurance of the feasability of this simulation on current hardware.
+Although this number is large, it is the result of over-estimations: for example, it is rare to know of a packet much ahead of a single millisecond.
+However, 82GB is still realizable on many current platforms and does give assurance of the feasibility of this simulation on current hardware.
 
 
 \paragraph{Flows}
 Over the entire simulation, the upper limit of nearly 2,000Tb of data will be divided into flows.
 The datamining distribution has an average flow size of 62MB, resulting in around 4 million flows being created throughout the simulation.
-Flow objects are more complex, requiring some book-keeping for which packets were acknowledged and need retransmitting.
+Flow objects are more complex, requiring some book-keeping for which packets were acknowledged and need re-transmitting.
 A generous estimate of the size of the flow object puts it at 2KB.
 Over the entire simulation, this corresponds to around 8GB of data used for flows, which is easily feasible on modern computers.
 
@@ -72,7 +72,7 @@ Although this may seem slow compared to the 16Gp/s of the network under simulati
 Optimistically, across multiple CPUs, we can hope to multiply this effect.
 My laptop's 8 cores may therefore dream of running a simulation at nearly 2Tbps.
 
-Realistically, 100 cycles per packet is optimistic, and in the case of a parallel simulaiton, the synchronization between cores becomes expensive: a typical shared lock operation alone typically taking 20-30ns. %TODO cite
+Realistically, 100 cycles per packet is optimistic, and in the case of a parallel simulation, the synchronization between cores becomes expensive: a typical shared lock operation alone typically taking 20-30ns.
 These numbers do allow us to understand an upper bound of what is possible.
 
 

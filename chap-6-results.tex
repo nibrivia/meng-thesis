@@ -99,7 +99,7 @@ Network simulators in particular are measured on the number of packet transmissi
 On a per-core basis, this corresponds to 187K packet/second/core, where Rustasim routinely reaches over 300K packets/second/core on an 8-core laptop. %TODO gather large-scale data?
 
 Beyond networking simulators, it is also possible to make direct comparisons of the event rate.
-The Opera model at 25\% load on my laptop, Rustasim is able to process 382K events/second/core (events include timeouts), significantly exceeding the 256K events/second/core per core performance of .%TODO cite.
+The Opera model at 25\% load on my laptop, Rustasim is able to process 382K events/second/core (events include timeouts), significantly exceeding the highest reported rate I could find of 256K events/second/core\cite{barnes_warp_2013}.%TODO cite.
 \\
 
 These comparisons highlight the potential of Rustasim, but they should also be understood carefully.
