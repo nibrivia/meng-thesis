@@ -1,7 +1,7 @@
 \chapter{Background and related work} \label{background}
 
 In this chapter I describe different types of simulators and the tradeoff between them.
-Excellent overviews of the entire field have been written over the years \cite{fujimoto_parallel_2001} \cite{fujimoto_computational_2017} and provide significantly further details on simulation techniques.
+Excellent overviews of the entire field have been written over the years \cite{fujimoto_parallel_2001, fujimoto_computational_2017} and provide significantly further details on simulation techniques.
 
 \section{Centralized discrete event simulators} \label{centralized-sim}
 
@@ -106,7 +106,7 @@ This guarantee can be achieved if we require all actors to send each other event
 In the rare case where this requirement isn't satisfied, it is usually possible to reformulate the model to comply with it.
 We will see an example of such a reformulation when in section \ref{sim-timeouts} when we talk about timeouts.
 
-An old algorithm, described as early as 1979\cite{fujimoto_parallel_2000}\cite{misra_distributed_1986} \manya{multiple citations are done with one \cite{X, Y}  command. please fix.}, is able to take these multiple in-order streams and safely return the next event.
+An old algorithm, described as early as 1979\cite{fujimoto_parallel_2000, misra_distributed_1986} \manya{multiple citations are done with one \cite{X, Y}  command. please fix.}, is able to take these multiple in-order streams and safely return the next event.
 Although taking the next event amongst all those received clearly is necessary to returning the next event, that alone is not sufficient.
 For example, if the current next event would be scheduled at time 10, but we still haven't heard from a neighbour, we may later receive an event to be scheduled at time 9 from that neighbour, violating causality.
 In order to avoid this situation, it is only safe to return an event when we have heard from \emph{every} neighbour. \manya{number 10 here is random, to make it more scientific, say time $t$.}
