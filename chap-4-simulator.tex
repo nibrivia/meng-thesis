@@ -1,9 +1,13 @@
 \chapter{Simulator design} \label{simulators}
 
+\manya{please start this chapter by describing the high-level goals of your research. In systems papers, we usually tell the reader what we are going to tell them before diving into details. It would be very useful to mention the performance metrics you later use in this chapter and that you are going to explain two simulators. the ideas behind each of them. the intuition of why two simulators. mention the challenges you had to solve in a high-level language to prepare the reader to navigate through this chapter.}
+
 \section{RotorSim} \label{rotorsim}
 
-RotorSim \cite{brode-roger_nibriviarotorsim_2020} is a centralized simulator (see \ref{centralized-sim}) of a packet-level datacenter network model (see \ref{model}).
+RotorSim \cite{brode-roger_nibriviarotorsim_2020} is a centralized simulator (see \ref{centralized-sim}) of a packet-level datacenter network model (see \ref{model}). \manya{since first part of your thesis contribution is on rotorsim and second part compares with opera, the background chapter should spend 2 pages describing the rotornet and opera papers with special attention given to their current simulators and their limitations.}
 It is implemented in Python \cite{van_rossum_python_2009} and is single-threaded. %does python need to be cited?
+
+\manya{instead of jumping into API right away, give a high-level view of what you are trying to do. what is the problem you are trying to solve? why is it a problem? what is your solution? what is the research contribution of your solution?}
 
 \subsection{Event queue} \label{rotorsim-eventq}
 \subsubsection{API} \label{rotorsim-eventq-api}
@@ -27,7 +31,7 @@ The event queue allows for the addition of new events through two functions: \co
 These will then appropriately add the event to the queue and return.
 The exact structure of \code{time} and \code{event} are discussed in \ref{rotorsim-eventq-event}.
 
-To event loop is started through a call to \code{run\_next()} and finishes either when there are no more events to schedule, or when it hits a limit defined at its creation.
+The event loop is started through a call to \code{run\_next()} and finishes either when there are no more events to schedule, or when it hits a limit defined at its creation.
 The loop may also ended by calling \code{stop()}, breaking the loop.
 Although rarely useful when running simulations to produce results, it is useful while debugging.
 After being stopped, the loop may be resumed through another call to \code{run\_next()}.
@@ -35,7 +39,7 @@ After being stopped, the loop may be resumed through another call to \code{run\_
 % wow is this section badly written
 In order to make code more readable, and less error-prone, the module also exports a function decorator, \code{@delay(amount)} that will wrap a function in a call.
 A useful case for this is to enforce delays in reconfiguration or receiving packets.
-For example, if an switch $S$ has a \code{recv(packet)} function that processes incoming packets, it may be useful to wrap this with a \code{@delay(latency)}, enforcing that anyone calling the function waits an additional $latency$ amount.
+For example, if a switch $S$ has a \code{recv(packet)} function that processes incoming packets, it may be useful to wrap this with a \code{@delay(latency)}, enforcing that anyone calling the function waits an additional $latency$ amount.
 Calling \code{S.recv(packet)} then doesn't actually call the function itself, but schedules an event $latency$ later that will call said function.
 In practice, most calls are made this way, clearing the code of many \code{call\_in} statements.
 
@@ -49,32 +53,34 @@ RotorSim's event queue is implemented using Python's \code{heapq} \cite{noauthor
 Python tuples are ordered by comparing the first element of the tuple, going to the next in case of a tie.
 This naturally leads to events being a tuple of time and event description.
 
-Python allows for the treatment of functions as values, as well as for calling a function with an array, or a dictionary as arguments through the \code{*args} and \code{**kwargs} idioms.
-Once the
+Python allows for the treatment of functions as values, as well as for calling a function with an array, or a dictionary as arguments through the \code{*args} and \code{**kwargs} idioms. \manya{please give context why this is an important point that is worth mentioning. why do you need this feature? does it simplify something?}
+Once the \manya{this sentence is unfinished.}
 
 In addition to \code{(time, function, args, kwargs)}, the event queue adds a user-controlled priority value to allow for the breaking of ties for events that happen simultaneously.
 Although this isn't strictly required, it does simplify simulator design around configuration changes.
-For example, if the routing table of a device changes and a packet sent, both at time 100, it is often intended that the configuration change take place before the packet is routed, avoiding odd situations where a packet is routed along a path that no longer exists.
+For example, if the routing table of a device changes and a packet sent, both at time 100, it is often intended that the configuration change take place before the packet is routed, avoiding odd situations where a packet is routed along a path that no longer exists. \manya{please give context on why the routing table can change. how often this happens? how did opera solve this challenge?}
 
 Finally, as suggested in \code{heapq}'s documentation, there is a final integer, a counter, inserted after the priority. Ostensibly this breaks ties between events having the same time and priority by the order in which they are inserted.
-This property is not used in the simulator, however it stops python from 
+This property is not used in the simulator, however it stops python from \manya{unfinished sentence.}
 
-Each event is a tuple consisting of, in order, the current time, a priority (lower means run earlier), a unique counter, 
+Each event is a tuple consisting of, in order, the current time, a priority (lower means run earlier), a unique counter, \manya{again, unfinished sentence.}
 
 
 
 \subsection{Limitations} \label{rotorsim-limits}
 
-There were two main frustrations with RotorSim, its large memory usage and "slow" performance.
+There were two main frustrations \manya{please avoid using informal terms. call it a challenge is more scientific} with RotorSim, its large memory usage and "slow" performance.
 
 \paragraph{Memory usage} \label{rotorsim-mem}
-Large simulations used up a lot of memory.
-Part of this is due to the large amounts of objects being actively used, see \ref{limits-mem}, but Python also offers little to no control of the underlying memory representations of objects.
+Large simulations used up a lot of memory. \manya{please quantify how large is large. give some numbers about mem usage.}
+Part of this is due to the large amounts of objects being actively used, see \ref{limits-mem}, but Python also offers little to no control of the underlying memory representations of objects. \manya{what is the fundamental reason behind its large mem usage? please give some intuition to the reader.}
 
 \paragraph{Low performance} \label{rotorsim-perf}
-In addition to large memory usage, it often took over 24h, sometimes even up to 72, to get results.
+In addition to large memory usage, it often took over 24h, sometimes even up to 72, to get results \manya{for how large of a network? or how many flows? making a blanket statement in a thesis is not wise unless the blanket statement is true always. in this case, there are scenarios where the simulation can finish fast, so please quantify and make measured claims to avoid confusion.}.
 This significantly slows down the research iterations.
-Although this was sometimes mitigated thanks to being able to run hundreds of simulations simultaneously, this was only interesting when we wanted to explore a large cross-section of different parameters.
+Although this was sometimes mitigated thanks to being able to run hundreds of simulations simultaneously, this was only interesting when we wanted to explore a large cross-section of different parameters.\manya{unclear what the last "this" refers to. so the simulation time taking 24hours can be mitigated but it wasn't interesting? }
+
+\manya{the terminology low performance can mean several things in the literature. i suggest rewording it to slow simulation progress to make sure the reader understand you are referring to time it takes to run the simulation as your performance metric. at the beginning of this section it is worth defining the performance metrics for designing a new simulator.}
 
 
 \subsection{Python runtime} \label{rotorsim-runtime}
@@ -95,25 +101,26 @@ For RotorSim, numpy was only used for some random number generation, making movi
 
 Rustasim \cite{brode-roger_nibriviarustasim_2020} is a parallel discrete event simulator implemented in Rust \cite{klabnik_rust_2018}\cite{matsakis_rust_2014}, and heavily benefiting from the well-optimized data structures of the crossbeam library \cite{noauthor_crossbeam-rscrossbeam_2020}.
 
-The main impetus for exploring a different programming language came from repeatedly hitting memory limits with RotorSim (even with 96GB of RAM!) and being frustrated at its slow speed.
-A goal was proposed to make a simulator run medium-sized simulations within a few hours, yielding an objective of managing to simulate 100Gb worth of traffic moving for every wall-clock second the simulator is run.
-For context, Rotorsim is able to move 126Gbps on a laptop, more in \ref{}.
+The main impetus for exploring a different programming language came from repeatedly hitting memory limits with RotorSim (even with 96GB of RAM!) and being frustrated at its slow speed. \manya{being frustrated is not a great scientific reason, please make this sentence more formal and scientific. For instance you could say RotorSim becomes prohibitively slow to simulate a network with X servers.}
+A goal was proposed to make a simulator run medium-sized simulations within a few hours \manya{same as above, please make this more scientific and formal. quantify what you say}, yielding an objective of managing to simulate 100Gb \manya{please explain how this is derived} worth of traffic moving for every wall-clock second the simulator is run.
+For context, Rotorsim is able to move 126Gbps on a laptop, more in \ref{}. \manya{missing ref}
 
 
 \subsection{Language choice} \label{rustasim-language}
 
 In order to achieve the desired goal, I decided to re-evaluate the choice of programming language.
-Rotorsim used Python because it was chosen for a class project, which later turned into a research simulator.
-There was no formal evaluation of that choice.
+Rotorsim used Python because it was chosen for a class project, which later turned into a research simulator. 
+There was no formal evaluation of that choice. 
+\manya{omit this reason. it sounds like we didn't do our homework. you can say because python is a popular choice for programming.}
 
 The evaluation criteria were a combination of resulting speed and ease of development.
 The candidate languages were: Python, Go \cite{donovan_go_2015}, C \cite{kernighan_c_1988}, and Rust.
-All but Rust were chosen due to my familiarity with them, Rust chosen because recommended to me.
+All but Rust were chosen due to my familiarity with them, Rust chosen because recommended to me \manya{again, this is a non scientific reason. please omit. make sure you stay scientific and formal. mention the benefits of rust instead of saying it was recommenced to you.}.
 Go was interesting due to potential for easy concurrency and parallelism.
 C was chosen for its reputation as a high-performance language.
 
 For each of the languages I implemented a simple simulator consisting of one device with a `loopback' link, a connection feeding right back to itself after a small latency.
-The goal was simply to see how fast the simulator was able to be pushed, and how easy or not developping in the language was.
+The goal was simply to see how fast the simulator was able to be pushed, and how easy or not developing in the language was.
 \begin{itemize}
 \item Python took a few hours to re-implement, and was able to move 25Gb of traffic for every second of realtime on the link.
 
@@ -126,9 +133,9 @@ Rust also does not take well to functions whose type is not defined at compile t
 However, Rust has structured enumerations, allowing all the different event types to be defined at compile time.
 The event loop could then, on a pre-defined event, call a specific function.
 Since the different enumeration variants can also carry distinct data, the arguments for the function can be carried with the variant, allowing flexibility in the types of functions called.
-After some quick optimizations, Rust moved 125Gb per second, faster than goal.
+After some quick optimizations, Rust moved 125Gb per second, faster than goal. \manya{at this point, your reader is not sure what the significance of your 100Gb goal was.}
 
-\item The C implementation never took off, the library management system being difficult to manage, simple data structures like the heap requiring re-implementation.
+\item The C implementation never took off, the library management system being difficult to manage, simple data structures like the heap requiring re-implementation.\manya{okay then omit something that you didn't do. no need to even mention it.}
 \end{itemize}
 
 Thus Rust became the top choice, despite a long implementation time, since I believed this was due to the initial learning cost, and not to a fundamental feature of the language.
