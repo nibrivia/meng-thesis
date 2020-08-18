@@ -2,9 +2,13 @@
 
 \manya{please start this chapter by describing the high-level goals of your research. In systems papers, we usually tell the reader what we are going to tell them before diving into details. It would be very useful to mention the performance metrics you later use in this chapter and that you are going to explain two simulators. the ideas behind each of them. the intuition of why two simulators. mention the challenges you had to solve in a high-level language to prepare the reader to navigate through this chapter.}
 
+In this chapter, I describe two \datacenter simulators, RotorSim and Rustasim.
+The first, RotorSim, was developed to simulate RotorNet \rotornet and Opera \opera, and suffered from inadequate performance.
+The second, Rustasim, was developed as a proof-of-concept for fast \datacenter simulators
+
 \section{RotorSim} \label{rotorsim}
 
-RotorSim \cite{brode-roger_nibriviarotorsim_2020} is a centralized simulator (see \ref{centralized-sim}) of a packet-level datacenter network model (see \ref{model}). \manya{since first part of your thesis contribution is on rotorsim and second part compares with opera, the background chapter should spend 2 pages describing the rotornet and opera papers with special attention given to their current simulators and their limitations.}
+RotorSim \cite{brode-roger_nibriviarotorsim_2020} is a centralized simulator (see \ref{centralized-sim}) of a packet-level \datacenter network model (see \ref{model}). \manya{since first part of your thesis contribution is on rotorsim and second part compares with opera, the background chapter should spend 2 pages describing the rotornet and opera papers with special attention given to their current simulators and their limitations.}
 It is implemented in Python \cite{van_rossum_python_2009} and is single-threaded. %does python need to be cited?
 
 \manya{instead of jumping into API right away, give a high-level view of what you are trying to do. what is the problem you are trying to solve? why is it a problem? what is your solution? what is the research contribution of your solution?}
@@ -103,7 +107,7 @@ Rustasim \cite{brode-roger_nibriviarustasim_2020} is a parallel discrete event s
 
 The main impetus for exploring a different programming language came from repeatedly hitting memory limits with RotorSim (even with 96GB of RAM!) and being frustrated at its slow speed. \manya{being frustrated is not a great scientific reason, please make this sentence more formal and scientific. For instance you could say RotorSim becomes prohibitively slow to simulate a network with X servers.}
 A goal was proposed to make a simulator run medium-sized simulations within a few hours \manya{same as above, please make this more scientific and formal. quantify what you say}, yielding an objective of managing to simulate 100Gb \manya{please explain how this is derived} worth of traffic moving for every wall-clock second the simulator is run.
-For context, Rotorsim is able to move 126Gbps on a laptop, more in \ref{}. \manya{missing ref}
+For context, Rotorsim is able to move 126Gbps on a laptop, see discussion in section \ref{perf-net}. \manya{missing ref} \olivia{fixed}
 
 
 \subsection{Language choice} \label{rustasim-language}
@@ -114,10 +118,10 @@ There was no formal evaluation of that choice.
 \manya{omit this reason. it sounds like we didn't do our homework. you can say because python is a popular choice for programming.}
 
 The evaluation criteria were a combination of resulting speed and ease of development.
-The candidate languages were: Python, Go \cite{donovan_go_2015}, C \cite{kernighan_c_1988}, and Rust.
-All but Rust were chosen due to my familiarity with them, Rust chosen because recommended to me \manya{again, this is a non scientific reason. please omit. make sure you stay scientific and formal. mention the benefits of rust instead of saying it was recommenced to you.}.
+The candidate languages were: Python, Go \cite{donovan_go_2015}, and Rust.
+All but Rust were chosen due to my familiarity with them, and Rust because of its interesting performance characteristics. \manya{again, this is a non scientific reason. please omit. make sure you stay scientific and formal. mention the benefits of rust instead of saying it was recommenced to you.}.
 Go was interesting due to potential for easy concurrency and parallelism.
-C was chosen for its reputation as a high-performance language.
+%C was chosen for its reputation as a high-performance language.
 
 For each of the languages I implemented a simple simulator consisting of one device with a `loopback' link, a connection feeding right back to itself after a small latency.
 The goal was simply to see how fast the simulator was able to be pushed, and how easy or not developing in the language was.
@@ -135,7 +139,8 @@ The event loop could then, on a pre-defined event, call a specific function.
 Since the different enumeration variants can also carry distinct data, the arguments for the function can be carried with the variant, allowing flexibility in the types of functions called.
 After some quick optimizations, Rust moved 125Gb per second, faster than goal. \manya{at this point, your reader is not sure what the significance of your 100Gb goal was.}
 
-\item The C implementation never took off, the library management system being difficult to manage, simple data structures like the heap requiring re-implementation.\manya{okay then omit something that you didn't do. no need to even mention it.}
+%\item The C implementation never took off, the library management system being difficult to manage, simple data structures like the heap requiring re-implementation.
+\manya{okay then omit something that you didn't do. no need to even mention it.} \olivia{removed}
 \end{itemize}
 
 Thus Rust became the top choice, despite a long implementation time, since I believed this was due to the initial learning cost, and not to a fundamental feature of the language.

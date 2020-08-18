@@ -7,9 +7,9 @@ In this chapter I describe common models of networks and data-centers as well as
 \subsection{Network configuration} \label{model-network}
 
 % A lot of this section is a mess
-Most datacenters \rotornet\cite{handley_re-architecting_2017}\opera \manya{the convention is to combine multiple citations into one}
+Most \datacenters \rotornet\cite{handley_re-architecting_2017}\opera \manya{the convention is to combine multiple citations into one}
 There are anywhere from 5 to 50 servers in a rack, each connected to a switch typically at the top, giving it the common name "Top of Rack switch" or ToR. \manya{this sentence seems broken at the beginning: most datacetenrs There are}
-A "small" datacenter may have around 5,000 machines, large ones up to 250,000 or more. \manya{please add citation for all of these numbers}% TODO citation?
+A "small" \datacenter may have around 5,000 machines, large ones up to 250,000 or more. \manya{please add citation for all of these numbers}% TODO citation?
 
 The racks themselves are connected together through different fabrics, and switch technologies.
 The topology and technologies behind these is extremely varied \cite{kassing_beyond_2017}, and the subject of extensive research \opera\rotornet (TODO Xpander). \manya{please address all TODO cites. please cite more papers since the sentence says "extensive research"} % TODO cite
@@ -33,18 +33,18 @@ The latencies involved are often extremely small, on the order of tens of nanose
 
 \subsection{Traffic modelling} \label{model-traffic}
 
-There are a few well studied datacenter traffic models (datamining \manya{cite}, websearch \manya{cite}, Chen Stefan Manya paper \manya{???? please remove sentences like this}, more), with a common takeaway being that datacenter traffic is hard to predict.
+There are a few well studied \datacenter traffic models (datamining \manya{cite}, websearch \manya{cite}, Chen Stefan Manya paper \manya{???? please remove sentences like this}, more), with a common takeaway being that \datacenter traffic is hard to predict.
 
 Traffic distribution can be broken down into multiple dimensions: overall load, skeweness, and flow size distribution.
 
 
 Overall load corresponds to how much traffic is being offered onto the network relative to how much capacity the network has.
 It is important to note that this does not mean that the network is able to serve 100\% load, most networks are overwhelmed far before.
-The reason for this is simple: if on average, it takes 4 hops to get to the destination, traffic is essentially being sent 4 times, making any load above 25\% impossible to satisfy. \manya{this is not entirely true. it depends on timing and how they collide. please tone it down. we don't want someone reading this thesis to cite your thesis to say you claim data centers cannot handle load above 25\% out of context}
+The reason for this is simple: if on average, it takes 4 hops to get to the destination, traffic is essentially being sent 4 times, making any load above 25\% impossible to satisfy. \manya{this is not entirely true. it depends on timing and how they collide. please tone it down. we don't want someone reading this thesis to cite your thesis to say you claim \datacenters cannot handle load above 25\% out of context}
 
-The traffic may be fairly uniform, each sender and receiver being involved in traffic all around the datacenter, or very concentrated, with a few "hot" racks being very active with each other, the rest of the datacenter quiet. \manya{again, this depends on timing granularity that you are observing the traffic. please clarify.}
+The traffic may be fairly uniform, each sender and receiver being involved in traffic all around the \datacenter, or very concentrated, with a few "hot" racks being very active with each other, the rest of the \datacenter quiet. \manya{again, this depends on timing granularity that you are observing the traffic. please clarify.}
 Describing these patterns can become quite complex, as there may be multiple "hot" regions mostly not interacting with each other.
-Throughput this thesis, and in most of the literature \manya{cite}, we tend to be concerned about uniform traffic. \manya{please cite this claim or tone it down. we don't want someone to cite your thesis and say you claimed most of the data center research focuses on uniform traffic. have you read most data center papers to verify this is true? if so, cite them one by one to substantiate your claim. if not, don't make a claim we can't back up.}
+Throughput this thesis, and in most of the literature \manya{cite}, we tend to be concerned about uniform traffic. \manya{please cite this claim or tone it down. we don't want someone to cite your thesis and say you claimed most of the \datacenter research focuses on uniform traffic. have you read most \datacenter papers to verify this is true? if so, cite them one by one to substantiate your claim. if not, don't make a claim we can't back up.}
 
 Finally, the flow size distribution corresponds to how big each flow is expected to be \cite{alizadeh_data_2010} \manya{the sentence should be complete without the citation.}.
 Some workloads, such as websearch, consists mostly of many small flows.
@@ -53,7 +53,7 @@ Machine working loads also typically create a large demand, for example in a rin
 
 \section{Simulation Model} \label{model-sim}
 
-The datacenter model used by Rustasim was chosen to emulate closely that of Opera \manya{cite}, to allow for comparison and verification of the results.
+The \datacenter model used by Rustasim was chosen to emulate closely that of Opera \manya{cite}, to allow for comparison and verification of the results.
 
 The model used in Rustasim \ref{rustasim}, consists of two actor types: routers and servers, and three model-level event types: \code{packet}, \code{flow} and \code{timeout} events.
 The servers are organized in racks, themselves interconnected through a user-chosen topology.

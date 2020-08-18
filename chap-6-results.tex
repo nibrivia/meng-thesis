@@ -12,7 +12,7 @@ Replication of prior results is significantly more difficult to achieve, requiri
 
 \subsection{Testing} \label{testing}
 
-The Rustasim engine, and the datacenter model both contain a large number of automated tests, most testing small components of the design.
+The Rustasim engine, and the \datacenter model both contain a large number of automated tests, most testing small components of the design.
 These tests serve to build assurance during development that optimizations did not break the accuracy of the simulator.
 
 Notably, in my experience, routing is a common source of inaccuracies during the development of network models due to errors such as the mishandling of redundant paths.
@@ -86,9 +86,9 @@ Once flows smaller than a single packet are excluded, the average error is of 1.
 %\end{table}
 
 
-\section{Network simulation performance} \label{perf-phold}
+\section{Network simulation performance} \label{perf-net}
 
-Although general performance metrics are useful to compare against other general purpose simulators, Rustasim outperforms datacenter network simulators directly.
+Although general performance metrics are useful to compare against other general purpose simulators, Rustasim outperforms \datacenter network simulators directly.
 
 The Opera simulator\opera was not built for speed, and will often take over a day to finish larger simulations. %TODO more precise data incoming
 Even anecdotely, I have not heard of a full Opera run taking less than multiple hours to run, even on dedicated compute servers.

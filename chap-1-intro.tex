@@ -18,7 +18,7 @@ It is also worth noting that in practice, after a simulator is built, the outcom
 This process of iteration is expected.
 
 The contribution of this work is in the simulator, not in the model.
-In order to validate the correctness of the simulator, I will be comparing it to the published simulator from the Opera paper \opera. \manya{please cite and address all the TODOs in the entire thesis.} \olivia{done}
+In order to validate the correctness of the simulator, I will be comparing it to the published simulator from the Opera paper \opera. \manya{please cite and address all the TODOs in the entire thesis.}
 
 \section{Discrete-event models and simulators} \label{discrete-event-sims}
 
@@ -37,6 +37,6 @@ A data network is similar, cars becoming packets or flows, stations becoming ser
 These discrete models may then be implemented in many different ways, and can be broadly divided in sequential or parallel simulators.
 In a sequential simulator \manya{cite}, only one event is processed at a time, making progress in time as the events are processed, the main advantage of these being their relative ease of implementation.
 In contrast, parallel simulators \manya{cite} are able to process multiple events simultaneously, possibly increasing simulation speed, but are significantly harder to implement: without special care, it is easy to accidentally process events in the wrong order which will almost certainly result in inaccurate results.
-This thesis implements a general-purpose parallel discrete simulator, Rustasim TODO ref: \manya{please resolve all the TODOs} the codebase can be used by simulation developers to implement their own simulators, while Rustasim manages the parallel nature of the simulator.
+This thesis implements a general-purpose parallel discrete simulator, Rustasim (see section \ref{rustasim}) \manya{please resolve all the TODOs} \olivia{this one done} the codebase can be used by simulation developers to implement their own simulators, while Rustasim manages the parallel nature of the simulator.
 
 \manya{high-level comment on the intro: the introduction of a thesis should talk about the content of the thesis, the ideas behind it, the challenges to solve, the techniques you used, the evaluation methodology, and results. the current version, unfortunately, does not meet the bar for intro of a thesis.The last few sentences are insufficient to capture what you did in this thesis. The focus of the current version is on "what is a simulation model". But the reader is left unsure about why you are talking about the model for 2 pages without tying it to the research contribution of this thesis. Please re-write the intro and put more emphasis on the contributions of the thesis. Ayush's and Jeremy's theses are good examples to read and follow their format.}

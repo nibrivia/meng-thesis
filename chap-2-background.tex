@@ -12,7 +12,7 @@ The relatively simple nature of the scheduler makes it so that it can usually be
 For the sequential simulator, RotorSim\cite{brode-roger_nibriviarotorsim_2020} described in \S \ref{rotorsim}, the loop and event processing code takes up around 30 lines of python.
 
 % not happy with this paragraph structure
-\manya{suggestion to make the following para better: start with the goal of this thesis is to simulate a large-scale data center. Then talk about prior papers and available code and cite them as the state of the art for large-scale data center simulations. then talk about millions of events and challenges associated with it......note that, in essence, the closest prior work to your thesis are data center simulators and they need to be discussed in the background section.}
+\manya{suggestion to make the following para better: start with the goal of this thesis is to simulate a large-scale \datacenter. Then talk about prior papers and available code and cite them as the state of the art for large-scale \datacenter simulations. then talk about millions of events and challenges associated with it......note that, in essence, the closest prior work to your thesis are \datacenter simulators and they need to be discussed in the background section.}
 Large simulation models can generate millions or billions of events through their lifetime, if not every second \cite{fujimoto_parallel_2015}, causing the queue to continuously hold thousands or more events at a time, see the results section \S\ref{results} for more details.\manya{Call out a major result from your results section here (and in intro too): For instance, our evaluations in Section X shows that the state-of-the-art Opera \cite{} simulator takes X hours to simulate a network with X servers. In contrast, the simulator developed in this thesis, RustaSim (described in Section X), simulates the same network in only X minutes. }
 In addition, since events are typically fast to process, the queue is also continuously being accessed and modified and can easily become a bottleneck.
 The large size and frequent access of the queue, force careful consideration of the data structures used to implement the queue.
@@ -27,7 +27,7 @@ Some parallelization is possible if many events are scheduled at the same virtua
 Even if the simulation has many events executing in parallel, we run into issues when they \manya{unclear what "they" refers to, please reword.} try to schedule new events: the scheduler needs to manage multiple new events being enqueued concurrently.
 In my experience, the overhead of managing these concurrent operations results in worse performance overall. \manya{please quantify. this is a research thesis, it's not enough to say you experienced worse performance. put it into perspective by giving a more concrete description with numbers}
 
-\manya{is centralized discrete event simulator == single threaded simulator aka all prior data center simulators? if so, it's worth to call it out in this section. if not, mention how they differ.}
+\manya{is centralized discrete event simulator == single threaded simulator aka all prior \datacenter simulators? if so, it's worth to call it out in this section. if not, mention how they differ.}
 
 \manya{the flow of this section is confusing. Why are you mentioning what is required from the queue? give a roadmap to the reader but telling them what you are going to tell them at the beginning of each subsection. For instance, something line this: in this section I describe the fundamentals of centralized simulators. I identify three? factors as their main bottlenecks: 1) 2) 3) [corresponding to your paragraphs and the main points you are making]...}
 
@@ -106,7 +106,7 @@ This guarantee can be achieved if we require all actors to send each other event
 In the rare case where this requirement isn't satisfied, it is usually possible to reformulate the model to comply with it.
 We will see an example of such a reformulation when in section \ref{sim-timeouts} when we talk about timeouts.
 
-An old algorithm, described as early as 1979\cite{fujimoto_parallel_2000, misra_distributed_1986} \manya{multiple citations are done with one \cite{X, Y}  command. please fix.}, is able to take these multiple in-order streams and safely return the next event.
+An old algorithm, described as early as 1979\cite{fujimoto_parallel_2000, misra_distributed_1986} \manya{multiple citations are done with one \cite{X, Y}  command. please fix.} \olivia{done}, is able to take these multiple in-order streams and safely return the next event.
 Although taking the next event amongst all those received clearly is necessary to returning the next event, that alone is not sufficient.
 For example, if the current next event would be scheduled at time 10, but we still haven't heard from a neighbour, we may later receive an event to be scheduled at time 9 from that neighbour, violating causality.
 In order to avoid this situation, it is only safe to return an event when we have heard from \emph{every} neighbour. \manya{number 10 here is random, to make it more scientific, say time $t$.}
@@ -161,7 +161,7 @@ The difference between the two approaches comes down to whether that accuracy er
 \paragraph{Optimistic scheduling} \label{optimistic-scheduling}
 It is also possible to allow actors to process events as fast as they can, possibly resulting in causality violations.
 In order to maintain correctness, the simulation needs to have a cancellation mechanism, some use anti-events, checkpointing, rollbacks, or other techniques \cite{fujimoto_parallel_2015}.
-This hopeful approach is the source of its name. \manya{any data center simulators using this?}
+This hopeful approach is the source of its name. \manya{any \datacenter simulators using this?}
 
 The cost of optimistic scheduling comes from the overhead necessary to allow for rollbacks, and the execution of these rollbacks.
 \emph{TimeWarp} \cite{jefferson_virtual_1985} is a popular example of an optimistic scheduling algorithm.
