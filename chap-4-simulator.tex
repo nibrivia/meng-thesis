@@ -157,19 +157,19 @@ After having spent significant time developing the full simulator, that bet has 
 \centering
 \label{rustasim-overview:fig}
 \includegraphics[width=\textwidth]{system-diagrams}
-\caption{Rustasim actor overview}
+\caption{Rustasim actor overview. \manya{this figure is not mentioned in the text. point the reader to the figure where you are explaining the functionalities shown in the figure.}}
 \end{figure}
 
 A Rustasim simulation consists of many actors, each running concurrently, not necessarily simultaneously, to all others.
-This concurrency brings with it all the challenges described in section\ \ref{pdes}: preserving causality and guaranteeing progress.
+This concurrency brings with it all the challenges described in section\ \ref{pdes}: preserving causality and guaranteeing progress. \manya{if these two ended up being the most important challenges, then please mention them in the abstract and intro. }
 
 To make developing models easier, Rustasim enforces a separation between the model and the code that deals with the parallel aspects of the simulation, the `engine'.
-The engine and the model then have a application/system relationship: the engine receives all incoming events, arranges them in order and detects stall, returning to the user/model the events in order.
-This is abstraction very similar to how applications interface with TCP: the application receives the bytes in-order while the OS handles the complexities of re-ordering and managing the connection.
+The engine and the model then have an application/system relationship: the engine receives all incoming events, arranges them in order and detects stall \manya{when do stalls happen? how common are they?}, returning to the user/model the events in order.
+This abstraction very similar \manya{in general, the work "very" is redundant and should be omitted unless it's absolutely necessary to convey the message} to how applications interface with TCP: the application receives the bytes in-order while the OS handles the complexities of re-ordering and managing the connection.
 The actor receives the events in order through an iterator, matches on the event type and executes the appropriate action.
-It is required to take certain actions upon receiving certain events
+It \manya{"it" refers to actor or engine?} is required to take certain actions upon receiving certain events.
 
-Since there may be thousands or more of actors, it is not possible to spin up separate threads for each of them.
+Since there may be thousands or more of actors, \manya{for a data center simulation, what are the actors?} it is not possible to spin up separate threads for each of them.
 Instead Rustasim spins up as many worker threads as there are available cores, and actors are scheduled on the workers.
 The details of the scheduling are described in \ref{rustasim-sched}.
 
@@ -177,31 +177,32 @@ The details of the scheduling are described in \ref{rustasim-sched}.
 
 \subsubsection{The actor-engine abstraction} \label{rustasim-actor-engine}
 
-The events in a distributed simulation are slightly more complex than in a centralized one.
-Although most events processed by actors, are still model events, there is a need for additional event types in order to guarantee progress.\\
+The events in a distributed simulation are more complex than in a centralized one.
+Although most events processed by actors are still model events, there is a need for additional event types in order to guarantee progress.\\
 \code{Null} events are required to signal neighbours that it is safe for them to progress up to a certain time without waiting for this actor.
 Without these messages, an actor cannot be sure if the silence from the neighbour comes from a lack of events to send, or from a delay in computation.
 Although \code{Null} events are required to guarantee progress, actors will never receive them: they are only useful for the engine to progress, the actor need not take action on them.
 The sole purpose of \code{Null} events is to allow the neighbours' engines to make progress.\\
-Because the \code{Null} events require model-level knowledge to send, the engine cannot do so on its own.
-However, it is the engine that will become aware of a potential deadlock, not the actor.
-Therefore, to inform the actor of a potential stall, the engine generates a \code{Stalled} event.
-Upon receiving such an event, the actor is \emph{required} to send all necessary neighbours a \code{Null} event updating how far they may progress.
-If a neighbour has already received another event at, or past, the time the \code{Null} event would be received, the \code{Null} event is not sent.\\ %TODO make clearer
+Because the \code{Null} events require model-level knowledge to send \manya{unclear what sort of model-level knowledge is needed. please elaborate.}, the engine cannot do so on its own.
+However, it is the engine that will become aware of a potential deadlock \manya{how?}, not the actor.
+Therefore, to inform the actor of a potential stall, the engine generates a \code{Stalled} event \manya{which actor would receive the stalled event?}.
+Upon receiving such an event, the actor is \emph{required} to send all necessary neighbours a \code{Null} event updating how far they may progress \manya{may or made?}.
+If a neighbour has already received another event at, or past, the time the \code{Null} event would be received, the \code{Null} event is not sent. \manya{this whole para would be more clear if you could draw the state machine or decision tree for it. also a real simulation example would be great. something like this: consider two servers in a data center: A, B, C. Server A sends to B, etc. explain the events and how your actor-engine abstraction works in the example.}\\ %TODO make clearer
 Finally, \code{Close} events tell the actor to return from its event loop.
-Although this might seem trivial, it does require a little care, it is easy to leave the simulation hanging at this point.
+Although this might seem trivial, it does require a little care, it is easy to leave the simulation hanging at this point. \manya{elaborate of the "care" part.}
 It is necessary to also inform neighbours that we have no more events to communicate to them.
 This can be done by sending \code{Null} events that pass closing times, or by sending \code{Close} events to the neighbours.
 
 % TODO re-write, more details, reorgnize, cite?
 \paragraph{Compiler enforcement}
 By separating the actor and the engine into different crates, the modularity is strictly enforced by the Rust compiler, forbidding the simulator designer from modifying the internals of Rustasim.
-In order to allow for arbitrary models to be built on top of Rustasim, the events the engine deals with are parametrized through a generic type \code{T}.
+In order to allow for arbitrary models to be built on top of Rustasim, the events that the engine deals with are parametrized through a generic type \code{T}.
 Because the engine code is generic over \code{T}, it cannot make any assumptions about what the type looks like, lest the Rust compiler errors.
 However, when compiled, the compiler will fill in the type appropriately and is able to optimize as though the type were written explicitly written in.\\
 This separation between the model and the engine also allows for many different models to be implemented using the same engine, allowing for significant reuse between projects.
 This is particularly appealing because most optimizations are implemented in the engine itself, and allowing further optimizations to be propagated to many simulations.
 This separation also allows the writing of tests for the engine using a trivial model, making it easier to validate the engine and catch subtle errors.
+\manya{at this point in the thesis, the simulator is described in abstract terms. somewhere in this chapter it would help to have a sample pseudocode with a simple topology as the front end of the simulator and show the inter-workings of the backend of the simulator to crystalize the functionality and modules.}
 
 \subsection{Message passing} \label{rustasim-message-passing}
 
